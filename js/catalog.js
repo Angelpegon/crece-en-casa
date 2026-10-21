@@ -1,4 +1,4 @@
-/* Catálogo de actividades: búsqueda y filtros por edad y área, sincronizados con la URL. */
+/* Catálogo de actividades: filtros combinables sincronizados con la URL. */
 (function () {
   const { data, ui } = window.CEC;
 
@@ -14,6 +14,10 @@
 
   const validAges = data.ages.map((age) => String(age.value));
   const validAreas = data.areas.map((area) => area.id);
+  const validMoments = data.moments.map((moment) => moment.id);
+  const validDurations = data.durations.map((duration) => duration.id);
+  const validMaterials = data.materials.map((material) => material.id);
+  let activeMomento = "";
 
   function chip(name, value, label, tone) {
     return `
@@ -26,9 +30,17 @@
   function renderChips() {
     const ageGroup = form.querySelector('[data-chips="edad"]');
     const areaGroup = form.querySelector('[data-chips="area"]');
+    const durationGroup = form.querySelector('[data-chips="duracion"]');
+    const materialGroup = form.querySelector('[data-chips="materiales"]');
+
     ageGroup.innerHTML =
-      chip("edad", "", "Todas") + data.ages.map((age) => chip("edad", String(age.value), age.label, age.tone)).join("");
+      chip("edad", "", "Todas las edades") +
+      data.ages.map((age) => chip("edad", String(age.value), age.label, age.tone)).join("");
     areaGroup.innerHTML = chip("area", "", "Todas") + data.areas.map((area) => chip("area", area.id, area.label)).join("");
+    durationGroup.innerHTML =
+      chip("duracion", "", "Todas") + data.durations.map((duration) => chip("duracion", duration.id, duration.label)).join("");
+    materialGroup.innerHTML =
+      chip("materiales", "", "Todos") + data.materials.map((material) => chip("materiales", material.id, material.label)).join("");
   }
 
   function normalize(text) {
@@ -47,7 +59,8 @@
         activity.summary,
         ...areaLabels,
         ...activity.materials,
-        ...activity.favors,
+        activity.accompany,
+        activity.adapt,
         ...activity.steps,
       ].join(" ");
       return [activity.id, normalize(text)];
@@ -58,10 +71,17 @@
     const params = new URLSearchParams(window.location.search);
     const edad = params.get("edad") || "";
     const area = params.get("area") || "";
+    const momento = params.get("momento") || "";
+    const duracion = params.get("duracion") || "";
+    const materiales = params.get("materiales") || "";
+    activeMomento = validMoments.includes(momento) ? momento : "";
     return {
       q: (params.get("q") || "").trim(),
       edad: validAges.includes(edad) ? edad : "",
       area: validAreas.includes(area) ? area : "",
+      momento: activeMomento,
+      duracion: validDurations.includes(duracion) ? duracion : "",
+      materiales: validMaterials.includes(materiales) ? materiales : "",
     };
   }
 
@@ -71,6 +91,9 @@
       q: String(formData.get("q") || "").trim(),
       edad: String(formData.get("edad") || ""),
       area: String(formData.get("area") || ""),
+      momento: activeMomento,
+      duracion: String(formData.get("duracion") || ""),
+      materiales: String(formData.get("materiales") || ""),
     };
   }
 
@@ -83,6 +106,8 @@
     form.elements.q.value = filters.q;
     checkRadio("edad", filters.edad);
     checkRadio("area", filters.area);
+    checkRadio("duracion", filters.duracion);
+    checkRadio("materiales", filters.materiales);
   }
 
   function updateUrl(filters) {
@@ -99,6 +124,9 @@
     return data.activities.filter((activity) => {
       if (filters.edad && !activity.ages.includes(Number(filters.edad))) return false;
       if (filters.area && !activity.areas.includes(filters.area)) return false;
+      if (filters.momento && !(activity.momentos || []).includes(filters.momento)) return false;
+      if (filters.duracion && activity.durationId !== filters.duracion) return false;
+      if (filters.materiales && activity.materialsId !== filters.materiales) return false;
       const text = searchIndex.get(activity.id);
       return words.every((word) => text.includes(word));
     });
@@ -109,6 +137,9 @@
     const parts = [];
     if (filters.edad) parts.push(`para ${data.getAge(filters.edad).label}`);
     if (filters.area) parts.push(`de ${data.getArea(filters.area).label.toLowerCase()}`);
+    if (filters.momento) parts.push(`para ${data.getMoment(filters.momento).label.toLowerCase()}`);
+    if (filters.duracion) parts.push(`de ${data.getDuration(filters.duracion).label}`);
+    if (filters.materiales) parts.push(`con ${data.getMaterial(filters.materiales).label.toLowerCase()}`);
     if (filters.q) parts.push(`que ${singular ? "coincide" : "coinciden"} con «${filters.q}»`);
     const noun = singular ? "actividad" : "actividades";
     return `${total} ${noun}${parts.length ? " " + parts.join(" ") : ""}`;
@@ -135,6 +166,7 @@
   }
 
   function resetFilters() {
+    activeMomento = "";
     form.reset();
     update();
     focusSearch();
@@ -154,10 +186,12 @@
   form.addEventListener("change", (event) => {
     if (event.target.type === "radio") update();
   });
-  form.addEventListener("reset", () => setTimeout(update));
+  form.addEventListener("reset", () => {
+    activeMomento = "";
+    setTimeout(update);
+  });
   if (clearButton) clearButton.addEventListener("click", resetFilters);
 
-  /* Ya en el catálogo, el icono de búsqueda del encabezado solo lleva al campo, sin perder los filtros. */
   document.querySelectorAll(SEARCH_LINK).forEach((link) => {
     link.addEventListener("click", (event) => {
       event.preventDefault();

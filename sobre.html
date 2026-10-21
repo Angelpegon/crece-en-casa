@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sobre Crece en Casa</title>
-  <meta name="description" content="Qué es Crece en Casa, a quién está dirigida y cuál es su enfoque.">
+  <meta name="description" content="Crece en Casa: acompañando la comunicación desde lo cotidiano.">
   <meta name="theme-color" content="#fef9f3">
   <script>document.documentElement.classList.add("js");</script>
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
@@ -26,21 +26,41 @@
           <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-menu"></use></svg>
           <span class="visually-hidden" data-nav-label>Abrir menú</span>
         </button>
-        <ul class="main-nav__list" id="menu-principal" data-nav-menu>
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="actividades.html">Actividades</a></li>
-          <li><a href="guia.html">Guía para cuidadores</a></li>
-          <li><a href="sobre.html" aria-current="page">Sobre Crece en Casa</a></li>
+                <ul class="main-nav__list" id="menu-principal" data-nav-menu>
+          <li><a href="index.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-home"></use></svg><span>Inicio</span></a></li>
+          <li><a href="actividades.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-juego"></use></svg><span>Actividades</span></a></li>
+          <li class="nav-item nav-item--has-submenu">
+            <button type="button" class="nav-submenu-toggle" aria-expanded="false" aria-controls="submenu-guia" data-submenu-toggle>
+              <svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-guide"></use></svg>
+              <span class="nav-submenu-toggle__text">Guía para cuidadores</span>
+              <span class="nav-submenu-toggle__chevron" aria-hidden="true"></span>
+            </button>
+            <ul class="nav-submenu" id="submenu-guia" data-submenu>
+              <li><a href="guia.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-guide"></use></svg><span>Ver la guía</span></a></li>
+              <li><a href="guia.html#ruta"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-route"></use></svg><span>Ruta de estrategias</span></a></li>
+              <li><a href="guia.html#retos"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-challenge"></use></svg><span>Retos cotidianos</span></a></li>
+            </ul>
+          </li>
+          <li><a href="sobre.html" aria-current="page"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-info"></use></svg><span>Sobre Crece en Casa</span></a></li>
+          <li class="nav-item nav-item--has-submenu">
+            <button type="button" class="nav-submenu-toggle" aria-expanded="false" aria-controls="submenu-comunidad" data-submenu-toggle>
+              <svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-community"></use></svg>
+              <span class="nav-submenu-toggle__text">Nuestra comunidad</span>
+              <span class="nav-submenu-toggle__chevron" aria-hidden="true"></span>
+            </button>
+            <ul class="nav-submenu" id="submenu-comunidad" data-submenu>
+              <li><a href="familias.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-community"></use></svg><span>Comunidad</span></a></li>
+              <li><a href="experiencias.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-story"></use></svg><span>Experiencias</span></a></li>
+              <li><a href="preguntas-frecuentes.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-faq"></use></svg><span>Preguntas frecuentes</span></a></li>
+            </ul>
+          </li>
         </ul>
+      
       </nav>
 
       <div class="header-actions">
         <a class="icon-button" href="actividades.html#buscar" aria-label="Buscar actividades">
           <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-search"></use></svg>
-        </a>
-        <a class="btn btn--soft" href="mi-espacio.html">
-          <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-user"></use></svg>
-          <span>Mi espacio</span>
         </a>
       </div>
     </div>
@@ -55,47 +75,66 @@
             <li aria-current="page">Sobre Crece en Casa</li>
           </ol>
         </nav>
-        <h1 id="page-title">Sobre Crece en Casa</h1>
-        <p class="page-hero__lead">
-          Una plataforma educativa para madres, padres, docentes y cuidadores de niños de 2 a 5 años
-          que quieren acompañar el desarrollo de la comunicación y el lenguaje desde casa.
+        <h1 id="page-title">Pequeños momentos que hacen crecer la comunicación</h1>
+        <p class="page-hero__lead">Una idea que nació de escuchar y creció con el deseo de acompañar.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="historia-title">
+      <div class="container prose">
+        <h2 id="historia-title">Sobre Crece en Casa</h2>
+        <p>
+          ¡Hola! Soy Marielys Daniela Sierra, estudiante de Fonoaudiología y creadora de Crece en Casa,
+          una propuesta que nació de una pregunta que me ha acompañado durante mi formación: ¿cómo podemos
+          ayudar a las familias a seguir construyendo oportunidades de comunicación con sus pequeños,
+          incluso cuando no están en terapia?
+        </p>
+        <p>
+          Durante mi formación, distintas experiencias despertaron en mí el interés por encontrar nuevas
+          formas de acercar a las familias al desarrollo comunicativo de sus pequeños. Comprendí que,
+          más allá de las sesiones terapéuticas, existen oportunidades cotidianas para acompañar este
+          proceso y que contar con orientaciones prácticas puede marcar una diferencia en la manera en
+          que las familias participan en él.
+        </p>
+        <p>
+          Esa inquietud se quedó conmigo. Más adelante, mi experiencia de práctica me permitió retomar
+          esa necesidad y pensar en una manera de responder a ella: una propuesta que acercara la
+          orientación fonoaudiológica a la vida cotidiana de las familias.
+        </p>
+        <p>
+          Así nació Crece en Casa, una plataforma con estrategias de comunicación y lenguaje,
+          actividades lúdicas y recursos prácticos para acompañar a niños de 2 a 5 años desde el hogar.
+        </p>
+        <p>
+          Hoy, Crece en Casa representa mucho más que una idea: es mi manera de transformar una realidad
+          que conocí durante mi formación en una propuesta que busca acompañar a otras familias. Porque
+          detrás de cada actividad hay una oportunidad para compartir, detrás de cada juego puede surgir
+          una palabra y detrás de cada pequeño momento puede crecer una forma de comunicarnos.
         </p>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="enfoque-title">
-      <div class="container">
-        <h2 class="section-title" id="enfoque-title">Nuestro enfoque</h2>
-        <ul class="tip-grid tip-grid--three">
-          <li class="tip tip--coral">
-            <h3>El encuentro es lo primero</h3>
-            <p>Las actividades se hacen entre una persona adulta y el niño o la niña. Las pantallas son solo un apoyo.</p>
-          </li>
-          <li class="tip tip--yellow">
-            <h3>La vida cotidiana enseña</h3>
-            <p>Cocinar, bañarse o leer un cuento son oportunidades para conversar, sin materiales especiales.</p>
-          </li>
-          <li class="tip tip--sage">
-            <h3>Lenguaje claro</h3>
-            <p>Instrucciones breves y paso a paso, pensadas para familias sin conocimientos técnicos.</p>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="section section--tint" aria-labelledby="estado-title">
+    <section class="section section--tint" aria-labelledby="basamos-title">
       <div class="container prose">
-        <h2 id="estado-title">Un proyecto en construcción</h2>
-        <p>Hoy puedes explorar actividades de ejemplo por edad y por área de desarrollo, y guardarlas en Mi espacio.
-          Estamos preparando nuevos recursos:</p>
-        <ul class="bullet-list">
-          <li>Videos demostrativos de las actividades.</li>
-          <li>Recursos descargables para imprimir.</li>
-          <li>Materiales físicos con códigos QR que llevan a cada actividad.</li>
-        </ul>
+        <h2 id="basamos-title">¿En qué nos basamos?</h2>
+        <p>
+          Crece en Casa se inspira en principios de intervención centrada en los cuidadores, incluidos
+          los de la estrategia Enhanced Milieu Teaching (EMT). Entre ellos se encuentran seguir el interés
+          del niño, responder a sus intentos de comunicación, darle tiempo para expresarse, ofrecer
+          modelos de lenguaje y compartir turnos durante las interacciones.
+        </p>
+        <p>
+          Estos principios orientan la creación de recursos prácticos que buscan acercar estrategias de
+          acompañamiento comunicativo al entorno familiar, mediante experiencias cotidianas, significativas
+          y basadas en el juego.
+        </p>
+        <p>
+          Descubre nuestras actividades y encuentra nuevas formas de acompañar a tu pequeño, un momento a la vez.
+        </p>
+        <p><strong>Crece en Casa: acompañando la comunicación desde lo cotidiano.</strong></p>
         <p class="notice notice--warm">
-          <span><strong>Importante:</strong> las orientaciones de Crece en Casa son educativas. No constituyen un diagnóstico
-          ni sustituyen una valoración fonoaudiológica. El contenido actual es de ejemplo y está pendiente de revisión profesional.</span>
+          <span><strong>Importante:</strong> Los contenidos de Crece en Casa tienen una finalidad educativa y orientativa.
+          No sustituyen la valoración fonoaudiológica ni la atención profesional individualizada cuando sea necesaria.</span>
         </p>
         <a class="btn btn--coral" href="actividades.html">
           Explorar actividades
@@ -118,7 +157,7 @@
             <li><a href="actividades.html">Actividades</a></li>
             <li><a href="guia.html">Guía para cuidadores</a></li>
             <li><a href="sobre.html">Sobre Crece en Casa</a></li>
-            <li><a href="mi-espacio.html">Mi espacio</a></li>
+            <li><a href="familias.html">Nuestra comunidad</a></li>
           </ul>
         </nav>
         <div>
@@ -128,7 +167,7 @@
       </div>
       <div class="site-footer__bottom">
         <p>© <span data-current-year>2026</span> Crece en Casa</p>
-        <p>Sitio en desarrollo · Contenido e imágenes de ejemplo</p>
+        <p>Sitio en desarrollo · Contenido educativo orientativo</p>
       </div>
     </div>
   </footer>

@@ -26,21 +26,41 @@
           <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-menu"></use></svg>
           <span class="visually-hidden" data-nav-label>Abrir menú</span>
         </button>
-        <ul class="main-nav__list" id="menu-principal" data-nav-menu>
-          <li><a href="index.html" aria-current="page">Inicio</a></li>
-          <li><a href="actividades.html">Actividades</a></li>
-          <li><a href="guia.html">Guía para cuidadores</a></li>
-          <li><a href="sobre.html">Sobre Crece en Casa</a></li>
+                <ul class="main-nav__list" id="menu-principal" data-nav-menu>
+          <li><a href="index.html" aria-current="page"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-home"></use></svg><span>Inicio</span></a></li>
+          <li><a href="actividades.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-juego"></use></svg><span>Actividades</span></a></li>
+          <li class="nav-item nav-item--has-submenu">
+            <button type="button" class="nav-submenu-toggle" aria-expanded="false" aria-controls="submenu-guia" data-submenu-toggle>
+              <svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-guide"></use></svg>
+              <span class="nav-submenu-toggle__text">Guía para cuidadores</span>
+              <span class="nav-submenu-toggle__chevron" aria-hidden="true"></span>
+            </button>
+            <ul class="nav-submenu" id="submenu-guia" data-submenu>
+              <li><a href="guia.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-guide"></use></svg><span>Ver la guía</span></a></li>
+              <li><a href="guia.html#ruta"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-route"></use></svg><span>Ruta de estrategias</span></a></li>
+              <li><a href="guia.html#retos"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-challenge"></use></svg><span>Retos cotidianos</span></a></li>
+            </ul>
+          </li>
+          <li><a href="sobre.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-info"></use></svg><span>Sobre Crece en Casa</span></a></li>
+          <li class="nav-item nav-item--has-submenu">
+            <button type="button" class="nav-submenu-toggle" aria-expanded="false" aria-controls="submenu-comunidad" data-submenu-toggle>
+              <svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-community"></use></svg>
+              <span class="nav-submenu-toggle__text">Nuestra comunidad</span>
+              <span class="nav-submenu-toggle__chevron" aria-hidden="true"></span>
+            </button>
+            <ul class="nav-submenu" id="submenu-comunidad" data-submenu>
+              <li><a href="familias.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-community"></use></svg><span>Comunidad</span></a></li>
+              <li><a href="experiencias.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-story"></use></svg><span>Experiencias</span></a></li>
+              <li><a href="preguntas-frecuentes.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-faq"></use></svg><span>Preguntas frecuentes</span></a></li>
+            </ul>
+          </li>
         </ul>
+      
       </nav>
 
       <div class="header-actions">
         <a class="icon-button" href="actividades.html#buscar" aria-label="Buscar actividades">
           <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-search"></use></svg>
-        </a>
-        <a class="btn btn--soft" href="mi-espacio.html">
-          <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-user"></use></svg>
-          <span>Mi espacio</span>
         </a>
       </div>
     </div>
@@ -62,10 +82,10 @@
             Pequeñas acciones, grandes <span class="rainbow-text">conversaciones</span>
           </h1>
           <p class="hero__lead">
-            Apoya el desarrollo de la comunicación de tu hijo o hija con actividades
+            Acompaña el desarrollo de la comunicación de tu hijo o hija con actividades
             sencillas, divertidas y basadas en la vida cotidiana.
           </p>
-          <a class="btn btn--coral" href="#edades">
+          <a class="btn btn--coral" href="actividades.html">
             Explorar actividades
             <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-arrow"></use></svg>
           </a>
@@ -146,76 +166,115 @@
         </div>
 
         <aside class="areas-panel" aria-labelledby="areas-title">
-          <h2 class="areas-panel__title" id="areas-title">O explora por área de desarrollo</h2>
+          <h2 class="areas-panel__title" id="areas-title">Explora por área de comunicación</h2>
           <ul class="areas-panel__list">
             <li>
               <a href="actividades.html?area=vocabulario">
                 <span class="area-icon area-icon--blue"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-vocabulario"></use></svg></span>
-                Vocabulario
+                Vocabulario y significado
               </a>
             </li>
             <li>
               <a href="actividades.html?area=comprension">
                 <span class="area-icon area-icon--coral"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-comprension"></use></svg></span>
-                Comprensión
+                Comprensión del lenguaje
               </a>
             </li>
             <li>
               <a href="actividades.html?area=expresion">
                 <span class="area-icon area-icon--lavender"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-expresion"></use></svg></span>
-                Expresión
+                Expresión del lenguaje
               </a>
             </li>
             <li>
-              <a href="actividades.html?area=interaccion-social">
+              <a href="actividades.html?area=interaccion">
                 <span class="area-icon area-icon--violet"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-interaccion"></use></svg></span>
-                Interacción social
-              </a>
-            </li>
-            <li>
-              <a href="actividades.html?area=juego-comunicativo">
-                <span class="area-icon area-icon--yellow"><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-juego"></use></svg></span>
-                Juego comunicativo
+                Interacción comunicativa
               </a>
             </li>
           </ul>
+          <p class="areas-panel__guide">
+            También puedes practicar estas áreas en la
+            <a href="guia.html#ruta">ruta de estrategias</a>
+            y en los
+            <a href="guia.html#retos">retos cotidianos</a>.
+          </p>
         </aside>
       </div>
     </section>
 
-    <!-- Beneficios -->
-    <section class="features" aria-labelledby="features-title">
-      <h2 class="visually-hidden" id="features-title">Cómo te acompaña Crece en Casa</h2>
-      <ul class="container features__list">
-        <li class="feature">
-          <svg class="feature__icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-casa"></use></svg>
-          <div>
-            <h3 class="feature__title">Actividades desde casa</h3>
-            <p class="feature__text">Con materiales que ya tienes.</p>
-          </div>
-        </li>
-        <li class="feature">
-          <svg class="feature__icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-bombilla"></use></svg>
-          <div>
-            <h3 class="feature__title">Instrucciones claras</h3>
-            <p class="feature__text">Paso a paso y fáciles de seguir.</p>
-          </div>
-        </li>
-        <li class="feature">
-          <svg class="feature__icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-corazon-circulo"></use></svg>
-          <div>
-            <h3 class="feature__title">Basadas en la vida cotidiana</h3>
-            <p class="feature__text">Para aprender jugando juntos.</p>
-          </div>
-        </li>
-        <li class="feature">
-          <svg class="feature__icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-brote"></use></svg>
-          <div>
-            <h3 class="feature__title">Acompañamiento en cada etapa</h3>
-            <p class="feature__text">Ideas pensadas para cada edad.</p>
-          </div>
-        </li>
-      </ul>
+    <!-- Aprende a acompañar -->
+    <section class="section section--tint guide-teaser" aria-labelledby="guide-teaser-title">
+      <div class="container">
+        <header class="section-heading">
+          <h2 id="guide-teaser-title">Aprende a acompañar</h2>
+          <p>
+            Descubre cómo reconocer oportunidades de comunicación y qué puedes hacer para acompañar
+            a tu niño en los momentos de cada día. Una estrategia a la vez, a tu ritmo.
+          </p>
+        </header>
+        <p class="guide-teaser__actions">
+          <a class="btn btn--coral" href="guia.html#ruta">
+            Explorar estrategias
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-arrow"></use></svg>
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <!-- Momentos que comunican -->
+    <section class="moments section" aria-labelledby="moments-title">
+      <div class="container">
+        <header class="section-heading">
+          <h2 id="moments-title">Momentos que comunican</h2>
+          <p>
+            Jugar, comer, vestirse y mirar un cuento pueden convertirse en oportunidades para comunicarse.
+            Encuentra ideas para aprovechar esos momentos sin preparar una clase.
+          </p>
+        </header>
+
+        <ul class="moment-grid">
+          <li class="moment-card moment-card--yellow">
+            <span class="area-icon area-icon--yellow" aria-hidden="true">
+              <svg class="icon"><use href="assets/icons/sprite.svg#i-juego"></use></svg>
+            </span>
+            <span class="moment-card__title">Juego</span>
+            <span class="moment-card__actions">
+              <a href="actividades.html?momento=juego">Actividades</a>
+              <a href="reto.html?id=senala-algo">Reto</a>
+            </span>
+          </li>
+          <li class="moment-card moment-card--coral">
+            <span class="area-icon area-icon--coral" aria-hidden="true">
+              <svg class="icon"><use href="assets/icons/sprite.svg#i-expresion"></use></svg>
+            </span>
+            <span class="moment-card__title">Comida</span>
+            <span class="moment-card__actions">
+              <a href="actividades.html?momento=comida">Actividades</a>
+              <a href="reto.html?id=dice-una-palabra">Reto</a>
+            </span>
+          </li>
+          <li class="moment-card moment-card--sage">
+            <span class="area-icon area-icon--violet" aria-hidden="true">
+              <svg class="icon"><use href="assets/icons/sprite.svg#i-interaccion"></use></svg>
+            </span>
+            <span class="moment-card__title">Rutinas diarias</span>
+            <span class="moment-card__actions">
+              <a href="actividades.html?momento=rutinas">Actividades</a>
+              <a href="reto.html?id=vestirse">Reto</a>
+            </span>
+          </li>
+          <li class="moment-card moment-card--lavender">
+            <span class="area-icon area-icon--blue" aria-hidden="true">
+              <svg class="icon"><use href="assets/icons/sprite.svg#i-vocabulario"></use></svg>
+            </span>
+            <span class="moment-card__title">Lectura compartida</span>
+            <span class="moment-card__actions">
+              <a href="actividades.html?momento=lectura">Actividades</a>
+            </span>
+          </li>
+        </ul>
+      </div>
     </section>
 
     <!-- Actividad destacada -->
@@ -242,12 +301,9 @@
           </figure>
 
           <aside class="note" aria-labelledby="note-title">
-            <h3 class="note__title hand" id="note-title">¿Qué favorece?</h3>
+            <h3 class="note__title hand" id="note-title">Área principal</h3>
             <ul class="checklist">
-              <li><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-check"></use></svg>Vocabulario</li>
-              <li><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-check"></use></svg>Comprensión</li>
-              <li><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-check"></use></svg>Imaginación</li>
-              <li><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-check"></use></svg>Interacción</li>
+              <li><svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-check"></use></svg>Interacción comunicativa</li>
             </ul>
             <svg class="note__heart" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#d-heart"></use></svg>
           </aside>
@@ -292,7 +348,7 @@
             <li><a href="actividades.html">Actividades</a></li>
             <li><a href="guia.html">Guía para cuidadores</a></li>
             <li><a href="sobre.html">Sobre Crece en Casa</a></li>
-            <li><a href="mi-espacio.html">Mi espacio</a></li>
+            <li><a href="familias.html">Nuestra comunidad</a></li>
           </ul>
         </nav>
         <div>

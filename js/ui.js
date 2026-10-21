@@ -30,6 +30,14 @@ window.CEC.ui = (function () {
     return `actividad.html?id=${encodeURIComponent(activity.id)}`;
   }
 
+  function strategyUrl(strategy) {
+    return `estrategia.html?id=${encodeURIComponent(strategy.id)}`;
+  }
+
+  function challengeUrl(challenge) {
+    return `reto.html?id=${encodeURIComponent(challenge.id)}`;
+  }
+
   function activityImage(activity) {
     if (activity.image) return activity.image;
     return window.CEC.data.getAge(activity.ages[0]).image;
@@ -49,9 +57,17 @@ window.CEC.ui = (function () {
       .join("");
   }
 
-  /* `actions` permite añadir controles propios de cada página (p. ej. quitar de Mi espacio). */
+  function strategyLinks(strategyIds) {
+    return (strategyIds || [])
+      .map((id) => window.CEC.data.getStrategy(id))
+      .filter(Boolean)
+      .map((strategy) => `<a href="${strategyUrl(strategy)}">${escapeHTML(strategy.title)}</a>`)
+      .join(" · ");
+  }
+
   function activityCard(activity, { headingLevel = 3, actions = "" } = {}) {
     const tone = window.CEC.data.getAge(activity.ages[0]).tone;
+    const primary = window.CEC.data.getArea(activity.primaryArea);
     const media = activity.image ? "activity-card__media--photo" : "";
     return `
       <article class="activity-card activity-card--${tone}">
@@ -64,12 +80,55 @@ window.CEC.ui = (function () {
             <a class="activity-card__link" href="${activityUrl(activity)}">${escapeHTML(activity.title)}</a>
           </h${headingLevel}>
           <p class="activity-card__tagline">${escapeHTML(activity.tagline)}</p>
-          <ul class="tag-list" aria-label="Áreas que trabaja">${areaTags(activity)}</ul>
+          ${primary ? `<p class="activity-card__area">${escapeHTML(primary.label)}</p>` : ""}
           <p class="activity-card__meta">${icon("i-clock")} ${escapeHTML(activity.duration)}</p>
+          <a class="btn btn--outline btn--small" href="${activityUrl(activity)}">Ver actividad</a>
           ${actions}
         </div>
       </article>`;
   }
 
-  return { escapeHTML, icon, formatAges, activityUrl, activityImage, imageTag, areaTags, activityCard };
+  function tipTone(tone) {
+    if (tone === "pink" || tone === "coral") return "coral";
+    if (tone === "green" || tone === "sage") return "sage";
+    if (tone === "yellow") return "yellow";
+    if (tone === "lavender") return "lavender";
+    return "sage";
+  }
+
+  function strategyCard(strategy) {
+    return `
+      <article class="tip tip--${tipTone(strategy.tone)}">
+        <p class="strategy-card__eyebrow">Estrategia ${strategy.number} de 8</p>
+        <h3><a href="${strategyUrl(strategy)}">${escapeHTML(strategy.title)}</a></h3>
+        <p><strong>Qué hacer:</strong> ${escapeHTML(strategy.what)}</p>
+        <p class="strategy-card__more"><a href="${strategyUrl(strategy)}">Ver estrategia ${icon("i-arrow")}</a></p>
+      </article>`;
+  }
+
+  function challengeCard(challenge) {
+    return `
+      <article class="tip tip--${tipTone(challenge.tone)}">
+        <p class="strategy-card__eyebrow">${escapeHTML(challenge.tag)}</p>
+        <h3><a href="${challengeUrl(challenge)}">${escapeHTML(challenge.title)}</a></h3>
+        <p>${escapeHTML(challenge.situation)}</p>
+        <p class="strategy-card__more"><a href="${challengeUrl(challenge)}">Empezar reto ${icon("i-arrow")}</a></p>
+      </article>`;
+  }
+
+  return {
+    escapeHTML,
+    icon,
+    formatAges,
+    activityUrl,
+    strategyUrl,
+    challengeUrl,
+    activityImage,
+    imageTag,
+    areaTags,
+    strategyLinks,
+    activityCard,
+    strategyCard,
+    challengeCard,
+  };
 })();

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Guía para cuidadores | Crece en Casa</title>
-  <meta name="description" content="Ideas sencillas para acompañar la comunicación de niños de 2 a 5 años en la vida cotidiana.">
+  <meta name="description" content="Estrategias y retos cotidianos para acompañar la comunicación de niños de 2 a 5 años.">
   <meta name="theme-color" content="#fef9f3">
   <script>document.documentElement.classList.add("js");</script>
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
@@ -26,21 +26,41 @@
           <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-menu"></use></svg>
           <span class="visually-hidden" data-nav-label>Abrir menú</span>
         </button>
-        <ul class="main-nav__list" id="menu-principal" data-nav-menu>
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="actividades.html">Actividades</a></li>
-          <li><a href="guia.html" aria-current="page">Guía para cuidadores</a></li>
-          <li><a href="sobre.html">Sobre Crece en Casa</a></li>
+                <ul class="main-nav__list" id="menu-principal" data-nav-menu>
+          <li><a href="index.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-home"></use></svg><span>Inicio</span></a></li>
+          <li><a href="actividades.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-juego"></use></svg><span>Actividades</span></a></li>
+          <li class="nav-item nav-item--has-submenu is-current">
+            <button type="button" class="nav-submenu-toggle" aria-expanded="false" aria-controls="submenu-guia" data-submenu-toggle aria-current="page">
+              <svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-guide"></use></svg>
+              <span class="nav-submenu-toggle__text">Guía para cuidadores</span>
+              <span class="nav-submenu-toggle__chevron" aria-hidden="true"></span>
+            </button>
+            <ul class="nav-submenu" id="submenu-guia" data-submenu>
+              <li><a href="guia.html" aria-current="page"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-guide"></use></svg><span>Ver la guía</span></a></li>
+              <li><a href="guia.html#ruta"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-route"></use></svg><span>Ruta de estrategias</span></a></li>
+              <li><a href="guia.html#retos"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-challenge"></use></svg><span>Retos cotidianos</span></a></li>
+            </ul>
+          </li>
+          <li><a href="sobre.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-info"></use></svg><span>Sobre Crece en Casa</span></a></li>
+          <li class="nav-item nav-item--has-submenu">
+            <button type="button" class="nav-submenu-toggle" aria-expanded="false" aria-controls="submenu-comunidad" data-submenu-toggle>
+              <svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-community"></use></svg>
+              <span class="nav-submenu-toggle__text">Nuestra comunidad</span>
+              <span class="nav-submenu-toggle__chevron" aria-hidden="true"></span>
+            </button>
+            <ul class="nav-submenu" id="submenu-comunidad" data-submenu>
+              <li><a href="familias.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-community"></use></svg><span>Comunidad</span></a></li>
+              <li><a href="experiencias.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-story"></use></svg><span>Experiencias</span></a></li>
+              <li><a href="preguntas-frecuentes.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-faq"></use></svg><span>Preguntas frecuentes</span></a></li>
+            </ul>
+          </li>
         </ul>
+      
       </nav>
 
       <div class="header-actions">
         <a class="icon-button" href="actividades.html#buscar" aria-label="Buscar actividades">
           <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-search"></use></svg>
-        </a>
-        <a class="btn btn--soft" href="mi-espacio.html">
-          <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-user"></use></svg>
-          <span>Mi espacio</span>
         </a>
       </div>
     </div>
@@ -55,62 +75,56 @@
             <li aria-current="page">Guía para cuidadores</li>
           </ol>
         </nav>
-        <h1 id="page-title">Guía para cuidadores</h1>
+        <h1 id="page-title">Aprende a acompañar la comunicación de tu niño</h1>
         <p class="page-hero__lead">
-          Pequeños hábitos que convierten los momentos de cada día en oportunidades para conversar.
-          No necesitas materiales especiales: lo más valioso es tu atención.
+          Aquí encontrarás estrategias sencillas para acompañar a tu niño en la vida diaria y retos cortos
+          para practicar cómo responder en situaciones reales. No necesitas hacerlo todo ni hacerlo perfecto:
+          puedes avanzar a tu ritmo.
         </p>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="ideas-title">
+    <section class="section" aria-labelledby="bloques-title">
       <div class="container">
-        <h2 class="section-title" id="ideas-title">Ideas que ayudan en el día a día</h2>
-        <ul class="tip-grid tip-grid--three">
-          <li class="tip tip--coral">
-            <h3>Ponte a su altura</h3>
-            <p>Habla cara a cara, para que pueda ver tu rostro, tus gestos y tu boca mientras hablas.</p>
-          </li>
-          <li class="tip tip--yellow">
-            <h3>Espera y escucha</h3>
-            <p>Después de una pregunta, cuenta en silencio hasta cinco. Las pausas le dan tiempo para responder.</p>
-          </li>
+        <h2 class="visually-hidden" id="bloques-title">Cómo empezar</h2>
+        <ul class="tip-grid tip-grid--two">
           <li class="tip tip--sage">
-            <h3>Repite y amplía</h3>
-            <p>Retoma lo que dice y añade una o dos palabras: si dice «perro», puedes responder «un perro grande».</p>
-          </li>
-          <li class="tip tip--sky">
-            <h3>Nombra lo cotidiano</h3>
-            <p>Describe lo que hacen juntos mientras cocinan, se visten, se bañan o salen a pasear.</p>
-          </li>
-          <li class="tip tip--lavender">
-            <h3>Sigue su interés</h3>
-            <p>Conversa sobre lo que le llama la atención en ese momento; así la charla será más natural.</p>
+            <h3>Ruta de estrategias</h3>
+            <p>Ocho estrategias para acompañar la comunicación. Te sugerimos probar una por semana, pero puedes explorarlas en el orden que prefieras.</p>
+            <a class="btn btn--coral" href="#ruta">Ver la ruta de estrategias</a>
           </li>
           <li class="tip tip--coral">
-            <h3>Pantallas como apoyo</h3>
-            <p>Si usan un video, véanlo juntos y conversen después. El encuentro entre ustedes es lo más importante.</p>
+            <h3>Retos cotidianos</h3>
+            <p>Situaciones de todos los días en las que tú decides qué harías. Después de elegir, encontrarás ideas para probar en casa.</p>
+            <a class="btn btn--lavender" href="#retos">Empezar un reto</a>
           </li>
         </ul>
       </div>
     </section>
 
-    <section class="section section--tint" aria-labelledby="consulta-title">
-      <div class="container prose">
-        <h2 id="consulta-title">¿Cuándo consultar a un profesional?</h2>
-        <p>
-          Cada niño y cada niña tienen su propio ritmo. Si tienes dudas sobre cómo se comunica tu hijo o hija,
-          o si algo te preocupa, consulta con su pediatra o con un fonoaudiólogo. Una valoración profesional
-          es la forma adecuada de resolver esas dudas.
-        </p>
-        <p class="notice notice--warm">
-          <span><strong>Contenido de ejemplo:</strong> esta guía está pendiente de revisión por profesionales
-          de la fonoaudiología y la educación inicial. Sus orientaciones son educativas y no constituyen un diagnóstico.</span>
-        </p>
-        <a class="btn btn--coral" href="actividades.html">
-          Ver actividades
-          <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-arrow"></use></svg>
-        </a>
+    <section class="section section--tint" id="ruta" aria-labelledby="ruta-title">
+      <div class="container">
+        <header class="section-heading">
+          <h2 id="ruta-title">Ruta de estrategias</h2>
+          <p>Ocho ideas sencillas para acompañar la comunicación de tu niño. Prueba una por semana o explora la que más te llame la atención.</p>
+        </header>
+        <ul class="tip-grid tip-grid--three" data-strategies></ul>
+        <noscript>
+          <p class="notice notice--warm">Para ver la ruta de estrategias necesitas activar JavaScript en tu navegador.</p>
+        </noscript>
+      </div>
+    </section>
+
+    <section class="section" id="retos" aria-labelledby="retos-title">
+      <div class="container">
+        <header class="section-heading">
+          <h2 id="retos-title">Retos cotidianos</h2>
+          <p>Elige una situación, decide qué harías y recibe ideas para probar en casa. Ninguna respuesta es una evaluación del niño.</p>
+        </header>
+        <ul class="tip-grid tip-grid--two" data-challenges></ul>
+        <noscript>
+          <p class="notice notice--warm">Para ver los retos necesitas activar JavaScript en tu navegador.</p>
+        </noscript>
       </div>
     </section>
   </main>
@@ -128,7 +142,7 @@
             <li><a href="actividades.html">Actividades</a></li>
             <li><a href="guia.html">Guía para cuidadores</a></li>
             <li><a href="sobre.html">Sobre Crece en Casa</a></li>
-            <li><a href="mi-espacio.html">Mi espacio</a></li>
+            <li><a href="familias.html">Nuestra comunidad</a></li>
           </ul>
         </nav>
         <div>
@@ -138,11 +152,14 @@
       </div>
       <div class="site-footer__bottom">
         <p>© <span data-current-year>2026</span> Crece en Casa</p>
-        <p>Sitio en desarrollo · Contenido e imágenes de ejemplo</p>
+        <p>Sitio en desarrollo · Contenido educativo orientativo</p>
       </div>
     </div>
   </footer>
 
+  <script src="js/data.js" defer></script>
+  <script src="js/ui.js" defer></script>
   <script src="js/main.js" defer></script>
+  <script src="js/guide.js" defer></script>
 </body>
 </html>

@@ -74,10 +74,11 @@
 }
 
 .hero__title {
-  font-size: clamp(2.6rem, 1.35rem + 4.2vw, 4.4rem);
+  font-size: clamp(2.15rem, 1.2rem + 4vw, 4.4rem);
   font-weight: 800;
-  line-height: 1.02;
+  line-height: 1.05;
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 .hero__lead {
@@ -281,9 +282,27 @@
 .age-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-4);
+  gap: var(--space-3);
   padding: 0;
   list-style: none;
+}
+
+@media (max-width: 29.99em) {
+  .age-card {
+    padding: var(--space-4) var(--space-2) var(--space-3);
+  }
+
+  .age-card__img {
+    height: 5.75rem;
+  }
+
+  .age-card__title {
+    font-size: 1.25rem;
+  }
+
+  .age-card__text {
+    font-size: 0.88rem;
+  }
 }
 
 .age-card {
@@ -405,7 +424,7 @@
 
 @media (min-width: 64em) {
   .ages__layout {
-    grid-template-columns: minmax(0, 1fr) 15rem;
+    grid-template-columns: minmax(0, 1fr) 17.5rem;
     align-items: end;
     gap: var(--space-5);
   }
@@ -421,55 +440,111 @@
   .areas-panel__list {
     grid-template-columns: 1fr;
   }
+
+  .areas-panel__list a {
+    align-items: flex-start;
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
 }
 
-/* ---------- Beneficios ---------- */
-.features {
-  border-top: 1px solid var(--c-line);
-  padding-block: var(--space-6);
+.areas-panel__guide {
+  margin-top: var(--space-4);
+  color: var(--c-text);
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
 
-.features__list {
+.areas-panel__guide a {
+  color: var(--c-coral-ink);
+  font-weight: 700;
+}
+
+/* ---------- Aprende a acompañar ---------- */
+.guide-teaser .section-heading {
+  max-width: 40rem;
+  margin-inline: auto;
+}
+
+.guide-teaser__actions {
+  display: flex;
+  justify-content: center;
+  margin-top: calc(var(--space-5) * -1);
+}
+
+/* ---------- Momentos que comunican ---------- */
+.moments .section-heading {
+  max-width: 40rem;
+  margin-inline: auto;
+}
+
+.moment-grid {
   display: grid;
-  gap: var(--space-5);
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
   padding: 0;
   list-style: none;
 }
 
-.feature {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-4);
-}
-
-.feature__icon {
-  width: 3.25rem;
-  height: 3.25rem;
-  flex: none;
-}
-
-.feature__title {
-  font-family: var(--font-body);
-  font-size: 1.05rem;
-  font-weight: 800;
-  line-height: 1.25;
-}
-
-.feature__text {
-  margin-top: var(--space-1);
-  color: var(--c-muted);
-  font-size: 0.95rem;
-  line-height: 1.4;
-}
-
-@media (min-width: 40em) {
-  .features__list {
+@media (min-width: 30em) {
+  .moment-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (min-width: 64em) {
-  .features__list {
+.moment-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 8.5rem;
+  padding: var(--space-5) var(--space-4);
+  border-radius: 1.4rem;
+  color: var(--c-ink);
+  text-align: center;
+}
+
+.moment-card__title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.moment-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: auto;
+}
+
+.moment-card__actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.72);
+  color: var(--c-ink);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.moment-card__actions a:hover {
+  background: #fff;
+  box-shadow: 0 8px 18px -14px rgb(28 53 50 / 0.6);
+}
+
+.moment-card--yellow { background: var(--c-yellow-soft); }
+.moment-card--coral { background: var(--c-coral-soft); }
+.moment-card--sage { background: var(--c-sage-soft); }
+.moment-card--lavender { background: var(--c-lavender-soft); }
+
+@media (min-width: 48em) {
+  .moment-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
@@ -538,10 +613,18 @@
 
 .featured__card .note {
   order: 1;
-  justify-self: end;
+  justify-self: stretch;
   width: min(100%, 15rem);
-  margin-right: var(--space-2);
-  transform: rotate(3deg);
+  margin-inline: auto;
+  transform: none;
+}
+
+@media (min-width: 40em) {
+  .featured__card .note {
+    justify-self: end;
+    margin-inline: 0 var(--space-2);
+    transform: rotate(3deg);
+  }
 }
 
 @media (min-width: 48em) {
