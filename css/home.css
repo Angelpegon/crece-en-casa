@@ -293,7 +293,7 @@
   }
 
   .age-card__img {
-    height: 5.75rem;
+    height: 6.25rem;
   }
 
   .age-card__title {
@@ -326,15 +326,21 @@
   box-shadow: 0 16px 28px -20px rgb(28 53 50 / 0.5);
 }
 
-.age-card--yellow { --card-bg: var(--c-yellow-soft); --card-accent: #f6cf7f; }
-.age-card--green { --card-bg: var(--c-sage-soft); --card-accent: #a9d2bd; }
-.age-card--lavender { --card-bg: var(--c-lavender-soft); --card-accent: #c9b0ee; }
+/* Fondos alineados al pastel de cada ilustración para que no se vea un marco interno */
+.age-card--pink { --card-bg: #fce4da; --card-accent: #f7b4a3; }
+.age-card--yellow { --card-bg: #feefd0; --card-accent: #f6cf7f; }
+.age-card--green { --card-bg: #e3f4e5; --card-accent: #a9d2bd; }
+.age-card--lavender { --card-bg: #eddffc; --card-accent: #c9b0ee; }
 
 .age-card__img {
+  display: block;
   width: auto;
-  height: 7.5rem;
+  max-width: 100%;
+  height: 8.5rem;
   margin-bottom: var(--space-3);
+  border-radius: 0;
   object-fit: contain;
+  background: transparent;
 }
 
 .age-card__title {
@@ -605,10 +611,15 @@
 .featured__media {
   order: 2;
   margin-inline: calc(var(--space-5) * -1);
+  line-height: 0;
 }
 
 .featured__media img {
+  display: block;
   width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: bottom center;
 }
 
 .featured__card .note {

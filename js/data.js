@@ -12,10 +12,10 @@ window.CEC.data = (function () {
   }
 
   const ages = [
-    { value: 2, label: "2 años", tagline: "Descubrir y expresar", tone: "pink", image: image("edad-2.webp", 190, 172) },
-    { value: 3, label: "3 años", tagline: "Nombrar y comprender", tone: "yellow", image: image("edad-3.webp", 170, 172) },
-    { value: 4, label: "4 años", tagline: "Conversar y crear ideas", tone: "green", image: image("edad-4.webp", 190, 172) },
-    { value: 5, label: "5 años", tagline: "Contar, jugar y compartir", tone: "lavender", image: image("edad-5.webp", 204, 156) },
+    { value: 2, label: "2 años", tagline: "Descubrir y expresar", tone: "pink", image: image("edad-2.jpeg", 220, 180) },
+    { value: 3, label: "3 años", tagline: "Nombrar y comprender", tone: "yellow", image: image("edad-3.jpeg", 220, 180) },
+    { value: 4, label: "4 años", tagline: "Conversar y crear ideas", tone: "green", image: image("edad-4.jpeg", 220, 180) },
+    { value: 5, label: "5 años", tagline: "Contar, jugar y compartir", tone: "lavender", image: image("edad-5.jpeg", 220, 180) },
   ];
 
   const areas = [
@@ -273,7 +273,7 @@ window.CEC.data = (function () {
       duration: "5–10 minutos",
       materialsId: "casa",
       strategyIds: ["sigue-su-interes", "espera-y-dale-espacio"],
-      image: image("actividad-cuento-con-pausa.webp", 550, 396),
+      image: image("actividad-cuento-con-pausa.webp", 1041, 774),
       imageAlt: "Una mamá lee un cuento ilustrado junto a su hijo, ambos sonríen.",
       materials: ["Un cuento ilustrado o imágenes de una historia."],
       before: "Siéntense juntos y elijan una historia que llame la atención del niño. No es necesario leer cada palabra.",
