@@ -4,458 +4,208 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Crece en Casa | Actividades para acompañar la comunicación de niños de 2 a 5 años</title>
+    <title>Crece en Casa | El lenguaje sucede</title>
     <meta name="description"
-        content="Actividades sencillas, divertidas y basadas en la vida cotidiana para acompañar el desarrollo de la comunicación y el lenguaje de niños de 2 a 5 años.">
+        content="Actividades sencillas basadas en la vida cotidiana para acompañar la comunicación y el lenguaje de niños de 2 a 5 años.">
     <meta name="theme-color" content="#fef9f3">
     <script>document.documentElement.classList.add("js");</script>
     <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/home.css?v=mockup6">
 </head>
 
 <body>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header class="site-header" data-site-header></header>
 
-    <header class="site-header">
-        <div class="container site-header__inner">
-            <a class="brand" href="index.html" aria-label="Crece en Casa, ir al inicio">Crece en Casa</a>
+    <main id="contenido">
+        <section class="hero hero--inicio" aria-labelledby="hero-title">
+            <div class="container hero__banner">
+                <img class="hero__banner-img"
+                    src="assets/img/temporal/momentos-que-construyen-lenguaje.png?v=5"
+                    width="2164" height="727"
+                    alt="Una mamá y su hija juegan con bloques. El lenguaje sucede en cada momento compartido en casa."
+                    fetchpriority="high">
 
-            <nav class="main-nav" aria-label="Navegación principal">
-                <button class="nav-toggle icon-button" type="button" aria-expanded="false"
-                    aria-controls="menu-principal" data-nav-toggle>
+                <div class="hero__content">
+                    <h1 class="hero__title" id="hero-title">
+                        Pequeñas<br>
+                        acciones,<br>
+                        grandes<br>
+                        <span class="rainbow-text">conversaciones</span>
+                    </h1>
+                </div>
+
+                <a class="btn btn--sage hero__cta" href="experiencias.html">
+                    ¿Qué podemos descubrir hoy?
                     <svg class="icon" aria-hidden="true" focusable="false">
-                        <use href="assets/icons/sprite.svg#i-menu"></use>
-                    </svg>
-                    <span class="visually-hidden" data-nav-label>Abrir menú</span>
-                </button>
-                <ul class="main-nav__list" id="menu-principal" data-nav-menu>
-                    <li><a href="index.html" aria-current="page"><svg class="icon nav-icon" aria-hidden="true"
-                                focusable="false">
-                                <use href="assets/icons/sprite.svg#i-home"></use>
-                            </svg><span>Inicio</span></a></li>
-                    <li><a href="actividades.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false">
-                                <use href="assets/icons/sprite.svg#i-juego"></use>
-                            </svg><span>Actividades</span></a></li>
-                    <li class="nav-item nav-item--has-submenu">
-                        <button type="button" class="nav-submenu-toggle" aria-expanded="false"
-                            aria-controls="submenu-guia" data-submenu-toggle>
-                            <svg class="icon nav-icon" aria-hidden="true" focusable="false">
-                                <use href="assets/icons/sprite.svg#i-guide"></use>
-                            </svg>
-                            <span class="nav-submenu-toggle__text">Guía para cuidadores</span>
-                            <span class="nav-submenu-toggle__chevron" aria-hidden="true"></span>
-                        </button>
-                        <ul class="nav-submenu" id="submenu-guia" data-submenu>
-                            <li><a href="guia.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false">
-                                        <use href="assets/icons/sprite.svg#i-guide"></use>
-                                    </svg><span>Ver la guía</span></a></li>
-                            <li><a href="guia.html#ruta"><svg class="icon nav-icon" aria-hidden="true"
-                                        focusable="false">
-                                        <use href="assets/icons/sprite.svg#i-route"></use>
-                                    </svg><span>Ruta de estrategias</span></a></li>
-                            <li><a href="guia.html#retos"><svg class="icon nav-icon" aria-hidden="true"
-                                        focusable="false">
-                                        <use href="assets/icons/sprite.svg#i-challenge"></use>
-                                    </svg><span>Retos cotidianos</span></a></li>
-                        </ul>
-                    </li>
-                    <li><a href="sobre.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false">
-                                <use href="assets/icons/sprite.svg#i-info"></use>
-                            </svg><span>Sobre Crece en Casa</span></a></li>
-                    <li class="nav-item nav-item--has-submenu">
-                        <button type="button" class="nav-submenu-toggle" aria-expanded="false"
-                            aria-controls="submenu-comunidad" data-submenu-toggle>
-                            <svg class="icon nav-icon" aria-hidden="true" focusable="false">
-                                <use href="assets/icons/sprite.svg#i-community"></use>
-                            </svg>
-                            <span class="nav-submenu-toggle__text">Nuestra comunidad</span>
-                            <span class="nav-submenu-toggle__chevron" aria-hidden="true"></span>
-                        </button>
-                        <ul class="nav-submenu" id="submenu-comunidad" data-submenu>
-                            <li><a href="familias.html"><svg class="icon nav-icon" aria-hidden="true" focusable="false">
-                                        <use href="assets/icons/sprite.svg#i-community"></use>
-                                    </svg><span>Comunidad</span></a></li>
-                            <li><a href="experiencias.html"><svg class="icon nav-icon" aria-hidden="true"
-                                        focusable="false">
-                                        <use href="assets/icons/sprite.svg#i-story"></use>
-                                    </svg><span>Experiencias</span></a></li>
-                            <li><a href="preguntas-frecuentes.html"><svg class="icon nav-icon" aria-hidden="true"
-                                        focusable="false">
-                                        <use href="assets/icons/sprite.svg#i-faq"></use>
-                                    </svg><span>Preguntas frecuentes</span></a></li>
-                        </ul>
-                    </li>
-                </ul>
-
-            </nav>
-
-            <div class="header-actions">
-                <a class="icon-button" href="actividades.html#buscar" aria-label="Buscar actividades">
-                    <svg class="icon" aria-hidden="true" focusable="false">
-                        <use href="assets/icons/sprite.svg#i-search"></use>
+                        <use href="assets/icons/sprite.svg#i-arrow"></use>
                     </svg>
                 </a>
             </div>
-        </div>
-    </header>
-
-    <main id="contenido">
-        <!-- Hero -->
-        <section class="hero" aria-labelledby="hero-title">
-            <span class="blob blob--sage blob--hero-top" aria-hidden="true"></span>
-            <span class="blob blob--sage-soft blob--hero-bottom" aria-hidden="true"></span>
-            <span class="blob blob--sage blob--hero-right" aria-hidden="true"></span>
-            <span class="blob blob--yellow blob--hero-right-2" aria-hidden="true"></span>
-
-            <div class="container hero__layout">
-                <div class="hero__content">
-                    <svg class="deco deco--hero-sparks" aria-hidden="true" focusable="false">
-                        <use href="assets/icons/sprite.svg#d-sparks"></use>
-                    </svg>
-                    <svg class="deco deco--hero-sparks-left" aria-hidden="true" focusable="false">
-                        <use href="assets/icons/sprite.svg#d-sparks"></use>
-                    </svg>
-                    <h1 class="hero__title" id="hero-title">
-                        Pequeñas acciones, grandes <span class="rainbow-text">conversaciones</span>
-                    </h1>
-                    <p class="hero__lead">
-                        Acompaña el desarrollo de la comunicación de tu hijo o hija con actividades
-                        sencillas, divertidas y basadas en la vida cotidiana.
-                    </p>
-                    <a class="btn btn--coral" href="actividades.html">
-                        Explorar actividades
-                        <svg class="icon" aria-hidden="true" focusable="false">
-                            <use href="assets/icons/sprite.svg#i-arrow"></use>
-                        </svg>
-                    </a>
-                    <svg class="deco deco--hero-heart" aria-hidden="true" focusable="false">
-                        <use href="assets/icons/sprite.svg#d-heart"></use>
-                    </svg>
-                </div>
-
-                <div class="hero__media">
-                    <!-- Imagen temporal recortada del mockup: reemplazar por la fotografía definitiva -->
-                    <img class="hero__photo" src="assets/img/temporal/hero-familia-lectura.jpeg" width="584"
-                        height="524"
-                        alt="Una mamá y su hija pequeña, recostadas frente a un libro abierto, se miran y sonríen."
-                        fetchpriority="high">
-                </div>
-            </div>
         </section>
 
-        <!-- Edades y áreas -->
-        <section class="ages section" id="edades" aria-labelledby="edades-title">
-            <svg class="deco deco--leaf-left" aria-hidden="true" focusable="false">
-                <use href="assets/icons/sprite.svg#d-leaf"></use>
-            </svg>
-            <svg class="deco deco--ages-sparks" aria-hidden="true" focusable="false">
-                <use href="assets/icons/sprite.svg#d-sparks"></use>
-            </svg>
+        <section class="explore section" aria-labelledby="moments-title">
+            <div class="container">
+                <header class="section-heading section-heading--explore">
+                    <h2 id="moments-title">Momentos para explorar</h2>
+                </header>
 
-            <div class="container ages__layout">
-                <div class="ages__main">
-                    <header class="section-heading">
-                        <h2 id="edades-title">¿Para qué edad buscas actividades?</h2>
-                        <p>Cada etapa tiene grandes oportunidades para comunicarse.</p>
-                    </header>
-
-                    <ul class="age-grid">
+                <div class="explore__layout">
+                    <ul class="moment-grid moment-grid--five">
                         <li>
-                            <a class="age-card age-card--pink" href="actividades.html?edad=2">
-                                <img class="age-card__img" src="assets/img/temporal/edad-2.jpeg" width="220"
-                                    height="180" alt="" loading="lazy">
-                                <span class="age-card__title">2 años</span>
-                                <span class="age-card__text">Descubrir y expresar</span>
-                                <span class="age-card__arrow" aria-hidden="true">
-                                    <svg class="icon">
-                                        <use href="assets/icons/sprite.svg#i-arrow"></use>
-                                    </svg>
-                                </span>
+                            <a class="moment-tile moment-tile--coral" href="explorar-actividades.html?momento=comida">
+                                <img class="moment-tile__img" src="assets/img/temporal/nino1.jpeg?v=2" width="306" height="305" alt="" loading="lazy">
+                                <span class="moment-tile__title">Preparando o comiendo</span>
+                                <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
                             </a>
                         </li>
                         <li>
-                            <a class="age-card age-card--yellow" href="actividades.html?edad=3">
-                                <img class="age-card__img" src="assets/img/temporal/edad-3.jpeg" width="220"
-                                    height="180" alt="" loading="lazy">
-                                <span class="age-card__title">3 años</span>
-                                <span class="age-card__text">Nombrar y comprender</span>
-                                <span class="age-card__arrow" aria-hidden="true">
-                                    <svg class="icon">
-                                        <use href="assets/icons/sprite.svg#i-arrow"></use>
-                                    </svg>
-                                </span>
+                            <a class="moment-tile moment-tile--lavender" href="explorar-actividades.html?momento=rutinas">
+                                <img class="moment-tile__img" src="assets/img/temporal/nino2.jpeg?v=2" width="298" height="308" alt="" loading="lazy">
+                                <span class="moment-tile__title">Vistiéndose</span>
+                                <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
                             </a>
                         </li>
                         <li>
-                            <a class="age-card age-card--green" href="actividades.html?edad=4">
-                                <img class="age-card__img" src="assets/img/temporal/edad-4.jpeg" width="220"
-                                    height="180" alt="" loading="lazy">
-                                <span class="age-card__title">4 años</span>
-                                <span class="age-card__text">Conversar y crear ideas</span>
-                                <span class="age-card__arrow" aria-hidden="true">
-                                    <svg class="icon">
-                                        <use href="assets/icons/sprite.svg#i-arrow"></use>
-                                    </svg>
-                                </span>
+                            <a class="moment-tile moment-tile--sage" href="explorar-actividades.html?momento=juego">
+                                <img class="moment-tile__img" src="assets/img/temporal/nino3.jpeg?v=2" width="277" height="311" alt="" loading="lazy">
+                                <span class="moment-tile__title">Jugando en casa</span>
+                                <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
                             </a>
                         </li>
                         <li>
-                            <a class="age-card age-card--lavender" href="actividades.html?edad=5">
-                                <img class="age-card__img" src="assets/img/temporal/edad-5.jpeg" width="220"
-                                    height="180" alt="" loading="lazy">
-                                <span class="age-card__title">5 años</span>
-                                <span class="age-card__text">Contar, jugar y compartir</span>
-                                <span class="age-card__arrow" aria-hidden="true">
-                                    <svg class="icon">
-                                        <use href="assets/icons/sprite.svg#i-arrow"></use>
-                                    </svg>
-                                </span>
+                            <a class="moment-tile moment-tile--sky" href="explorar-actividades.html?momento=afuera">
+                                <img class="moment-tile__img" src="assets/img/temporal/nino4.jpeg?v=2" width="297" height="320" alt="" loading="lazy">
+                                <span class="moment-tile__title">Caminando o explorando afuera</span>
+                                <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="moment-tile moment-tile--pink" href="explorar-actividades.html?momento=lectura">
+                                <img class="moment-tile__img" src="assets/img/temporal/nino5.jpeg?v=2" width="313" height="317" alt="" loading="lazy">
+                                <span class="moment-tile__title">Leyendo un cuento</span>
+                                <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
                             </a>
                         </li>
                     </ul>
+
+                    <aside class="how-panel" aria-labelledby="how-title">
+                        <h2 id="how-title">¿Cómo funciona?</h2>
+                        <ol class="how-list">
+                            <li><span class="how-list__num">1</span> Elige tu momento y personaliza tu experiencia.</li>
+                            <li><span class="how-list__num">2</span> Realiza la actividad a tu ritmo.</li>
+                            <li><span class="how-list__num">3</span> Registra tu experiencia y guarda tus recuerdos.</li>
+                            <li><span class="how-list__num">4</span> Descubre nuevas ideas en la comunidad.</li>
+                        </ol>
+                    </aside>
                 </div>
-
-                <aside class="areas-panel" aria-labelledby="areas-title">
-                    <h2 class="areas-panel__title" id="areas-title">Explora por área de comunicación</h2>
-                    <ul class="areas-panel__list">
-                        <li>
-                            <a href="actividades.html?area=vocabulario">
-                                <span class="area-icon area-icon--blue"><svg class="icon" aria-hidden="true"
-                                        focusable="false">
-                                        <use href="assets/icons/sprite.svg#i-vocabulario"></use>
-                                    </svg></span>
-                                Vocabulario y significado
-                            </a>
-                        </li>
-                        <li>
-                            <a href="actividades.html?area=comprension">
-                                <span class="area-icon area-icon--coral"><svg class="icon" aria-hidden="true"
-                                        focusable="false">
-                                        <use href="assets/icons/sprite.svg#i-comprension"></use>
-                                    </svg></span>
-                                Comprensión del lenguaje
-                            </a>
-                        </li>
-                        <li>
-                            <a href="actividades.html?area=expresion">
-                                <span class="area-icon area-icon--lavender"><svg class="icon" aria-hidden="true"
-                                        focusable="false">
-                                        <use href="assets/icons/sprite.svg#i-expresion"></use>
-                                    </svg></span>
-                                Expresión del lenguaje
-                            </a>
-                        </li>
-                        <li>
-                            <a href="actividades.html?area=interaccion">
-                                <span class="area-icon area-icon--violet"><svg class="icon" aria-hidden="true"
-                                        focusable="false">
-                                        <use href="assets/icons/sprite.svg#i-interaccion"></use>
-                                    </svg></span>
-                                Interacción comunicativa
-                            </a>
-                        </li>
-                    </ul>
-                    <p class="areas-panel__guide">
-                        También puedes practicar estas áreas en la
-                        <a href="guia.html#ruta">ruta de estrategias</a>
-                        y en los
-                        <a href="guia.html#retos">retos cotidianos</a>.
-                    </p>
-                </aside>
             </div>
         </section>
 
-        <!-- Aprende a acompañar -->
-        <section class="section section--tint guide-teaser" aria-labelledby="guide-teaser-title">
+        <section class="product-grid section" aria-labelledby="product-title">
             <div class="container">
-                <header class="section-heading">
-                    <h2 id="guide-teaser-title">Aprende a acompañar</h2>
-                    <p>
-                        Descubre cómo reconocer oportunidades de comunicación y qué puedes hacer para acompañar
-                        a tu niño en los momentos de cada día. Una estrategia a la vez, a tu ritmo.
-                    </p>
-                </header>
-                <p class="guide-teaser__actions">
-                    <a class="btn btn--coral" href="guia.html#ruta">
-                        Explorar estrategias
-                        <svg class="icon" aria-hidden="true" focusable="false">
-                            <use href="assets/icons/sprite.svg#i-arrow"></use>
-                        </svg>
-                    </a>
-                </p>
-            </div>
-        </section>
-
-        <!-- Momentos que comunican -->
-        <section class="moments section" aria-labelledby="moments-title">
-            <div class="container">
-                <header class="section-heading">
-                    <h2 id="moments-title">Momentos que comunican</h2>
-                    <p>
-                        Jugar, comer, vestirse y mirar un cuento pueden convertirse en oportunidades para comunicarse.
-                        Encuentra ideas para aprovechar esos momentos sin preparar una clase.
-                    </p>
-                </header>
-
-                <ul class="moment-grid">
-                    <li class="moment-card moment-card--yellow">
-                        <span class="area-icon area-icon--yellow" aria-hidden="true">
-                            <svg class="icon">
-                                <use href="assets/icons/sprite.svg#i-juego"></use>
-                            </svg>
-                        </span>
-                        <span class="moment-card__title">Juego</span>
-                        <span class="moment-card__actions">
-                            <a href="actividades.html?momento=juego">Actividades</a>
-                            <a href="reto.html?id=senala-algo">Reto</a>
-                        </span>
+                <h2 class="visually-hidden" id="product-title">Tu espacio en Crece en Casa</h2>
+                <ul class="product-cards">
+                    <li class="product-card product-card--path">
+                        <div class="product-card__body">
+                            <h3>Mi camino</h3>
+                            <p class="product-card__sub">Cada momento cuenta.</p>
+                            <div class="product-card__widget">
+                                <p class="product-card__meta">Huellas de esta semana <strong>3 de 5</strong></p>
+                                <div class="product-card__progress" aria-hidden="true">
+                                    <span class="product-card__bar" style="--progress: 60%"></span>
+                                </div>
+                                <div class="product-card__leaves" aria-hidden="true">
+                                    <span class="path-leaf is-filled"><svg class="icon"><use href="assets/icons/sprite.svg#i-brote"></use></svg></span>
+                                    <span class="path-leaf is-filled"><svg class="icon"><use href="assets/icons/sprite.svg#i-brote"></use></svg></span>
+                                    <span class="path-leaf is-filled"><svg class="icon"><use href="assets/icons/sprite.svg#i-brote"></use></svg></span>
+                                    <span class="path-leaf"><svg class="icon"><use href="assets/icons/sprite.svg#i-brote"></use></svg></span>
+                                    <span class="path-leaf"><svg class="icon"><use href="assets/icons/sprite.svg#i-brote"></use></svg></span>
+                                </div>
+                            </div>
+                            <a class="btn btn--sage btn--small" href="mi-camino.html">
+                                Ver mi camino
+                                <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-arrow"></use></svg>
+                            </a>
+                        </div>
+                        <img class="product-card__art" src="assets/img/temporal/home-nina-camino.png?v=3" width="220" height="220" alt="" loading="lazy">
                     </li>
-                    <li class="moment-card moment-card--coral">
-                        <span class="area-icon area-icon--coral" aria-hidden="true">
-                            <svg class="icon">
-                                <use href="assets/icons/sprite.svg#i-expresion"></use>
-                            </svg>
-                        </span>
-                        <span class="moment-card__title">Comida</span>
-                        <span class="moment-card__actions">
-                            <a href="actividades.html?momento=comida">Actividades</a>
-                            <a href="reto.html?id=dice-una-palabra">Reto</a>
-                        </span>
+                    <li class="product-card product-card--album">
+                        <h3>Mi álbum de momentos</h3>
+                        <p class="product-card__sub">Guarda lo que hace especial cada día.</p>
+                        <img class="product-card__art product-card__art--wide" src="assets/img/temporal/home-album-polaroids.png?v=3" width="280" height="210" alt="" loading="lazy">
+                        <a class="btn btn--sage btn--small" href="mi-album.html">
+                            Ir a mi álbum
+                            <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-arrow"></use></svg>
+                        </a>
                     </li>
-                    <li class="moment-card moment-card--sage">
-                        <span class="area-icon area-icon--violet" aria-hidden="true">
-                            <svg class="icon">
-                                <use href="assets/icons/sprite.svg#i-interaccion"></use>
-                            </svg>
-                        </span>
-                        <span class="moment-card__title">Rutinas diarias</span>
-                        <span class="moment-card__actions">
-                            <a href="actividades.html?momento=rutinas">Actividades</a>
-                            <a href="reto.html?id=vestirse">Reto</a>
-                        </span>
+                    <li class="product-card product-card--community">
+                        <h3>Comunidad que acompaña</h3>
+                        <p class="product-card__sub">Ideas reales de familias como la tuya.</p>
+                        <div class="product-card__testimonial">
+                            <img src="assets/img/temporal/comunidad-familia-mockup.jpg?v=2" width="72" height="72" alt="" loading="lazy">
+                            <blockquote class="product-card__quote">
+                                <p>“Hicimos la actividad en la cocina y a mi hijo le encantó. Usamos frutas que teníamos en casa y repetía los nombres.”</p>
+                                <footer>
+                                    <svg class="icon product-card__heart" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#d-heart"></use></svg>
+                                    Mamá de 3 años
+                                </footer>
+                            </blockquote>
+                        </div>
+                        <a class="btn btn--sky btn--small" href="experiencias-familias.html">
+                            Ver más experiencias
+                            <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-arrow"></use></svg>
+                        </a>
                     </li>
-                    <li class="moment-card moment-card--lavender">
-                        <span class="area-icon area-icon--blue" aria-hidden="true">
-                            <svg class="icon">
-                                <use href="assets/icons/sprite.svg#i-vocabulario"></use>
-                            </svg>
-                        </span>
-                        <span class="moment-card__title">Lectura compartida</span>
-                        <span class="moment-card__actions">
-                            <a href="actividades.html?momento=lectura">Actividades</a>
-                        </span>
+                    <li class="product-card product-card--guide">
+                        <h3>Guía para cuidadores</h3>
+                        <p class="product-card__sub">Todo en un mismo lugar.</p>
+                        <img class="product-card__art product-card__art--wide" src="assets/img/temporal/home-guia-recursos.png?v=3" width="280" height="210" alt="" loading="lazy">
+                        <a class="btn btn--sage btn--small" href="guia-cuidadores.html">
+                            Explorar recursos
+                            <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-arrow"></use></svg>
+                        </a>
                     </li>
                 </ul>
             </div>
         </section>
 
-        <!-- Actividad destacada -->
-        <section class="featured section" aria-labelledby="featured-title">
-            <div class="container">
-                <article class="featured__card">
-                    <div class="featured__content">
-                        <p class="featured__eyebrow">Actividad destacada</p>
-                        <h2 class="featured__title" id="featured-title">El cuento con pausa</h2>
-                        <p class="featured__tagline">Mirar, imaginar y conversar</p>
-                        <p class="featured__summary">Una historia, muchas oportunidades para comunicarse.</p>
-                        <a class="btn btn--lavender" href="actividad.html?id=el-cuento-con-pausa">
-                            Ver actividad
-                            <span class="visually-hidden">El cuento con pausa</span>
-                            <svg class="icon" aria-hidden="true" focusable="false">
-                                <use href="assets/icons/sprite.svg#i-arrow"></use>
-                            </svg>
+        <section class="closing closing--split" aria-labelledby="closing-title">
+            <div class="container closing__split">
+                <aside class="closing__about">
+                    <div class="closing__about-copy">
+                        <h2>Crecer en comunicación también es crecer juntos</h2>
+                        <p>Conoce nuestra historia, misión y el propósito de Crece en Casa.</p>
+                        <a class="btn btn--sage btn--small" href="sobre.html">
+                            Descubrir más
+                            <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-arrow"></use></svg>
                         </a>
-                        <svg class="deco deco--featured-sparks" aria-hidden="true" focusable="false">
-                            <use href="assets/icons/sprite.svg#d-sparks"></use>
-                        </svg>
                     </div>
-
-                    <figure class="featured__media">
-                        <img src="assets/img/temporal/actividad-cuento-con-pausa.webp" width="1041" height="774"
-                            loading="lazy" alt="Una mamá lee un cuento ilustrado junto a su hijo, ambos sonríen.">
-                    </figure>
-
-                    <aside class="note" aria-labelledby="note-title">
-                        <h3 class="note__title hand" id="note-title">Área principal</h3>
-                        <ul class="checklist">
-                            <li>
-                                <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-check"></use></svg>
-                                Interacción comunicativa
-                            </li>
-                        </ul>
-                        <svg class="note__heart" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#d-heart"></use></svg>
-                    </aside>
-                </article>
-            </div>
-        </section>
-
-        <!-- Cierre -->
-        <section class="closing" aria-labelledby="closing-title">
-            <svg class="deco deco--closing-leaf" aria-hidden="true" focusable="false">
-                <use href="assets/icons/sprite.svg#d-leaf"></use>
-            </svg>
-
-            <div class="container closing__layout">
-                <!-- Ilustración temporal recortada del mockup: reemplazar por la ilustración definitiva -->
-                <img class="closing__img" src="assets/img/temporal/familia-abrazo.jpeg" width="620" height="340"
-                    loading="lazy"
-                    alt="Ilustración de una familia (mamá, papá y su hijo pequeño) abrazándose y sonriendo.">
-
-                <h2 class="closing__title hand" id="closing-title">
-                    <span class="closing__line">Aquí también</span>
-                    <span class="closing__line">se construyen</span>
-                    <span class="closing__line">grandes <span class="rainbow-text">historias</span>
-                        <svg class="icon" aria-hidden="true" focusable="false">
-                            <use href="assets/icons/sprite.svg#d-heart"></use>
-                        </svg></span>
-                </h2>
-
-                <div class="closing__bubble">
-                    <p>Cada momento en casa es una oportunidad para conectar, explorar y crecer juntos.</p>
-                    <svg class="icon" aria-hidden="true" focusable="false">
-                        <use href="assets/icons/sprite.svg#d-heart-outline"></use>
-                    </svg>
+                    <img class="closing__fox" src="assets/img/temporal/home-zorro.png?v=3" width="160" height="160" alt="" loading="lazy">
+                </aside>
+                <div class="closing__cta-panel">
+                    <div class="closing__cta-copy">
+                        <h2 id="closing-title">¿Listo para crear una nueva experiencia?</h2>
+                        <p>Elige tu momento, tu tiempo y lo que te gustaría favorecer. Nosotros te damos una propuesta pensada para ti.</p>
+                    </div>
+                    <a class="btn btn--sage" href="experiencias.html">
+                        Crear mi experiencia
+                        <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-arrow"></use></svg>
+                    </a>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="site-footer">
-        <div class="container">
-            <div class="site-footer__grid">
-                <div class="site-footer__brand">
-                    <a class="brand" href="index.html" aria-label="Crece en Casa, ir al inicio">Crece en Casa</a>
-                    <p>Ideas para acompañar la comunicación y el lenguaje de niños de 2 a 5 años, a partir de la vida
-                        cotidiana en casa.</p>
-                </div>
-                <nav aria-labelledby="footer-nav-title">
-                    <h2 id="footer-nav-title">Explora</h2>
-                    <ul class="site-footer__links">
-                        <li><a href="actividades.html">Actividades</a></li>
-                        <li><a href="guia.html">Guía para cuidadores</a></li>
-                        <li><a href="sobre.html">Sobre Crece en Casa</a></li>
-                        <li><a href="familias.html">Nuestra comunidad</a></li>
-                    </ul>
-                </nav>
-                <div>
-                    <h2>Importante</h2>
-                    <p>Las orientaciones de Crece en Casa son educativas. No constituyen un diagnóstico ni sustituyen
-                        una valoración fonoaudiológica. Si tienes dudas sobre el desarrollo de tu hijo o hija, consulta
-                        con un profesional.</p>
-                </div>
-            </div>
-            <div class="site-footer__bottom">
-                <p>© <span data-current-year>2026</span> Crece en Casa</p>
-                <p>Sitio en desarrollo · Contenido e imágenes de ejemplo</p>
-            </div>
-        </div>
-    </footer>
+    <footer class="site-footer" data-site-footer></footer>
 
+    <script src="js/chrome.js" defer></script>
     <script src="js/main.js" defer></script>
 </body>
 

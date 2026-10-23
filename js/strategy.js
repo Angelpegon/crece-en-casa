@@ -12,29 +12,29 @@
       <nav class="breadcrumb" aria-label="Ruta de navegación">
         <ol>
           <li><a href="index.html">Inicio</a></li>
-          <li><a href="guia.html">Guía para cuidadores</a></li>
-          <li><a href="guia.html#ruta">Ruta de estrategias</a></li>
+          <li><a href="guia-cuidadores.html">Guía para cuidadores</a></li>
+          <li><a href="ideas-que-acompanan.html">Ideas que acompañan</a></li>
           <li aria-current="page">${esc(current)}</li>
         </ol>
       </nav>`;
   }
 
   function notFound() {
-    document.title = "Estrategia no encontrada | Crece en Casa";
+    document.title = "Idea no encontrada | Crece en Casa";
     root.innerHTML = `
       <section class="page-hero page-hero--sage" aria-labelledby="page-title">
         <div class="container">
-          ${breadcrumb("Estrategia no encontrada")}
-          <h1 id="page-title">No encontramos esta estrategia</h1>
+          ${breadcrumb("Idea no encontrada")}
+          <h1 id="page-title">No encontramos esta idea</h1>
           <p class="page-hero__lead">Es posible que el enlace esté incompleto.</p>
-          <a class="btn btn--coral" href="guia.html#ruta">Ver la ruta de estrategias ${ui.icon("i-arrow")}</a>
+          <a class="btn btn--coral" href="ideas-que-acompanan.html">Ver ideas que acompañan ${ui.icon("i-arrow")}</a>
         </div>
       </section>`;
   }
 
   function relatedChallenges(strategy) {
     const list = strategy.challengeIds.map((id) => data.getChallenge(id)).filter(Boolean);
-    if (!list.length) return `<p class="related-empty">Sin reto en esta versión.</p>`;
+    if (!list.length) return `<p class="related-empty">Sin oportunidad relacionada en esta versión.</p>`;
     return `<ul class="link-list">${list
       .map((item) => `<li><a href="${ui.challengeUrl(item)}">${esc(item.title)}</a></li>`)
       .join("")}</ul>`;
@@ -58,7 +58,7 @@
       <section class="progress-box" aria-labelledby="progress-title">
         <h2 id="progress-title">Tus ideas para acompañar</h2>
         <p>Cada familia avanza a su ritmo. Guarda las ideas que te sirvan en este navegador.</p>
-        <div class="chip-group" role="group" aria-label="Estado de esta estrategia" data-progress-states>
+        <div class="chip-group" role="group" aria-label="Estado de esta idea" data-progress-states>
           ${Object.entries(progress.STATES)
             .map(
               ([value, label]) => `
@@ -98,7 +98,7 @@
         <header class="page-hero page-hero--${heroTone(strategy.tone)}" aria-labelledby="page-title">
           <div class="container">
             ${breadcrumb(strategy.title)}
-            <p class="activity-hero__ages">Estrategia ${strategy.number} de ${TOTAL}</p>
+            <p class="activity-hero__ages">Idea ${strategy.number} de ${TOTAL}</p>
             <h1 id="page-title">${esc(strategy.title)}</h1>
           </div>
         </header>
@@ -118,7 +118,7 @@
               <p>${esc(strategy.tip)}</p>
             </section>
             <section aria-labelledby="reto-rel-title">
-              <h2 id="reto-rel-title">Reto relacionado</h2>
+              <h2 id="reto-rel-title">Oportunidad relacionada</h2>
               ${relatedChallenges(strategy)}
             </section>
             <section aria-labelledby="act-rel-title">

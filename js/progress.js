@@ -59,5 +59,42 @@ window.CEC.progress = (function () {
     return write(data);
   }
 
-  return { STATES, isAvailable, get, set };
+  function list() {
+    const data = read();
+    return Object.entries(data)
+      .map(([key, value]) => {
+        const [type, ...rest] = key.split(":");
+        return {
+          key,
+          type,
+          id: rest.join(":"),
+          state: value && value.state,
+          moment: value && value.moment,
+          updatedAt: value && value.updatedAt,
+        };
+      })
+      .filter((item) => item.state && STATES[item.state])
+      .sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
+  }
+
+  function weekStart(date) {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = (day + 6) % 7;
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() - diff);
+    return d;
+  }
+
+  function weeklyTriedCount(limit = 5) {
+    const start = weekStart(new Date()).getTime();
+    const tried = list().filter((item) => {
+      if (item.state !== "tried") return false;
+      const t = Date.parse(item.updatedAt || "");
+      return Number.isFinite(t) && t >= start;
+    });
+    return { count: Math.min(tried.length, limit), total: limit, items: tried.slice(0, limit) };
+  }
+
+  return { STATES, isAvailable, get, set, list, weeklyTriedCount };
 })();

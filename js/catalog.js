@@ -9,7 +9,7 @@
   const clearButton = document.querySelector("[data-clear-filters]");
   if (!form || !results || !count || !empty) return;
 
-  const SEARCH_LINK = 'a[href="actividades.html#buscar"]';
+  const SEARCH_LINK = 'a[href="explorar-actividades.html#buscar"]';
   const TYPING_DELAY = 300;
 
   const validAges = data.ages.map((age) => String(age.value));
@@ -135,11 +135,16 @@
   function describe(filters, total) {
     const singular = total === 1;
     const parts = [];
-    if (filters.edad) parts.push(`para ${data.getAge(filters.edad).label}`);
-    if (filters.area) parts.push(`de ${data.getArea(filters.area).label.toLowerCase()}`);
-    if (filters.momento) parts.push(`para ${data.getMoment(filters.momento).label.toLowerCase()}`);
-    if (filters.duracion) parts.push(`de ${data.getDuration(filters.duracion).label}`);
-    if (filters.materiales) parts.push(`con ${data.getMaterial(filters.materiales).label.toLowerCase()}`);
+    const age = filters.edad ? data.getAge(filters.edad) : null;
+    const area = filters.area ? data.getArea(filters.area) : null;
+    const moment = filters.momento ? data.getMoment(filters.momento) : null;
+    const duration = filters.duracion ? data.getDuration(filters.duracion) : null;
+    const material = filters.materiales ? data.getMaterial(filters.materiales) : null;
+    if (age) parts.push(`para ${age.label}`);
+    if (area) parts.push(`de ${area.label.toLowerCase()}`);
+    if (moment) parts.push(`para ${moment.label.toLowerCase()}`);
+    if (duration) parts.push(`de ${duration.label}`);
+    if (material) parts.push(`con ${material.label.toLowerCase()}`);
     if (filters.q) parts.push(`que ${singular ? "coincide" : "coinciden"} con «${filters.q}»`);
     const noun = singular ? "actividad" : "actividades";
     return `${total} ${noun}${parts.length ? " " + parts.join(" ") : ""}`;

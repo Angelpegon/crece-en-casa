@@ -40,7 +40,8 @@ window.CEC.ui = (function () {
 
   function activityImage(activity) {
     if (activity.image) return activity.image;
-    return window.CEC.data.getAge(activity.ages[0]).image;
+    const age = window.CEC.data.getAge(activity.ages[0]);
+    return age ? age.image : { src: "assets/img/temporal/edad-2.jpeg", width: 220, height: 180 };
   }
 
   function imageTag(image, { alt = "", attrs = "" } = {}) {
@@ -66,7 +67,8 @@ window.CEC.ui = (function () {
   }
 
   function activityCard(activity, { headingLevel = 3, actions = "" } = {}) {
-    const tone = window.CEC.data.getAge(activity.ages[0]).tone;
+    const age = window.CEC.data.getAge(activity.ages[0]);
+    const tone = age ? age.tone : "lavender";
     const primary = window.CEC.data.getArea(activity.primaryArea);
     const media = activity.image ? "activity-card__media--photo" : "";
     return `
@@ -99,10 +101,10 @@ window.CEC.ui = (function () {
   function strategyCard(strategy) {
     return `
       <article class="tip tip--${tipTone(strategy.tone)}">
-        <p class="strategy-card__eyebrow">Estrategia ${strategy.number} de 8</p>
+        <p class="strategy-card__eyebrow">Idea ${strategy.number} de 8</p>
         <h3><a href="${strategyUrl(strategy)}">${escapeHTML(strategy.title)}</a></h3>
         <p><strong>Qué hacer:</strong> ${escapeHTML(strategy.what)}</p>
-        <p class="strategy-card__more"><a href="${strategyUrl(strategy)}">Ver estrategia ${icon("i-arrow")}</a></p>
+        <p class="strategy-card__more"><a href="${strategyUrl(strategy)}">Ver idea ${icon("i-arrow")}</a></p>
       </article>`;
   }
 
@@ -112,7 +114,7 @@ window.CEC.ui = (function () {
         <p class="strategy-card__eyebrow">${escapeHTML(challenge.tag)}</p>
         <h3><a href="${challengeUrl(challenge)}">${escapeHTML(challenge.title)}</a></h3>
         <p>${escapeHTML(challenge.situation)}</p>
-        <p class="strategy-card__more"><a href="${challengeUrl(challenge)}">Empezar reto ${icon("i-arrow")}</a></p>
+        <p class="strategy-card__more"><a href="${challengeUrl(challenge)}">Empezar ${icon("i-arrow")}</a></p>
       </article>`;
   }
 

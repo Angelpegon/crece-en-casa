@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi espacio | Crece en Casa</title>
+  <meta name="description" content="Tu espacio en este navegador. Todavía no hay cuentas en la nube.">
+  <meta name="theme-color" content="#fef9f3">
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header" data-site-header></header>
+  <main id="contenido">
+    <section class="page-hero page-hero--sage" aria-labelledby="page-title">
+      <div class="container">
+        <nav class="breadcrumb" aria-label="Ruta de navegación">
+          <ol>
+            <li><a href="index.html">Inicio</a></li>
+            <li aria-current="page">Mi espacio</li>
+          </ol>
+        </nav>
+        <h1 id="page-title">Mi espacio</h1>
+        <p class="page-hero__lead">
+          En esta versión no hay inicio de sesión en la nube. Puedes poner un nombre para personalizar
+          Mi camino y Mi álbum; todo se guarda solo aquí.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="access-title">
+      <div class="container prose">
+        <h2 id="access-title">Continuar</h2>
+        <form class="access-form" data-access-form>
+          <label>
+            Tu nombre o el de la familia
+            <input data-access-name name="name" type="text" maxlength="60" required placeholder="Por ejemplo: Ana">
+          </label>
+          <button class="btn btn--sage" type="submit">Entrar a mi espacio</button>
+          <button class="btn btn--outline" type="button" data-access-signout hidden>Salir de este espacio</button>
+          <p data-access-status role="status"></p>
+        </form>
+        <p class="notice notice--warm">
+          <span><strong>Importante:</strong> si borras los datos del navegador, se pierde este espacio. Más adelante podrá haber cuentas reales.</span>
+        </p>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer" data-site-footer></footer>
+  <script src="js/session.js" defer></script>
+  <script src="js/chrome.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/access.js" defer></script>
+</body>
+</html>

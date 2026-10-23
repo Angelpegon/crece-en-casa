@@ -17,29 +17,29 @@
       <nav class="breadcrumb" aria-label="Ruta de navegación">
         <ol>
           <li><a href="index.html">Inicio</a></li>
-          <li><a href="guia.html">Guía para cuidadores</a></li>
-          <li><a href="guia.html#retos">Retos cotidianos</a></li>
+          <li><a href="guia-cuidadores.html">Guía para cuidadores</a></li>
+          <li><a href="cada-dia-una-oportunidad.html">Cada día, una oportunidad</a></li>
           <li aria-current="page">${esc(current)}</li>
         </ol>
       </nav>`;
   }
 
   function notFound() {
-    document.title = "Reto no encontrado | Crece en Casa";
+    document.title = "Oportunidad no encontrada | Crece en Casa";
     root.innerHTML = `
       <section class="page-hero page-hero--coral" aria-labelledby="page-title">
         <div class="container">
-          ${breadcrumb("Reto no encontrado")}
-          <h1 id="page-title">No encontramos este reto</h1>
+          ${breadcrumb("Oportunidad no encontrada")}
+          <h1 id="page-title">No encontramos esta oportunidad</h1>
           <p class="page-hero__lead">Es posible que el enlace esté incompleto.</p>
-          <a class="btn btn--coral" href="guia.html#retos">Ver retos cotidianos ${ui.icon("i-arrow")}</a>
+          <a class="btn btn--coral" href="cada-dia-una-oportunidad.html">Ver oportunidades ${ui.icon("i-arrow")}</a>
         </div>
       </section>`;
   }
 
   function strategyLine(challenge) {
     const links = ui.strategyLinks(challenge.strategyIds);
-    return links ? `<p class="detail-meta"><strong>Estrategia que practicas:</strong> ${links}</p>` : "";
+    return links ? `<p class="detail-meta"><strong>Idea que practicas:</strong> ${links}</p>` : "";
   }
 
   function render(challenge) {
@@ -82,7 +82,7 @@
 
             <section class="progress-box" aria-labelledby="cierre-title" data-close hidden>
               <h2 id="cierre-title">¿Pudiste probar esta idea?</h2>
-              <div class="chip-group" role="group" aria-label="Cierre del reto">
+              <div class="chip-group" role="group" aria-label="Cierre de la oportunidad">
                 ${CLOSE_OPTIONS.map(
                   (option) => `
                   <label class="chip">

@@ -26,6 +26,7 @@
 .page-hero--coral { background: var(--c-coral-soft); }
 .page-hero--sage { background: var(--c-sage-soft); }
 .page-hero--lavender { background: var(--c-lavender-soft); }
+.page-hero--sky { background: #ddebf6; }
 
 .page-hero h1 {
   margin-top: var(--space-4);
@@ -38,6 +39,13 @@
   max-width: 42rem;
   margin-block: var(--space-3) var(--space-5);
   font-size: var(--fs-500);
+}
+
+.page-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-block: var(--space-4) 0;
 }
 
 .page-hero .container {
@@ -710,5 +718,147 @@ html:not(.js) .filters {
 
   .activity-body__aside {
     position: static;
+  }
+}
+
+/* ---------- Mi camino / álbum / acceso ---------- */
+.path-week {
+  max-width: 40rem;
+}
+
+.path-week__count {
+  margin: var(--space-3) 0;
+  font-size: 1.25rem;
+}
+
+.path-week__leaves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.path-leaf {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: #dfe8e2;
+  color: #7a8f86;
+  opacity: 0.55;
+}
+
+.path-leaf.is-filled {
+  background: var(--c-sage-soft);
+  color: #2f5a4a;
+  opacity: 1;
+}
+
+.path-week__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.path-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.path-list a {
+  display: grid;
+  gap: 0.15rem;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-soft);
+  text-decoration: none;
+  color: var(--c-ink);
+}
+
+.path-list__type {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--c-muted);
+}
+
+.album-layout {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.album-form,
+.access-form {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 28rem;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.album-form label,
+.access-form label {
+  display: grid;
+  gap: var(--space-2);
+  font-weight: 700;
+  color: var(--c-ink);
+}
+
+.album-form input,
+.album-form select,
+.album-form textarea,
+.access-form input {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.9rem;
+  border: 2px solid #8c8174;
+  border-radius: var(--radius-md);
+  font: inherit;
+}
+
+.album-grid {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.album-card {
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.album-card__meta {
+  margin: 0 0 var(--space-2);
+  color: var(--c-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.album-card__title {
+  margin: 0 0 var(--space-2);
+  font-size: 1.2rem;
+}
+
+@media (min-width: 64em) {
+  .album-layout {
+    grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .album-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

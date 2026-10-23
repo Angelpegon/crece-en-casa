@@ -26,10 +26,11 @@ window.CEC.data = (function () {
   ];
 
   const moments = [
-    { id: "juego", label: "Juego", icon: "i-juego", tone: "yellow" },
-    { id: "comida", label: "Comida", icon: "i-casa", tone: "coral" },
-    { id: "rutinas", label: "Rutinas diarias", icon: "i-brote", tone: "green" },
-    { id: "lectura", label: "Lectura compartida", icon: "i-vocabulario", tone: "lavender" },
+    { id: "comida", label: "Preparando o comiendo", shortLabel: "Comida", icon: "i-casa", tone: "coral" },
+    { id: "rutinas", label: "Vistiéndose", shortLabel: "Rutinas", icon: "i-brote", tone: "green" },
+    { id: "juego", label: "Jugando en casa", shortLabel: "Juego", icon: "i-juego", tone: "yellow" },
+    { id: "afuera", label: "Caminando o explorando afuera", shortLabel: "Afuera", icon: "i-interaccion", tone: "blue" },
+    { id: "lectura", label: "Leyendo un cuento", shortLabel: "Lectura", icon: "i-vocabulario", tone: "lavender" },
   ];
 
   const durations = [
@@ -135,7 +136,7 @@ window.CEC.data = (function () {
   const challenges = [
     {
       id: "senala-algo",
-      tag: "Reto cotidiano · En casa",
+      tag: "Oportunidad · En casa",
       title: "Tu niño señala algo que le interesa",
       situation: "Están en casa y tu niño señala una pelota, un juguete o un objeto. Puede que todavía no diga su nombre.",
       question: "¿Qué harías tú?",
@@ -166,7 +167,7 @@ window.CEC.data = (function () {
     },
     {
       id: "no-responde",
-      tag: "Reto cotidiano · En el juego",
+      tag: "Oportunidad · En el juego",
       title: "Le hablas y no responde",
       situation: "Le preguntas algo mientras juega, pero sigue concentrado en lo que está haciendo.",
       question: "¿Qué podrías hacer?",
@@ -197,7 +198,7 @@ window.CEC.data = (function () {
     },
     {
       id: "dice-una-palabra",
-      tag: "Reto cotidiano · En la merienda",
+      tag: "Oportunidad · En la merienda",
       title: "Tu niño dice una palabra y espera",
       situation: "Durante la merienda, tu niño dice «agua» o señala su vaso.",
       question: "¿Cómo puedes acompañar ese mensaje?",
@@ -228,7 +229,7 @@ window.CEC.data = (function () {
     },
     {
       id: "vestirse",
-      tag: "Reto cotidiano · En las rutinas",
+      tag: "Oportunidad · En las rutinas",
       title: "Vestirse también es comunicarse",
       situation: "Estás ayudando a tu niño a ponerse la ropa y tienen poco tiempo.",
       question: "¿Cómo puedes aprovechar este momento sin convertirlo en una clase?",

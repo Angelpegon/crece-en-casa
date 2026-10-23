@@ -356,7 +356,6 @@ select {
   min-height: var(--header-h);
 }
 
-/* Logotipo pendiente: marcador temporal, reemplazar por el logo oficial */
 .brand {
   display: inline-flex;
   align-items: center;
@@ -374,6 +373,101 @@ select {
   white-space: nowrap;
 }
 
+.brand--mark {
+  gap: var(--space-2);
+  min-width: 0;
+  padding: 0.2rem 0.35rem 0.2rem 0.2rem;
+  border: 0;
+  background: transparent;
+  white-space: normal;
+}
+
+.brand__mark {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.7rem;
+  object-fit: cover;
+  flex: none;
+}
+
+.brand__copy {
+  display: grid;
+  line-height: 1.1;
+  text-align: left;
+}
+
+.brand__name {
+  font-size: 1rem;
+}
+
+.brand__tag {
+  color: var(--c-muted);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.btn--sage {
+  background: #3f6f5f;
+  color: #fff;
+  box-shadow: 0 10px 22px -12px rgb(63 111 95 / 0.75);
+}
+
+.btn--sage:hover {
+  background: #355f51;
+}
+
+.btn--sky {
+  background: #5b7fa8;
+  color: #fff;
+  box-shadow: 0 10px 22px -12px rgb(91 127 168 / 0.7);
+}
+
+.btn--sky:hover {
+  background: #4d6e94;
+}
+
+.btn--sky {
+  background: #5b7fb0;
+  color: #fff;
+  box-shadow: 0 10px 22px -12px rgb(91 127 176 / 0.7);
+}
+
+.btn--sky:hover {
+  background: #4d6e9a;
+}
+
+.header-actions__access {
+  display: none;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.header-actions__access[aria-current="page"] {
+  background: var(--c-sage-soft);
+  border-color: transparent;
+  color: #2f5a4a;
+  font-weight: 700;
+}
+
+.nav-item--space {
+  display: list-item;
+}
+
+@media (min-width: 64em) {
+  .header-actions {
+    flex-wrap: nowrap;
+  }
+
+  .header-actions__access {
+    display: inline-flex;
+  }
+
+  .nav-item--space {
+    display: none;
+  }
+}
+
 .main-nav {
   margin-inline: auto;
 }
@@ -381,7 +475,7 @@ select {
 .main-nav__list {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 0.15rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -391,8 +485,7 @@ select {
   list-style: none;
 }
 
-.main-nav__list a,
-.nav-submenu-toggle {
+.main-nav__list a {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -408,9 +501,65 @@ select {
   line-height: 1.2;
   text-decoration: none;
   cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+@media (min-width: 64em) {
+  .site-header__inner {
+    gap: 0.65rem;
+  }
+
+  .main-nav {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .main-nav__list {
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 0.1rem;
+  }
+
+  .main-nav__list a {
+    gap: 0.2rem;
+    min-height: 2.1rem;
+    padding: 0.28rem 0.45rem;
+    font-size: 0.78rem;
+  }
+
+  .header-actions {
+    gap: 0.45rem;
+    flex: none;
+  }
+
+  .header-actions__access {
+    padding-inline: 0.7rem;
+    font-size: 0.8rem;
+    min-height: 2.2rem;
+  }
+
+  .header-actions .icon-button {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+}
+
+@media (min-width: 64em) and (max-width: 99.99em) {
+  .brand__tag {
+    display: none;
+  }
+}
+
+@media (min-width: 90em) {
+  .main-nav__list a {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.88rem;
+  }
+
+  .header-actions__access {
+    padding-inline: 0.9rem;
+    font-size: 0.88rem;
+  }
 }
 
 .nav-icon {
@@ -419,126 +568,14 @@ select {
   flex: none;
 }
 
-.nav-submenu-toggle__text {
-  flex: 1;
-  min-width: 0;
-  text-align: left;
-}
-
-.main-nav__list > li > a:hover,
-.nav-submenu-toggle:hover,
-.nav-submenu-toggle[aria-expanded="true"] {
-  background: rgb(241 140 130 / 0.14);
-}
-
-.main-nav__list > li > a[aria-current="page"],
-.nav-submenu-toggle[aria-current="page"],
-.nav-item--has-submenu.is-current > .nav-submenu-toggle {
-  background: var(--c-coral-tint);
-  color: var(--c-coral-ink);
-  font-weight: 700;
-}
-
-.nav-item--has-submenu {
-  position: relative;
-}
-
-.nav-submenu-toggle__chevron {
-  display: inline-block;
-  width: 0.45rem;
-  height: 0.45rem;
-  flex: none;
-  border-right: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: rotate(45deg) translateY(-1px);
-  transition: transform 0.2s ease;
-}
-
-.nav-submenu-toggle[aria-expanded="true"] .nav-submenu-toggle__chevron {
-  transform: rotate(225deg) translateY(-1px);
-}
-
-/* Panel bajo el botón; el ::before es solo zona clicleable invisible (sin hueco visual). */
-.nav-submenu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 60;
-  display: none;
-  flex-direction: column;
-  gap: 0.15rem;
-  width: max-content;
-  min-width: 15.5rem;
-  margin: 0;
-  padding: 0.4rem;
-  list-style: none;
-  border: 1px solid var(--c-line);
-  border-radius: 0.9rem;
-  background: var(--c-surface);
-  box-shadow: 0 12px 28px -14px rgb(28 53 50 / 0.32);
-}
-
-.nav-submenu::before {
-  content: "";
-  position: absolute;
-  top: -0.55rem;
-  right: 0;
-  left: 0;
-  height: 0.55rem;
-}
-
-.nav-submenu > li {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.nav-submenu.is-open {
-  display: flex;
-}
-
-.nav-submenu a {
-  width: 100%;
-  min-height: 2.4rem;
-  padding: 0.45rem 0.75rem;
-  border-radius: 0.65rem;
-  color: var(--c-ink);
-  font-size: 0.92rem;
-  font-weight: 600;
-}
-
-.nav-submenu a:hover {
+.main-nav__list > li > a:hover {
   background: var(--c-sage-tint);
-  color: var(--c-ink);
 }
 
-.nav-submenu a[aria-current="page"] {
-  background: rgb(241 140 130 / 0.12);
-  color: var(--c-ink);
+.main-nav__list > li > a[aria-current="page"] {
+  background: var(--c-sage-soft);
+  color: var(--c-sage-ink, #2f5a4a);
   font-weight: 700;
-}
-
-.nav-submenu .nav-icon {
-  width: 1rem;
-  height: 1rem;
-  color: var(--c-muted);
-}
-
-.nav-submenu a:hover .nav-icon,
-.nav-submenu a[aria-current="page"] .nav-icon {
-  color: var(--c-ink);
-}
-
-@media (min-width: 64em) {
-  .nav-item--has-submenu:hover > .nav-submenu,
-  .nav-item--has-submenu:focus-within > .nav-submenu {
-    display: flex;
-  }
-
-  .nav-item--has-submenu:hover > .nav-submenu-toggle .nav-submenu-toggle__chevron,
-  .nav-item--has-submenu:focus-within > .nav-submenu-toggle .nav-submenu-toggle__chevron {
-    transform: rotate(225deg) translateY(-1px);
-  }
 }
 
 .nav-toggle {
@@ -600,42 +637,12 @@ select {
     overflow: hidden;
   }
 
-  .js .main-nav__list a,
-  .js .nav-submenu-toggle {
+  .js .main-nav__list a {
     width: 100%;
     min-height: 3rem;
     padding-inline: var(--space-4);
     font-size: var(--fs-500);
     justify-content: flex-start;
-  }
-
-  .js .nav-submenu-toggle__text {
-    min-width: 0;
-  }
-
-  .js .nav-submenu {
-    position: static;
-    display: none;
-    width: auto;
-    min-width: 0;
-    margin: 0 0 var(--space-2);
-    padding: 0 0 0 var(--space-4);
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .js .nav-submenu::before {
-    display: none;
-  }
-
-  .js .nav-submenu.is-open {
-    display: flex;
-  }
-
-  .js .nav-submenu a {
-    font-size: 1rem;
   }
 
   .header-actions {
@@ -971,7 +978,184 @@ select {
   }
 }
 
-/* ---------- 12. Movimiento reducido ---------- */
+/* ---------- 12. Barra lateral (páginas distintas de Inicio) ---------- */
+/* body es flex column: sin width/flex el shell se encoge al contenido y se centra. */
+.page-shell {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: 0;
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+.page-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  margin: var(--space-3) 0 0;
+  padding: var(--space-4);
+  border-radius: 1.35rem;
+  background: #fbf7f1;
+  border: 1px solid var(--c-line);
+}
+
+@media (min-width: 64em) {
+  .page-shell {
+    display: grid;
+    grid-template-columns: 17.5rem minmax(0, 1fr);
+    align-items: start;
+    /* Misma caja que el header (.container) para alinear marca y sidebar */
+    width: min(100% - 2.5rem, var(--container));
+    max-width: none;
+    margin-inline: auto;
+    padding-inline: 0;
+    column-gap: var(--space-5);
+  }
+
+  .page-sidebar {
+    position: sticky;
+    top: calc(var(--header-h) + 0.75rem);
+    width: auto;
+    gap: var(--space-5);
+    max-height: calc(100dvh - var(--header-h) - 1.5rem);
+    margin: var(--space-4) 0 var(--space-6);
+    padding: var(--space-5) var(--space-4);
+    overflow: auto;
+    border-radius: 1.5rem;
+  }
+
+  .page-shell > main {
+    min-width: 0;
+  }
+
+  .page-shell .page-hero .container,
+  .page-shell .section .container {
+    width: 100%;
+    max-width: none;
+    padding-inline: clamp(1rem, 2.5vw, 2rem);
+  }
+}
+
+.side-nav__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.side-nav__item {
+  list-style: none;
+}
+
+.side-nav__link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 1rem;
+  color: var(--c-ink);
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.side-nav__link .nav-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+  color: #8a7568;
+}
+
+.side-nav__link:hover {
+  background: rgb(119 170 151 / 0.12);
+}
+
+.side-nav__link--active {
+  background: #3f6f5f;
+  color: #fff;
+}
+
+.side-nav__link--active .nav-icon {
+  color: #fff;
+}
+
+.side-nav__panel {
+  margin: 0.35rem 0 0.55rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 1rem;
+  background: #e5f0e4;
+}
+
+.side-nav__blurb {
+  margin: 0;
+  color: #3f5a4e;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.side-nav__children {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0.65rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.side-nav__children a {
+  display: block;
+  padding: 0.4rem 0.55rem;
+  border-radius: 0.65rem;
+  color: #2f5a4a;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.side-nav__children a:hover,
+.side-nav__children a[aria-current="page"] {
+  background: rgb(255 255 255 / 0.7);
+}
+
+.page-sidebar__foot {
+  margin-top: auto;
+  padding-top: var(--space-4);
+  text-align: center;
+}
+
+.page-sidebar__fox {
+  display: none;
+  width: min(9rem, 70%);
+  height: auto;
+  margin: 0 auto 0.75rem;
+}
+
+@media (min-width: 64em) {
+  .page-sidebar__fox {
+    display: block;
+  }
+}
+
+.page-sidebar__quote {
+  margin: 0;
+  color: var(--c-text);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+/* ---------- 13. Movimiento reducido ---------- */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

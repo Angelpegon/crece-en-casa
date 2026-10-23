@@ -22,6 +22,7 @@
         <ol>
           <li><a href="index.html">Inicio</a></li>
           <li><a href="actividades.html">Actividades</a></li>
+          <li><a href="explorar-actividades.html">Explorar actividades</a></li>
           <li aria-current="page">${esc(current)}</li>
         </ol>
       </nav>`;
@@ -35,7 +36,7 @@
           ${breadcrumb("Actividad no encontrada")}
           <h1 id="page-title">No encontramos esta actividad</h1>
           <p class="page-hero__lead">Es posible que el enlace esté incompleto o que la actividad ya no esté disponible.</p>
-          <a class="btn btn--coral" href="actividades.html">Ver todas las actividades ${ui.icon("i-arrow")}</a>
+          <a class="btn btn--coral" href="explorar-actividades.html">Ver todas las actividades ${ui.icon("i-arrow")}</a>
         </div>
       </section>`;
   }
@@ -57,7 +58,7 @@
   }
 
   function render(activity) {
-    const tone = data.getAge(activity.ages[0]).tone;
+    const tone = (data.getAge(activity.ages[0]) || {}).tone || "lavender";
     const primary = data.getArea(activity.primaryArea);
     const imageAlt = activity.image ? activity.imageAlt : "";
     const strategies = ui.strategyLinks(activity.strategyIds);
@@ -79,7 +80,7 @@
                 <li>${ui.icon("i-clock")} ${esc(activity.duration)}</li>
                 ${primary ? `<li>${esc(primary.label)}</li>` : ""}
               </ul>
-              ${strategies ? `<p class="detail-meta"><strong>Estrategia que practicas:</strong> ${strategies}</p>` : ""}
+              ${strategies ? `<p class="detail-meta"><strong>Idea que practicas:</strong> ${strategies}</p>` : ""}
               <div class="activity-hero__actions">
                 <button class="btn btn--outline" type="button" data-print>
                   ${ui.icon("i-print")} Imprimir
