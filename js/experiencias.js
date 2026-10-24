@@ -38,8 +38,14 @@
     activityId: "",
     openAdapt: "",
     saved: false,
+    saveIntent: "",
+    saveMessage: "",
+    saveError: "",
     shareOpen: false,
     error: "",
+    activityStep: 0,
+    activityStopped: false,
+    observation: "",
   };
 
   let state = loadState();
@@ -70,8 +76,19 @@
     render();
   }
 
+  function focusControl(selector, attribute, value) {
+    const control = Array.from(root.querySelectorAll(selector))
+      .find((item) => item.getAttribute(attribute) === value);
+    if (control) control.focus({ preventScroll: true });
+  }
+
   function goTo(step) {
-    setState({ step, error: "", shareOpen: false, openAdapt: step === 5 ? state.openAdapt : "" });
+    setState({
+      step,
+      error: "",
+      shareOpen: false,
+      openAdapt: step === 5 ? state.observation === "observed" ? "noQuiere" : state.openAdapt : "",
+    });
     const heading = root.querySelector("h2, h3");
     if (heading) heading.focus();
     root.scrollIntoView({ block: "start", behavior: "smooth" });
@@ -104,6 +121,94 @@
     if (!duration) return "";
     const map = { "3": "3 minutos", "5": "5 minutos", "10": "10 minutos" };
     return map[duration.id] || duration.label;
+  }
+
+  function momentLabel() {
+    const moment = data.getMoment(state.moment);
+    return moment ? moment.shortLabel || moment.label : "este momento";
+  }
+
+  function positiveFeedback(message, announceChange = true, { title = "¡Eso también cuenta!", compact = false, field = "" } = {}) {
+    return `
+      <div class="exp-feedback${compact ? " exp-feedback--compact" : ""}"${announceChange ? ' role="status"' : ""}${field ? ` data-exp-feedback-field="${field}"` : ""}>
+        <span class="exp-feedback__spark" aria-hidden="true">✦</span>
+        ${compact ? "" : `<img class="exp-feedback__mascot" src="assets/img/temporal/home-zorro.png" width="180" height="180" alt="" loading="lazy" decoding="async">`}
+        <span class="exp-feedback__copy">
+          <strong class="exp-feedback__title">${esc(title)}</strong>
+          <span>${esc(message)}</span>
+        </span>
+      </div>`;
+  }
+
+  function fieldMessage(field) {
+    if (field === "age") return `Pensaremos una idea acorde a su edad (${(data.getAge(state.age) || {}).label || state.age}) y a su propio ritmo.`;
+    if (field === "skill") return `Acompañaremos ${((data.getExperienceSkill(state.skill) || {}).label || "lo que quieren practicar").toLowerCase()} dentro de un momento cotidiano, sin convertirlo en una prueba.`;
+    if (field === "duration") return `${durationPhrase()} también alcanzan para compartir algo valioso.`;
+    if (field === "interest") return `Podemos partir de ${interestLabel() || "lo que le gusta"}: seguir su curiosidad es una linda forma de conectar.`;
+    return "";
+  }
+
+  function fieldFeedbackTitle(field) {
+    return ({
+      age: "A su propio ritmo",
+      skill: "Una intención bonita",
+      duration: "Un momento que cabe",
+      interest: "Sigamos su curiosidad",
+    })[field] || "¡Buena elección!";
+  }
+
+  function fieldFeedback(field) {
+    return state[field] ? positiveFeedback(fieldMessage(field), false, { compact: true, title: fieldFeedbackTitle(field), field }) : "";
+  }
+
+  function completedDetailCount() {
+    const interestComplete = state.interest && (state.interest !== "otro" || state.interestOther.trim());
+    return ["age", "skill", "duration"].filter((field) => state[field]).length + Number(Boolean(interestComplete));
+  }
+
+  function detailsProgress() {
+    const count = completedDetailCount();
+    return `
+      <div class="exp-detail-progress" role="progressbar" aria-label="${count} de 4 detalles elegidos" aria-valuemin="0" aria-valuemax="4" aria-valuenow="${count}" data-exp-detail-progress>
+        <div class="exp-detail-progress__copy">
+          <span data-exp-detail-label>${count === 4 ? "¡Ya tenemos todo para buscar su idea!" : `${count} de 4 detalles para preparar su idea`}</span>
+          <strong data-exp-detail-count>${count}/4</strong>
+        </div>
+        <span class="exp-detail-progress__track" aria-hidden="true"><span data-exp-detail-bar style="width:${count * 25}%"></span></span>
+      </div>`;
+  }
+
+  function updateDetailsProgress() {
+    const progressMeter = root.querySelector("[data-exp-detail-progress]");
+    if (!progressMeter) return;
+    const count = completedDetailCount();
+    progressMeter.setAttribute("aria-label", `${count} de 4 detalles elegidos`);
+    progressMeter.setAttribute("aria-valuenow", String(count));
+    progressMeter.querySelector("[data-exp-detail-label]").textContent = count === 4
+      ? "¡Ya tenemos todo para buscar su idea!"
+      : `${count} de 4 detalles para preparar su idea`;
+    progressMeter.querySelector("[data-exp-detail-count]").textContent = `${count}/4`;
+    progressMeter.querySelector("[data-exp-detail-bar]").style.width = `${count * 25}%`;
+  }
+
+  function updateInterestFeedback() {
+    const feedback = root.querySelector('[data-exp-feedback-field="interest"] .exp-feedback__copy > span');
+    if (feedback) feedback.textContent = fieldMessage("interest");
+  }
+
+  function activityProgress(activityStep, total, { stopped = false } = {}) {
+    const completed = Math.min(activityStep, total);
+    const label = stopped
+      ? `Pausamos aquí · ${completed} de ${total}`
+      : completed === total
+        ? "¡Momento compartido!"
+        : `Vamos juntos · ${completed} de ${total}`;
+    return `
+      <div class="exp-activity-progress" role="progressbar" aria-label="${completed} de ${total} ideas compartidas" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${completed}">
+        <span class="exp-activity-progress__label">${label}</span>
+        <span class="exp-activity-progress__track"><span style="width:${total ? completed / total * 100 : 0}%"></span></span>
+        <span class="exp-activity-progress__steps" aria-hidden="true">${Array.from({ length: total }, (_, index) => `<span class="${index < completed ? "is-done" : ""}">${index < completed ? "✓" : index + 1}</span>`).join("")}</span>
+      </div>`;
   }
 
   function formatStepText(text) {
@@ -158,11 +263,12 @@
   }
 
   function renderStep1() {
+    const selectedMoment = state.moment ? positiveFeedback(`¡Buen punto de partida! ${momentLabel()} ya ofrece oportunidades para conversar, jugar y conectar a su manera.`, true, { title: "¡Encontraste una oportunidad!" }) : "";
     return `
       <div class="exp-panel">
         ${stepper()}
         <h2 class="exp-title" tabindex="-1">Crea tu experiencia</h2>
-        <p class="exp-lead">Cuéntanos un poco sobre tu momento de hoy.</p>
+        <p class="exp-lead">Empecemos por algo que ya está pasando. No hay una respuesta incorrecta.</p>
         <fieldset class="exp-fieldset">
           <legend class="exp-question">¿Qué están haciendo?</legend>
           <ul class="moment-grid moment-grid--five exp-moments">
@@ -183,6 +289,7 @@
           </ul>
         </fieldset>
         ${fieldError("moment", "Elige el momento que más se parezca a lo que están haciendo.")}
+        ${selectedMoment}
         <p class="exp-help">Puedes elegir la opción que más se parezca a tu rutina.</p>
         ${navButtons({ nextLabel: "Siguiente", nextAction: "step1-next", wide: true })}
       </div>`;
@@ -228,24 +335,28 @@
         ${stepper()}
         <h2 class="exp-title" tabindex="-1">Completa los detalles</h2>
         <p class="exp-lead">Esta información nos ayudará a recomendarte una experiencia especial.</p>
+        ${detailsProgress()}
         <form class="exp-form" data-exp-form="details">
           <fieldset class="exp-fieldset" data-field="age">
-            <legend class="exp-question">Edad del niño</legend>
+            <legend class="exp-question">¿Qué edad tiene?</legend>
             ${chipGroup(
               "age",
               data.ages.map((age) => ({ id: String(age.value), label: age.label })),
               state.age
             )}
+            ${fieldFeedback("age")}
             ${fieldError("age", "Elige la edad del niño.")}
           </fieldset>
           <fieldset class="exp-fieldset" data-field="skill">
-            <legend class="exp-question">¿Qué quieres favorecer?</legend>
+            <legend class="exp-question">¿Qué les gustaría disfrutar o practicar?</legend>
             ${radioList("skill", data.experienceSkills, state.skill)}
+            ${fieldFeedback("skill")}
             ${fieldError("skill", "Elige qué quieres favorecer.")}
           </fieldset>
           <fieldset class="exp-fieldset" data-field="duration">
             <legend class="exp-question">Tiempo disponible</legend>
             ${chipGroup("duration", data.experienceDurations, state.duration)}
+            ${fieldFeedback("duration")}
             ${fieldError("duration", "Elige el tiempo que tienen.")}
           </fieldset>
           <fieldset class="exp-fieldset" data-field="interest">
@@ -258,6 +369,7 @@
                   </label>`
                 : ""
             }
+            ${fieldFeedback("interest")}
             ${fieldError("interest", "Elige un interés o escribe otro.")}
           </fieldset>
           <div class="exp-nav">
@@ -312,12 +424,18 @@
           </div>
         </div>`;
     }
+    const matchDetails = [
+      `lo que están haciendo (${momentLabel()})`,
+      interestLabel() ? `su interés por ${interestLabel()}` : "",
+      durationPhrase() ? `el tiempo disponible (${durationPhrase()})` : "",
+    ].filter(Boolean).join(", ");
     return `
       <div class="exp-panel">
         ${stepper()}
         <img class="exp-deco" src="assets/img/temporal/home-zorro.png" width="180" height="180" alt="" decoding="async">
         <h2 class="exp-title exp-title--center" tabindex="-1">¡Perfecto!</h2>
-        <p class="exp-lead exp-lead--center">Aquí tienes tu experiencia personalizada</p>
+        <p class="exp-lead exp-lead--center">Esta idea toma en cuenta ${esc(matchDetails)}. Puedes cambiarla si otra les llama más.</p>
+        ${positiveFeedback(`La propuesta ${main.title} es solo una invitación. Pueden adaptarla y seguir el interés de tu niño.`, true, { title: "¡Zorrito encontró una idea para ustedes!" })}
         ${summaryList()}
         ${
           alternatives.length
@@ -341,6 +459,32 @@
     const materials = activity.materials && activity.materials.length
       ? activity.materials
       : [];
+    const observationChoices = [
+      { id: "interested", icon: "i-spark", label: "Se interesó o se acercó", message: "¡Qué bien! Su interés y atención ya son una forma de encontrarse contigo.", title: "¡Se encontraron en este momento!" },
+      { id: "communicated", icon: "i-vocabulario", label: "Miró, señaló, hizo un sonido o dijo algo", message: "¡Qué valioso! Cada mirada, gesto, sonido o palabra puede ser parte de la conversación.", title: "¡Te contó algo a su manera!" },
+      { id: "observed", icon: "i-person", label: "Prefirió observar, cambiar o parar", message: "También está bien. Respetar su ritmo cuida la confianza; pueden retomarlo otro día.", title: "¡Escuchar también es acompañar!" },
+    ];
+    const activityStep = state.activityStep || 0;
+    const finished = state.activityStopped || activityStep >= activity.steps.length;
+    const observation = observationChoices.find((item) => item.id === state.observation);
+    const playAlong = finished
+      ? `<div class="exp-playalong exp-playalong--done">
+          ${activityProgress(activityStep, activity.steps.length, { stopped: state.activityStopped })}
+          ${positiveFeedback(state.observation === "observed"
+            ? "Hicieron bien en escuchar su ritmo. Observar, cambiar de actividad o parar también son formas de cuidarse."
+            : "¡Compartieron este momento a su manera! Estar juntos ya cuenta; no hacía falta completar nada perfecto.", true, { title: state.observation === "observed" ? "Un cierre lleno de cuidado" : "¡Lo hicieron juntos!" })}
+          ${navButtons({ back: 3, nextLabel: "Ver formas de adaptarlo", nextAction: "to-adapt" })}
+        </div>`
+      : `<section class="exp-playalong" aria-labelledby="exp-playalong-title">
+          ${activityProgress(activityStep, activity.steps.length)}
+          <h3 id="exp-playalong-title">${formatStepText(activity.steps[activityStep])}</h3>
+          <p class="exp-help">Prueben esta idea juntos. ¿Qué pasó? Cualquier respuesta está bien.</p>
+          <div class="exp-observations" aria-label="¿Qué pasó?">
+            ${observationChoices.map((item) => `<button class="exp-observation${state.observation === item.id ? " is-selected" : ""}" type="button" data-exp-observation="${item.id}" aria-pressed="${state.observation === item.id}">${icon(item.icon)}<span>${esc(item.label)}</span></button>`).join("")}
+          </div>
+          ${observation ? positiveFeedback(observation.message, true, { title: observation.title }) : ""}
+          ${observation ? `<button class="btn btn--sage" type="button" data-exp-play-next>${observation.id === "observed" ? "Cerrar por hoy" : activityStep + 1 === activity.steps.length ? "Cerrar este momento" : "Continuar a la siguiente idea"} ${icon("i-arrow")}</button>` : ""}
+        </section>`;
     return `
       <div class="exp-panel">
         ${stepper()}
@@ -355,11 +499,9 @@
           ${moment ? `<li>${icon("i-home")} Momento ${esc(moment.shortLabel || moment.label)}</li>` : ""}
           ${interestLabel() ? `<li>${icon((data.getInterest(state.interest) || {}).icon || "i-spark")} Interés ${esc(interestLabel())}</li>` : ""}
         </ul>
-        <h3>¿Cómo lo hacemos?</h3>
+        <h3>Hagámoslo juntos, a su ritmo</h3>
         ${activity.before ? `<p>${esc(activity.before)}</p>` : ""}
-        <ol class="steps exp-steps">
-          ${activity.steps.map((step) => `<li>${formatStepText(step)}</li>`).join("")}
-        </ol>
+        ${playAlong}
         ${activity.accompany ? `<p>${esc(activity.accompany)}</p>` : ""}
         <details class="exp-materials">
           <summary>Materiales <span aria-hidden="true">+</span></summary>
@@ -369,7 +511,7 @@
               : "<p>¡No necesitas materiales especiales!</p>"
           }
         </details>
-        ${navButtons({ back: 3, nextLabel: "Siguiente", nextAction: "to-adapt" })}
+        ${finished ? "" : `<div class="exp-nav"><button class="btn btn--outline" type="button" data-exp-go="3">Volver a la idea</button></div>`}
       </div>`;
   }
 
@@ -382,6 +524,7 @@
       <div class="exp-panel">
         ${stepper()}
         <h2 class="exp-title" tabindex="-1">¿Necesitas otra forma?</h2>
+        <p class="exp-lead">Ajustar el plan también es acompañar. Elige lo que mejor les venga hoy.</p>
         <ul class="exp-adapt">
           ${ADAPT_CARDS.map((card) => {
             const open = state.openAdapt === card.id;
@@ -393,7 +536,7 @@
                   <strong>${esc(card.title)}</strong>
                   <span>${esc(card.lead)}</span>
                 </button>
-                ${open && body ? `<p class="exp-adapt__body">${esc(body)}</p>` : ""}
+                ${open && body ? `${positiveFeedback("Sí, esta también es una buena manera de cuidar el momento.", true, { compact: true, title: "¡Buen plan!" })}<p class="exp-adapt__body">${esc(body)}</p>` : ""}
               </li>`;
           }).join("")}
         </ul>
@@ -420,7 +563,7 @@
               : ""
           }
         </div>
-        ${navButtons({ back: 4, nextLabel: "Guardar este momento", nextAction: "to-save" })}
+        ${navButtons({ back: 4, nextLabel: "Elegir cómo guardarla", nextAction: "to-save" })}
       </div>`;
   }
 
@@ -447,27 +590,48 @@
 
   function renderStep6() {
     const activity = currentActivity();
-    const canStore = (progress && progress.isAvailable()) || (album && album.isAvailable());
+    if (state.saved) {
+      return `
+        <div class="exp-panel exp-panel--save">
+          ${stepper()}
+          <h2 class="exp-title exp-title--center" tabindex="-1">Gracias por compartir cómo les fue</h2>
+          <p class="exp-lead exp-lead--center">${esc(state.saveMessage || "La experiencia quedó guardada anteriormente en este navegador.")}</p>
+          ${positiveFeedback("No hay una única forma correcta de vivir este momento. Puedes volver a esta experiencia cuando quieras.", true, { title: "¡Un recuerdo para celebrar!" })}
+          ${state.saveError ? `<p class="notice notice--warm" role="status">${esc(state.saveError)}</p>` : ""}
+          <div class="exp-actions exp-actions--stack">
+            <a class="btn btn--sage" href="mi-camino.html">Ir a mi historia ${icon("i-arrow")}</a>
+            <button class="btn btn--outline" type="button" data-exp-action="share-open">Compartir en la comunidad</button>
+            <button class="btn btn--outline" type="button" data-exp-action="restart">Crear otra experiencia</button>
+          </div>
+          <p class="exp-help">Compartir es opcional. Podrás revisar el contenido antes de publicarlo.</p>
+          ${state.shareOpen ? sharePreview() : ""}
+        </div>`;
+    }
+    const saveOptions = [
+      { id: "later", icon: "i-clock", label: "La guardamos para otro día", detail: "Aún no la probamos o queremos retomarla después.", message: "Perfecto. Dejar una idea para otro momento también es avanzar.", title: "¡La idea queda lista para ustedes!" },
+      { id: "tried", icon: "i-brote", label: "La compartimos hoy", detail: "La intentamos juntos, aunque haya sido solo un instante.", message: "¡Qué valioso! Cada intento cuenta, sin importar cómo resultó.", title: "¡Cada intento merece celebrarse!" },
+    ];
+    const selectedSaveOption = saveOptions.find((option) => option.id === state.saveIntent);
     return `
       <div class="exp-panel exp-panel--save">
         ${stepper()}
-        <img class="exp-deco exp-deco--wide" src="assets/img/temporal/exp-nina-zorro.jpg" width="900" height="720" alt="" decoding="async">
-        <h2 class="exp-title exp-title--center" tabindex="-1">¡Momento guardado!</h2>
-        <p class="exp-lead exp-lead--center">Este recuerdo ya forma parte de tu historia.</p>
-        ${
-          !canStore
-            ? `<p class="notice notice--warm">No pudimos guardar en este navegador. Puedes copiar el nombre de la experiencia: ${activity ? esc(activity.title) : ""}.</p>`
-            : session && session.isSignedIn && !session.isSignedIn()
-              ? `<p class="notice">Se guardó en este navegador. Si quieres un nombre en Mi camino, puedes <a href="mi-espacio.html">crear tu espacio</a>.</p>`
-              : ""
-        }
-        <div class="exp-actions exp-actions--stack">
-          <a class="btn btn--sage" href="mi-camino.html">Ir a mi historia ${icon("i-arrow")}</a>
-          <button class="btn btn--outline" type="button" data-exp-action="share-open">Compartir en la comunidad</button>
-          <button class="btn btn--outline" type="button" data-exp-action="restart">Crear otra experiencia</button>
+        <h2 class="exp-title exp-title--center" tabindex="-1">¿Cómo quieres guardar esta experiencia?</h2>
+        <p class="exp-lead exp-lead--center">Tú decides qué refleja mejor lo que pasó. No hay una respuesta mejor que otra.</p>
+        <div class="exp-save-options" role="group" aria-label="Elige cómo guardar la experiencia">
+          ${saveOptions.map((option) => `
+            <button class="exp-save-option${state.saveIntent === option.id ? " is-selected" : ""}" type="button" data-exp-save-intent="${option.id}" aria-pressed="${state.saveIntent === option.id}">
+              ${icon(option.icon)}
+              <strong>${esc(option.label)}</strong>
+              <span>${esc(option.detail)}</span>
+            </button>`).join("")}
         </div>
-        <p class="exp-help">Compartir es opcional. Podrás revisar el contenido antes de publicarlo.</p>
-        ${state.shareOpen ? sharePreview() : ""}
+        ${selectedSaveOption ? positiveFeedback(selectedSaveOption.message, true, { title: selectedSaveOption.title }) : ""}
+        ${state.saveError ? `<p class="notice notice--warm" role="alert">${esc(state.saveError)}</p>` : ""}
+        <div class="exp-nav">
+          <button class="btn btn--outline" type="button" data-exp-go="5">Atrás</button>
+          <button class="btn btn--sage" type="button" data-exp-action="save-choice"${state.saveIntent ? "" : " disabled"}>Guardar mi decisión ${icon("i-arrow")}</button>
+        </div>
+        ${activity ? `<p class="exp-help">Experiencia: ${esc(activity.title)}</p>` : ""}
       </div>`;
   }
 
@@ -546,12 +710,33 @@
       step: 3,
       error: "",
       saved: false,
+      saveIntent: "",
+      saveMessage: "",
+      saveError: "",
+      activityStep: 0,
+      activityStopped: false,
+      observation: "",
     });
+    const heading = root.querySelector("h2");
+    if (heading) heading.focus();
   }
 
   function openActivity(id) {
     if (!data.getActivity(id)) return;
-    setState({ activityId: id, step: 4, error: "" });
+    setState({
+      activityId: id,
+      step: 4,
+      error: "",
+      saved: false,
+      saveIntent: "",
+      saveMessage: "",
+      saveError: "",
+      activityStep: 0,
+      activityStopped: false,
+      observation: "",
+    });
+    const heading = root.querySelector("h2");
+    if (heading) heading.focus();
   }
 
   function saveMoment() {
@@ -560,17 +745,58 @@
       goTo(3);
       return;
     }
-    if (progress && progress.isAvailable()) {
-      progress.set("activity", activity.id, { state: "tried", moment: state.moment || null });
+    if (!["later", "tried"].includes(state.saveIntent)) return;
+
+    const progressAvailable = progress && progress.isAvailable();
+    const albumAvailable = state.saveIntent === "tried" && album && album.isAvailable();
+    let progressSaved = null;
+    let albumSaved = null;
+    if (progressAvailable) {
+      const previousProgress = progress.get("activity", activity.id);
+      if (state.saveIntent === "later" && previousProgress) {
+        progressSaved = true;
+      } else {
+        progressSaved = progress.set("activity", activity.id, {
+          state: state.saveIntent === "tried" ? "tried" : "explored",
+          moment: state.moment || null,
+        });
+      }
     }
-    if (album && album.isAvailable()) {
-      album.add({
+    if (albumAvailable) {
+      albumSaved = Boolean(album.add({
         title: activity.title,
         note: `Experiencia para compartir · ${interestLabel() || (data.getMoment(state.moment) || {}).label || ""}`.trim(),
         momentId: state.moment || null,
-      });
+      }));
     }
-    setState({ step: 6, saved: true, error: "", shareOpen: false });
+
+    const savedSomewhere = progressSaved === true || albumSaved === true;
+    if (!savedSomewhere) {
+      setState({
+        saveError: state.saveIntent === "tried"
+          ? "No se pudo guardar en Mi camino ni en el álbum de este navegador. Revisa el almacenamiento e inténtalo de nuevo."
+          : "No se pudo guardar la idea en Mi camino. Revisa el almacenamiento e inténtalo de nuevo.",
+      });
+      return;
+    }
+
+    const saveError = state.saveIntent === "tried"
+      ? progressSaved !== true && albumSaved === true
+        ? "El momento quedó en tu álbum, pero no se pudo actualizar Mi camino."
+        : progressSaved === true && albumSaved !== true
+          ? "Mi camino se actualizó, pero no se pudo añadir el recuerdo al álbum."
+          : ""
+      : "";
+    const saveMessage = state.saveIntent === "later"
+      ? "La idea quedó guardada en Mi camino para retomarla cuando les venga bien."
+      : progressSaved && albumSaved
+        ? "El intento quedó registrado en Mi camino y en tu álbum. Cada experiencia cuenta a su manera."
+        : progressSaved
+          ? "El intento quedó registrado en Mi camino. Cada experiencia cuenta a su manera."
+          : "El recuerdo quedó guardado en tu álbum. Cada experiencia cuenta a su manera.";
+    setState({ saved: true, saveMessage, saveError, error: "", shareOpen: false });
+    const heading = root.querySelector("h2");
+    if (heading) heading.focus();
   }
 
   function restart() {
@@ -588,7 +814,39 @@
   root.addEventListener("click", (event) => {
     const momentBtn = event.target.closest("[data-exp-moment]");
     if (momentBtn) {
-      setState({ moment: momentBtn.getAttribute("data-exp-moment"), error: "" });
+      const id = momentBtn.getAttribute("data-exp-moment");
+      setState({ moment: id, error: "" });
+      focusControl("[data-exp-moment]", "data-exp-moment", id);
+      return;
+    }
+
+    const observationBtn = event.target.closest("[data-exp-observation]");
+    if (observationBtn) {
+      const id = observationBtn.getAttribute("data-exp-observation");
+      setState({ observation: id });
+      focusControl("[data-exp-observation]", "data-exp-observation", id);
+      return;
+    }
+
+    const playNextBtn = event.target.closest("[data-exp-play-next]");
+    if (playNextBtn) {
+      const stopForToday = state.observation === "observed";
+      setState({
+        activityStep: stopForToday ? state.activityStep : state.activityStep + 1,
+        activityStopped: stopForToday,
+        observation: stopForToday ? state.observation : "",
+      });
+      const nextHeading = root.querySelector("#exp-playalong-title");
+      if (nextHeading) nextHeading.focus();
+      else root.querySelector("[data-exp-action='to-adapt']")?.focus();
+      return;
+    }
+
+    const saveIntentBtn = event.target.closest("[data-exp-save-intent]");
+    if (saveIntentBtn) {
+      const saveIntent = saveIntentBtn.getAttribute("data-exp-save-intent");
+      setState({ saveIntent, saveError: "" });
+      focusControl("[data-exp-save-intent]", "data-exp-save-intent", saveIntent);
       return;
     }
 
@@ -606,7 +864,7 @@
         return;
       }
       if (action === "to-detail") {
-        if (state.activityId) goTo(4);
+        if (state.activityId) openActivity(state.activityId);
         return;
       }
       if (action === "to-adapt") {
@@ -614,6 +872,13 @@
         return;
       }
       if (action === "to-save") {
+        setState({ step: 6, saveIntent: "", saveMessage: "", saveError: "", shareOpen: false });
+        const heading = root.querySelector("h2");
+        if (heading) heading.focus();
+        root.scrollIntoView({ block: "start", behavior: "smooth" });
+        return;
+      }
+      if (action === "save-choice") {
         saveMoment();
         return;
       }
@@ -641,6 +906,7 @@
     if (adaptBtn) {
       const id = adaptBtn.getAttribute("data-exp-adapt");
       setState({ openAdapt: state.openAdapt === id ? "" : id });
+      focusControl("[data-exp-adapt]", "data-exp-adapt", id);
     }
   });
 
@@ -656,7 +922,28 @@
     const form = event.target.closest("[data-exp-form='details']");
     if (!form) return;
     const next = readDetailsForm(form);
+    const changedControl = event.target;
+    if (changedControl.name === "interestOther") {
+      state = { ...state, ...next, error: "" };
+      persist();
+      updateDetailsProgress();
+      return;
+    }
+    const { name, value, type } = changedControl;
     setState({ ...next, error: "" });
+    const control = Array.from(root.querySelectorAll("input"))
+      .find((input) => input.name === name && (type !== "radio" || input.value === value));
+    if (control) control.focus({ preventScroll: true });
+    const feedback = fieldMessage(name);
+    if (feedback) announce(`${fieldFeedbackTitle(name)}. ${feedback}`);
+  });
+
+  root.addEventListener("input", (event) => {
+    if (event.target.name !== "interestOther") return;
+    state = { ...state, interestOther: event.target.value.trim() };
+    persist();
+    updateDetailsProgress();
+    updateInterestFeedback();
   });
 
   root.addEventListener("keydown", (event) => {
