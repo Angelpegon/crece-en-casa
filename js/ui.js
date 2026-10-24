@@ -26,6 +26,13 @@ window.CEC.ui = (function () {
     return `${first} a ${last} años`;
   }
 
+  function formatDuration(activity, { html = false } = {}) {
+    if (!activity || !activity.duration) return "";
+    const value = escapeHTML(activity.duration);
+    if (!html) return `${activity.duration} (opcional)`;
+    return `${value} <span class="activity-card__optional">(opcional)</span>`;
+  }
+
   function activityUrl(activity) {
     return `actividad.html?id=${encodeURIComponent(activity.id)}`;
   }
@@ -83,7 +90,7 @@ window.CEC.ui = (function () {
           </h${headingLevel}>
           <p class="activity-card__tagline">${escapeHTML(activity.tagline)}</p>
           ${primary ? `<p class="activity-card__area">${escapeHTML(primary.label)}</p>` : ""}
-          <p class="activity-card__meta">${icon("i-clock")} ${escapeHTML(activity.duration)}</p>
+          ${activity.duration ? `<p class="activity-card__meta">${icon("i-clock")} ${formatDuration(activity, { html: true })}</p>` : ""}
           <a class="btn btn--outline btn--small" href="${activityUrl(activity)}">Ver actividad</a>
           ${actions}
         </div>
@@ -122,6 +129,7 @@ window.CEC.ui = (function () {
     escapeHTML,
     icon,
     formatAges,
+    formatDuration,
     activityUrl,
     strategyUrl,
     challengeUrl,

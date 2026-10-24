@@ -31,8 +31,7 @@
         </nav>
         <h1 id="page-title">Actividades para crecer comunicándonos</h1>
         <p class="page-hero__lead">
-          Encuentra actividades para compartir con tu niño de 2 a 5 años. Elige según su edad,
-          el área que deseas acompañar y el tiempo que tengan. Puedes adaptarlas a sus intereses
+          Encuentra actividades para compartir con tu niño de 2 a 5 años.           Elige según su edad y el área que deseas acompañar. Puedes adaptarlas a sus intereses
           y a los materiales que ya tienes en casa.
         </p>
       </div>
@@ -46,8 +45,11 @@
           <div class="filters__search">
             <label class="filters__label" for="q">Buscar actividad</label>
             <div class="search-field">
-              <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-search"></use></svg>
+              <svg class="icon search-field__icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-search"></use></svg>
               <input id="q" name="q" type="search" placeholder="Por ejemplo: cuento, merienda, turnos" autocomplete="off">
+              <button class="search-field__clear" type="button" data-clear-search hidden aria-label="Limpiar búsqueda">
+                <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-close"></use></svg>
+              </button>
             </div>
           </div>
 
@@ -58,24 +60,20 @@
 
           <fieldset class="filters__group">
             <legend class="filters__label">Área de comunicación</legend>
-            <div class="chip-group" data-chips="area"></div>
-          </fieldset>
-
-          <fieldset class="filters__group">
-            <legend class="filters__label">Duración</legend>
-            <div class="chip-group" data-chips="duracion"></div>
+            <div class="chip-group chip-group--icons" data-chips="area"></div>
           </fieldset>
 
           <fieldset class="filters__group">
             <legend class="filters__label">Materiales</legend>
-            <div class="chip-group" data-chips="materiales"></div>
+            <div class="chip-group chip-group--icons" data-chips="materiales"></div>
           </fieldset>
 
           <div class="filters__actions">
-            <button class="btn btn--coral" type="submit">Aplicar filtros</button>
-            <button class="btn btn--outline" type="reset">Limpiar filtros</button>
+            <button class="btn btn--outline" type="reset" data-reset-filters hidden>Limpiar filtros</button>
           </div>
         </form>
+
+        <div class="filters-active" data-active-filters hidden></div>
 
         <p class="results-count" aria-live="polite" data-results-count></p>
         <ul class="activity-grid" data-results></ul>

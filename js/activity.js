@@ -1,4 +1,4 @@
-/* Ficha de actividad: plantilla común según la guía MVP. */
+/* Ficha de actividad: contenido según Crece_en_Casa_Fichas_para_Programacion. */
 (function () {
   const { data, ui, progress } = window.CEC;
   const root = document.querySelector("[data-activity-root]");
@@ -7,9 +7,30 @@
   const esc = ui.escapeHTML;
 
   const REFLECTION = [
-    { id: "enjoyed", label: "Lo disfrutamos" },
-    { id: "hard", label: "Fue difícil" },
-    { id: "another-day", label: "Queremos intentarlo otro día" },
+    {
+      id: "enjoyed",
+      icon: "i-spark",
+      label: "Lo disfrutamos",
+      detail: "Hubo sonrisas, juego o un momento agradable juntos.",
+      title: "¡Qué lindo momento!",
+      message: "Celebrar lo compartido también cuenta. No hace falta que haya sido perfecto.",
+    },
+    {
+      id: "hard",
+      icon: "i-brote",
+      label: "Fue difícil",
+      detail: "Hubo frustración, cansancio o no fluyó como esperaban.",
+      title: "También es avanzar",
+      message: "Los días difíciles forman parte del camino. Pueden retomarlo con calma cuando quieran.",
+    },
+    {
+      id: "another-day",
+      icon: "i-clock",
+      label: "Otro día",
+      detail: "Hoy no era el momento y está bien dejarlo para después.",
+      title: "¡Queda guardado para ustedes!",
+      message: "Elegir otro momento también es cuidar la conexión. La idea sigue disponible.",
+    },
   ];
 
   function listItems(items) {
@@ -57,6 +78,38 @@
       </section>`;
   }
 
+  function fichaBlock(tone, icon, titleId, title, body, { wide = false, slot = "" } = {}) {
+    const classes = ["ficha-block", `ficha-block--${tone}`];
+    if (wide) classes.push("ficha-block--wide");
+    if (slot) classes.push(`ficha-block--${slot}`);
+    return `
+      <section class="${classes.join(" ")}" aria-labelledby="${titleId}">
+        <h2 class="ficha-block__title" id="${titleId}">
+          ${icon ? `<span class="ficha-block__icon" aria-hidden="true">${ui.icon(icon)}</span>` : ""}
+          <span>${esc(title)}</span>
+        </h2>
+        <div class="ficha-block__body">${body}</div>
+      </section>`;
+  }
+
+  function areasList(activity) {
+    const ordered = [activity.primaryArea, ...activity.areas.filter((id) => id !== activity.primaryArea)];
+    return `
+      <ul class="ficha-areas">
+        ${ordered
+          .map((id) => data.getArea(id))
+          .filter(Boolean)
+          .map(
+            (area) => `
+            <li class="ficha-areas__item ficha-areas__item--${area.tone || "sage"}">
+              ${area.icon ? `<span class="ficha-areas__glyph" aria-hidden="true">${ui.icon(area.icon)}</span>` : ""}
+              <span>${esc(area.label)}</span>
+            </li>`
+          )
+          .join("")}
+      </ul>`;
+  }
+
   function render(activity) {
     const tone = (data.getAge(activity.ages[0]) || {}).tone || "lavender";
     const primary = data.getArea(activity.primaryArea);
@@ -77,10 +130,10 @@
               <p class="activity-hero__tagline">${esc(activity.tagline)}</p>
               <p class="activity-hero__summary">${esc(activity.summary)}</p>
               <ul class="activity-hero__meta">
-                <li>${ui.icon("i-clock")} ${esc(activity.duration)}</li>
+                ${activity.duration ? `<li>${ui.icon("i-clock")} ${ui.formatDuration(activity, { html: true })}</li>` : ""}
                 ${primary ? `<li>${esc(primary.label)}</li>` : ""}
               </ul>
-              ${strategies ? `<p class="detail-meta"><strong>Idea que practicas:</strong> ${strategies}</p>` : ""}
+              ${strategies ? `<p class="detail-meta"><strong>Estrategia que practicas:</strong> ${strategies}</p>` : ""}
               <div class="activity-hero__actions">
                 <button class="btn btn--outline" type="button" data-print>
                   ${ui.icon("i-print")} Imprimir
@@ -94,77 +147,122 @@
         </header>
 
         <div class="container section activity-body">
-          <div class="activity-body__main">
-            <section aria-labelledby="materiales-title">
-              <h2 id="materiales-title">Materiales</h2>
-              <ul class="bullet-list">${listItems(activity.materials)}</ul>
-            </section>
+          <div class="ficha-grid">
+            ${fichaBlock("sage", "i-brote", "objetivo-title", "Objetivo", `<p>${esc(activity.objective)}</p>`, {
+              slot: "objetivo",
+            })}
+            ${fichaBlock(
+              "coral",
+              "i-home",
+              "materiales-title",
+              "Materiales",
+              `<ul class="bullet-list">${listItems(activity.materials)}</ul>`,
+              { slot: "materiales" }
+            )}
+            ${fichaBlock(
+              "sky",
+              "i-interaccion",
+              "areas-title",
+              "¿Qué áreas de comunicación favorece?",
+              areasList(activity),
+              { slot: "areas" }
+            )}
+            ${fichaBlock(
+              "yellow",
+              "i-spark",
+              "antes-title",
+              "Antes de empezar",
+              `<p>${esc(activity.before)}</p>`,
+              { slot: "antes" }
+            )}
+            ${fichaBlock(
+              "sky",
+              "i-juego",
+              "pasos-title",
+              "¿Cómo jugamos?",
+              `<ol class="steps">${listItems(activity.steps)}</ol>`,
+              { wide: true, slot: "pasos" }
+            )}
+            ${fichaBlock(
+              "coral",
+              "i-story",
+              "acompanar-title",
+              "¿Cómo puedes acompañar?",
+              `<p>${esc(activity.accompany)}</p>`,
+              { slot: "acompanar" }
+            )}
+            ${fichaBlock(
+              "sage",
+              "i-guide",
+              "adapta-title",
+              "Adapta la actividad",
+              `<p>${esc(activity.adapt)}</p>`,
+              { slot: "adapta" }
+            )}
+            ${fichaBlock(
+              "lavender",
+              "i-check",
+              "cerrar-title",
+              "Para cerrar",
+              `
+              <p class="ficha-closing__prompt">${esc(activity.closing)}</p>
+              <label class="ficha-closing__label" for="closing-note">Tu respuesta o comentario</label>
+              <textarea
+                class="ficha-closing__input"
+                id="closing-note"
+                name="closing"
+                rows="4"
+                maxlength="500"
+                placeholder="Escribe lo que notaste, cómo respondió o lo que quieres recordar…"
+                data-closing-note
+              ></textarea>
+              <div class="ficha-closing__actions">
+                <button class="btn btn--coral" type="button" data-save-closing>Guardar</button>
+                <p class="ficha-closing__meta">
+                  <span class="ficha-closing__hint">Opcional. Se guarda solo en este navegador.</span>
+                  <span class="ficha-closing__status" role="status" data-closing-status></span>
+                </p>
+              </div>
+            `,
+              { wide: true, slot: "cerrar" }
+            )}
+            ${fichaBlock(
+              "coral",
+              "i-info",
+              "recuerda-title",
+              "Recuerda que…",
+              `<p>${esc(activity.remember)}</p>`,
+              { wide: true, slot: "recuerda" }
+            )}
 
-            <section aria-labelledby="antes-title">
-              <h2 id="antes-title">Antes de empezar</h2>
-              <p>${esc(activity.before)}</p>
-            </section>
-
-            <section aria-labelledby="pasos-title">
-              <h2 id="pasos-title">¿Cómo jugamos?</h2>
-              <ol class="steps">${listItems(activity.steps)}</ol>
-            </section>
-
-            <section aria-labelledby="acompanar-title">
-              <h2 id="acompanar-title">¿Cómo puedes acompañar?</h2>
-              <p>${esc(activity.accompany)}</p>
-            </section>
-
-            <section aria-labelledby="adapta-title">
-              <h2 id="adapta-title">Adapta la actividad</h2>
-              <p>${esc(activity.adapt)}</p>
-            </section>
-
-            <section aria-labelledby="cerrar-title">
-              <h2 id="cerrar-title">Para cerrar</h2>
-              <p>${esc(activity.closing)}</p>
-            </section>
-
-            <section class="progress-box" aria-labelledby="termine-title">
+            <section class="progress-box ficha-close ficha-block ficha-block--progress ficha-block--wide ficha-block--termine" aria-labelledby="termine-title">
               <h2 id="termine-title">Terminé por ahora</h2>
-              <p>¿Cómo les fue? Esta respuesta no evalúa al niño: sirve para que tú reflexiones.</p>
-              <div class="chip-group" role="group" aria-label="Cómo les fue">
+              <p class="ficha-close__lead">Elige cómo se sintió este momento. No hay respuestas correctas: solo una forma de cerrar con cariño.</p>
+              <div class="ficha-close__choices" role="group" aria-label="Cómo se sintió el momento">
                 ${REFLECTION.map(
                   (option) => `
-                  <label class="chip">
+                  <label class="ficha-close__choice">
                     <input type="radio" name="reflection" value="${esc(option.id)}">
-                    <span>${esc(option.label)}</span>
+                    <span class="ficha-close__card">
+                      <span class="ficha-close__glyph" aria-hidden="true">${ui.icon(option.icon)}</span>
+                      <span class="ficha-close__copy">
+                        <strong>${esc(option.label)}</strong>
+                        <span>${esc(option.detail)}</span>
+                      </span>
+                    </span>
                   </label>`
                 ).join("")}
               </div>
-              <p class="activity-hero__status" role="status" data-reflection-status></p>
+              <div class="ficha-close__cheer" data-reflection-cheer hidden></div>
               <p class="progress-box__hint">Opcional. Se guarda solo en este navegador.</p>
             </section>
           </div>
-
-          <aside class="activity-body__aside">
-            <section class="note note--static" aria-labelledby="favorece-title">
-              <h2 class="note__title hand" id="favorece-title">También puede favorecer</h2>
-              <ul class="checklist">
-                ${activity.areas
-                  .filter((id) => id !== activity.primaryArea)
-                  .map((id) => data.getArea(id))
-                  .filter(Boolean)
-                  .map((area) => `<li>${ui.icon("i-check")}${esc(area.label)}</li>`)
-                  .join("")}
-              </ul>
-            </section>
-
-            <p class="notice">
-              <span><strong>Importante:</strong> esta es una propuesta educativa. No es un diagnóstico ni sustituye
-              una valoración fonoaudiológica. Si algo te preocupa, consulta con un profesional.</span>
-            </p>
-          </aside>
         </div>
       </article>
       ${related(activity)}`;
 
     setupPrint();
+    setupClosingNote(activity);
     setupReflection(activity);
   }
 
@@ -173,26 +271,93 @@
     if (button) button.addEventListener("click", () => window.print());
   }
 
-  function setupReflection(activity) {
-    const status = root.querySelector("[data-reflection-status]");
-    if (!status) return;
+  function setupClosingNote(activity) {
+    const field = root.querySelector("[data-closing-note]");
+    const button = root.querySelector("[data-save-closing]");
+    const status = root.querySelector("[data-closing-status]");
+    if (!field || !button) return;
 
+    const saved = progress.isAvailable() ? progress.get("activity", activity.id) : null;
+    if (saved && saved.note) field.value = saved.note;
+
+    function saveNote() {
+      if (!progress.isAvailable()) {
+        if (status) status.textContent = "No se pudo guardar en este navegador.";
+        return;
+      }
+      const ok = progress.set("activity", activity.id, { note: field.value });
+      if (status) {
+        status.textContent = ok
+          ? field.value.trim()
+            ? "Guardado en este navegador."
+            : "Respuesta borrada."
+          : "No se pudo guardar.";
+      }
+    }
+
+    button.addEventListener("click", saveNote);
+    field.addEventListener("keydown", (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+        event.preventDefault();
+        saveNote();
+      }
+    });
+  }
+
+  function showReflectionCheer(option, { animate = true } = {}) {
+    const cheer = root.querySelector("[data-reflection-cheer]");
+    if (!cheer || !option) return;
+    cheer.hidden = false;
+    cheer.innerHTML = `
+      <div class="ficha-close__feedback${animate ? " ficha-close__feedback--pop" : ""}" role="status">
+        <span class="ficha-close__spark" aria-hidden="true">✦</span>
+        <img class="ficha-close__mascot" src="assets/img/temporal/home-zorro-cutout.png" width="120" height="120" alt="" loading="lazy" decoding="async">
+        <span class="ficha-close__feedback-copy">
+          <strong>${esc(option.title)}</strong>
+          <span>${esc(option.message)}</span>
+        </span>
+      </div>`;
+    if (animate) {
+      const card = cheer.querySelector(".ficha-close__feedback");
+      if (card) {
+        card.classList.remove("ficha-close__feedback--pop");
+        void card.offsetWidth;
+        card.classList.add("ficha-close__feedback--pop");
+      }
+    }
+  }
+
+  function setupReflection(activity) {
     const map = {
       enjoyed: "tried",
       hard: "practice",
       "another-day": "practice",
     };
 
+    const saved = progress.isAvailable() ? progress.get("activity", activity.id) : null;
+    if (saved && saved.state === "tried") {
+      const input = root.querySelector('[name="reflection"][value="enjoyed"]');
+      if (input) {
+        input.checked = true;
+        showReflectionCheer(REFLECTION.find((item) => item.id === "enjoyed"), { animate: false });
+      }
+    }
+
     root.querySelectorAll('[name="reflection"]').forEach((input) => {
       input.addEventListener("change", () => {
+        const option = REFLECTION.find((item) => item.id === input.value);
+        showReflectionCheer(option, { animate: true });
         if (!progress.isAvailable()) {
-          status.textContent = "Tu navegador no permite guardar ideas en este dispositivo.";
+          const cheer = root.querySelector("[data-reflection-cheer]");
+          if (cheer) {
+            cheer.insertAdjacentHTML(
+              "beforeend",
+              `<p class="ficha-close__save-hint">Tu navegador no permite guardar ideas en este dispositivo.</p>`
+            );
+          }
           return;
         }
-        const ok = progress.set("activity", activity.id, { state: map[input.value] || "explored" });
-        status.textContent = ok
-          ? "Gracias. Tu reflexión quedó en este navegador."
-          : "No se pudo guardar. Revisa si tu navegador permite el almacenamiento local.";
+        progress.set("activity", activity.id, { state: map[input.value] || "explored" });
       });
     });
   }

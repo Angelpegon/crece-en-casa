@@ -415,7 +415,7 @@
       <button class="exp-thumb" type="button" data-exp-open="${esc(activity.id)}">
         ${ui.imageTag(media, { alt: "", attrs: 'decoding="async"' })}
         <span class="exp-thumb__title">${esc(activity.title)}</span>
-        <span class="exp-thumb__meta">${esc(activity.duration)}${moment ? ` · ${esc(moment.shortLabel)}` : ""}</span>
+        <span class="exp-thumb__meta">${[ui.formatDuration(activity), moment && moment.shortLabel].filter(Boolean).map(esc).join(" · ")}</span>
       </button>`;
   }
 
@@ -558,7 +558,7 @@
                   ${ui.imageTag(ui.activityImage(extended), { alt: "", attrs: 'decoding="async"' })}
                   <span>
                     <strong>Versión extendida</strong>
-                    ${esc(extended.title)} · ${esc(extended.duration)}
+                    ${esc(extended.title)}${extended.duration ? ` · ${esc(ui.formatDuration(extended))}` : ""}
                   </span>
                 </button>`
               : ""

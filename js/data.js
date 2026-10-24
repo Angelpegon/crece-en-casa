@@ -289,8 +289,8 @@ window.CEC.data = (function () {
       title: "El cuento con pausa",
       tagline: "Mirar, imaginar y conversar",
       summary: "Una historia, muchas oportunidades para comunicarse.",
-      ages: [2, 3, 4, 5],
-      ageNote: "Ajustar a la participación del niño",
+      ages: [2],
+      ageNote: "Ajustada a la participación del niño",
       primaryArea: "interaccion",
       areas: ["interaccion", "vocabulario", "comprension", "expresion"],
       momentos: ["lectura"],
@@ -300,20 +300,25 @@ window.CEC.data = (function () {
       strategyIds: ["sigue-su-interes", "espera-y-dale-espacio"],
       image: image("actividad-cuento-con-pausa.webp", 1041, 774),
       imageAlt: "Una mamá lee un cuento ilustrado junto a su hijo, ambos sonríen.",
+      objective:
+        "Favorecer la interacción comunicativa durante la lectura compartida, ofreciendo oportunidades para que el niño exprese intereses e ideas mediante miradas, gestos, sonidos o palabras.",
       materials: ["Un cuento ilustrado o imágenes de una historia."],
-      before: "Siéntense juntos y elijan una historia que llame la atención del niño. No es necesario leer cada palabra.",
+      before:
+        "Siéntense juntos y elijan una historia que llame la atención del niño. No es necesario leer cada palabra; pueden detenerse en las imágenes que despierten su interés.",
       steps: [
-        "Miren la portada juntos.",
-        "Deja que el niño señale o elija una imagen.",
-        "Comenta algo que le interese.",
-        "Haz una pausa para darle espacio a responder con mirada, gesto, sonido o palabra.",
-        "Continúa la historia siguiendo su interés.",
+        "Miren juntos la portada y observen qué llama la atención del niño.",
+        "Permite que señale, mire o elija una imagen.",
+        "Comenta algo relacionado con lo que está observando.",
+        "Haz una pausa y dale tiempo para responder con mirada, gesto, sonido o palabra.",
+        "Continúa la historia siguiendo su interés y alternando comentarios con pausas.",
       ],
       accompany:
-        "Si señala un perro, puedes decir: «¡Sí, un perro! Está corriendo». En vez de hacer muchas preguntas, alterna comentarios y pausas.",
+        "Si señala un perro, puedes decir: «¡Sí, un perro! Está corriendo». En lugar de hacer muchas preguntas seguidas, alterna comentarios y pausas para darle espacio a participar.",
       adapt:
-        "Si el niño aún no usa palabras, acepta miradas, gestos y sonidos; usa imágenes grandes y pocas páginas. Si quiere continuar, invita a anticipar qué podría pasar o a contar la historia a su manera.",
+        "Si todavía no usa palabras, acepta miradas, gestos y sonidos; elige imágenes grandes y pocas páginas. Si quiere continuar y muestra interés, invítalo a anticipar qué podría pasar o a contar la historia a su manera.",
       closing: "¿Qué imagen llamó más su atención?",
+      remember:
+        "No es necesario terminar el cuento ni obtener respuestas exactas. Lo importante es compartir la historia, seguir el interés del niño y disfrutar la interacción.",
       interests: ["animales", "naturaleza"],
       download: null,
       adaptations: {
@@ -328,7 +333,7 @@ window.CEC.data = (function () {
       title: "La bolsa sorpresa",
       tagline: "Explorar, nombrar y responder",
       summary: "Objetos conocidos que invitan a comunicarse.",
-      ages: [2, 3, 4, 5],
+      ages: [2],
       ageNote: "Adaptar los objetos y la dificultad",
       primaryArea: "vocabulario",
       areas: ["vocabulario", "expresion", "interaccion"],
@@ -337,22 +342,27 @@ window.CEC.data = (function () {
       duration: "5–10 minutos",
       materialsId: "casa",
       strategyIds: ["responde-e-imita", "amplia-su-mensaje"],
+      objective:
+        "Promover el reconocimiento y el uso de vocabulario cotidiano mediante la exploración compartida de objetos familiares, sus características y sus funciones.",
       materials: [
-        "Una bolsa opaca y 3 o 4 objetos grandes, conocidos y seguros; no usar piezas pequeñas ni objetos que puedan llevarse a la boca.",
+        "Una bolsa opaca y 3 o 4 objetos grandes, conocidos y seguros. Evita piezas pequeñas u objetos que puedan llevarse a la boca.",
       ],
-      before: "Coloca los objetos dentro de la bolsa y siéntate junto al niño. Permite que elija cuál explorar.",
+      before:
+        "Coloca los objetos dentro de la bolsa y siéntate junto al niño. Invítalo a elegir cuál explorar, sin obligarlo a tocar algo que no quiera.",
       steps: [
-        "Invítalo a sacar o tocar un objeto.",
-        "Observa qué hace o mira.",
-        "Nombra el objeto y comenta una característica o acción.",
-        "Espera su respuesta.",
-        "Si sigue interesado, compara dos objetos o busca otro uso para uno de ellos.",
+        "Invítalo a sacar o tocar un objeto, con supervisión adulta.",
+        "Observa qué hace, mira o señala.",
+        "Nombra el objeto y comenta una característica o acción relacionada.",
+        "Espera su respuesta, sin pedirle que repita obligatoriamente.",
+        "Si sigue interesado, compara dos objetos o descubre otro uso para uno de ellos.",
       ],
       accompany:
-        "Si saca una cuchara, puedes decir: «¡Una cuchara! La usamos para comer». Si hace un sonido o la señala, responde a su intento sin pedirle que repita.",
+        "Si saca una cuchara, puedes decir: «¡Una cuchara! La usamos para comer». Si hace un sonido, la mira o la señala, responde a ese intento de comunicación sin exigir que repita la palabra.",
       adapt:
-        "Para niños más pequeños, usa dos objetos familiares y nómbralos. Para quienes usan más palabras, describe tamaño, función o acciones. Mantén supervisión adulta durante toda la actividad.",
+        "Para niños más pequeños, ofrece dos objetos familiares y nómbralos. Para quienes usan más palabras, describe el tamaño, la textura, la función o las acciones posibles. Mantén supervisión adulta durante toda la actividad.",
       closing: "¿Qué objeto quiso explorar más?",
+      remember:
+        "Usa objetos grandes, limpios, no tóxicos y adecuados para la edad. Evita piezas pequeñas, objetos afilados, frágiles o que representen riesgo de atragantamiento.",
       interests: ["cocina", "vehiculos", "animales"],
       download: null,
       adaptations: {
@@ -367,7 +377,7 @@ window.CEC.data = (function () {
       title: "¿Dónde está?",
       tagline: "Buscar, comprender y participar",
       summary: "Indicaciones breves con un juguete familiar.",
-      ages: [2, 3, 4, 5],
+      ages: [3],
       ageNote: "Empezar con indicaciones sencillas",
       primaryArea: "comprension",
       areas: ["comprension", "vocabulario", "interaccion"],
@@ -376,22 +386,26 @@ window.CEC.data = (function () {
       duration: "5 minutos",
       materialsId: "casa",
       strategyIds: ["apoya-la-comprension"],
+      objective:
+        "Acompañar la comprensión de palabras e indicaciones sencillas mediante el juego de buscar un objeto, utilizando apoyos visuales y gestuales cuando sean útiles.",
       materials: ["Un juguete familiar y una tela o recipiente grande."],
       before:
-        "Muestra el juguete y luego colócalo parcialmente debajo de la tela o dentro del recipiente, siempre a la vista o en un lugar seguro.",
+        "Muestra el juguete y después colócalo parcialmente debajo de una tela o dentro de un recipiente grande, siempre en un lugar visible y seguro.",
       steps: [
-        "Nombra el juguete.",
-        "Ocúltalo parcialmente.",
-        "Di una instrucción breve, por ejemplo: «Busca el oso».",
+        "Nombra el juguete y deja que el niño lo observe.",
+        "Ocúltalo parcialmente, sin hacerlo inaccesible ni generar frustración.",
+        "Da una instrucción breve, por ejemplo: «Busca el oso».",
         "Espera y observa cómo responde.",
-        "Si lo necesita, acompaña la indicación con un gesto.",
-        "Celebra la participación y repitan si el niño quiere.",
+        "Si lo necesita, acompaña la indicación con un gesto o señala el lugar.",
+        "Reconoce su participación y repitan el juego si quiere.",
       ],
       accompany:
-        "Usa frases cortas y da tiempo. Si no lo encuentra, señala el lugar o acerca el objeto; evita repetir la instrucción muchas veces seguidas.",
+        "Usa frases cortas y dale tiempo. Si no encuentra el juguete, señala el lugar o acércaselo. Evita repetir la misma instrucción muchas veces seguidas.",
       adapt:
-        "Empieza con un objeto visible y una indicación. Después, si está preparado, ofrece dos objetos o instrucciones como «Pon el oso dentro». No convertirlo en examen.",
-      closing: "¿Qué apoyo le ayudó: la palabra, el gesto o ver el objeto?",
+        "Empieza con un objeto visible y una sola indicación. Después, si el niño está preparado, puedes ofrecer dos objetos o decir «Pon el oso dentro». La actividad es un juego compartido, no un examen.",
+      closing: "¿Qué apoyo le ayudó más: la palabra, el gesto o ver el objeto?",
+      remember:
+        "Asegúrate de que el juguete y el recipiente sean seguros y fáciles de alcanzar. Detén o modifica el juego si deja de ser agradable para el niño.",
       interests: ["animales", "cocina"],
       download: null,
       adaptations: {
@@ -406,7 +420,7 @@ window.CEC.data = (function () {
       title: "Construimos juntos",
       tagline: "Turnos, comentarios y juego compartido",
       summary: "Construir algo sencillo entre los dos.",
-      ages: [2, 3, 4, 5],
+      ages: [4],
       ageNote: "Usar piezas grandes y seguras",
       primaryArea: "interaccion",
       areas: ["interaccion", "vocabulario", "comprension", "expresion"],
@@ -415,22 +429,28 @@ window.CEC.data = (function () {
       duration: "5–10 minutos",
       materialsId: "casa",
       strategyIds: ["comparte-los-turnos"],
+      objective:
+        "Favorecer los turnos comunicativos y el intercambio durante una construcción compartida, comentando acciones, cambios y resultados del juego.",
       materials: [
-        "Bloques grandes, recipientes plásticos seguros o cajas pequeñas que no tengan bordes peligrosos.",
+        "Bloques grandes, recipientes plásticos seguros o cajas pequeñas sin bordes peligrosos.",
       ],
-      before: "Siéntense frente a los materiales y comiencen a construir algo sencillo juntos.",
+      before:
+        "Siéntense frente a los materiales y comiencen a construir algo sencillo juntos. Deja las piezas al alcance del niño y permite que proponga cómo jugar.",
       steps: [
-        "Coloca una pieza y comenta lo que haces.",
-        "Deja una pieza al alcance del niño.",
-        "Espera su iniciativa o invítalo con una frase corta.",
-        "Alternen turnos para colocar piezas.",
-        "Comenten lo que pasa si la torre crece o se cae.",
+        "Coloca una pieza y comenta lo que estás haciendo.",
+        "Deja otra pieza al alcance del niño.",
+        "Espera su iniciativa o invítalo a participar con una frase breve.",
+        "Alternen turnos para colocar, retirar o mover piezas.",
+        "Comenten lo que sucede cuando la construcción crece, cambia o se cae.",
+        "Continúen según el interés del niño, sin exigir que construya de una forma determinada.",
       ],
       accompany:
-        "Puedes decir: «Mi turno… tu turno», «arriba», «se cayó» o «¡qué alta!». Responde a los gestos y acciones del niño como parte de la interacción.",
+        "Puedes decir: «Mi turno… tu turno», «arriba», «se cayó» o «¡qué alta!». Los gestos, las miradas y las acciones del niño también forman parte de la interacción.",
       adapt:
-        "Si aún no construye una torre, pueden meter y sacar objetos de un recipiente. Si desea dirigir el juego, síguelo y comenta sus ideas. Supervisar y evitar piezas pequeñas.",
+        "Si todavía no apila piezas, pueden meter y sacar objetos grandes de un recipiente. Si desea dirigir el juego, síguelo y comenta sus ideas. Evita piezas pequeñas y mantén supervisión adulta.",
       closing: "¿Cómo se comunicaron para continuar el juego?",
+      remember:
+        "No importa cómo quede la construcción. Valora los turnos, la iniciativa y el disfrute compartido, no el resultado final.",
       interests: ["vehiculos", "cocina"],
       download: null,
       adaptations: {
@@ -445,8 +465,8 @@ window.CEC.data = (function () {
       title: "Elegimos la merienda",
       tagline: "Elegir, expresar y compartir la rutina",
       summary: "Una elección sencilla durante la merienda habitual.",
-      ages: [2, 3, 4, 5],
-      ageNote: "Considerar seguridad alimentaria y alergias conocidas",
+      ages: [3],
+      ageNote: "Considerar la seguridad alimentaria y las alergias conocidas",
       primaryArea: "expresion",
       areas: ["expresion", "comprension", "vocabulario", "interaccion"],
       momentos: ["comida"],
@@ -454,21 +474,25 @@ window.CEC.data = (function () {
       duration: "2–5 minutos",
       materialsId: "casa",
       strategyIds: ["organiza-el-ambiente", "espera-y-dale-espacio"],
-      materials: ["Dos opciones de alimentos habituales y seguros para el niño, presentados por el adulto."],
+      objective:
+        "Ofrecer oportunidades cotidianas para expresar elecciones, preferencias o necesidades mediante miradas, gestos, sonidos o palabras durante una merienda habitual.",
+      materials: ["Dos opciones de alimentos habituales y seguros para el niño, presentadas por el adulto."],
       before:
-        "Durante una merienda habitual, muestra dos opciones apropiadas para el niño. No hace falta preparar comida adicional.",
+        "Durante una merienda habitual, muestra dos opciones apropiadas para el niño. No es necesario preparar comida adicional.",
       steps: [
-        "Nombra las dos opciones.",
-        "Pregunta cuál quiere o invita a elegir con mirada, gesto o palabra.",
-        "Espera sin responder por él inmediatamente.",
-        "Reconoce su elección.",
+        "Nombra las dos opciones de manera clara y natural.",
+        "Pregunta cuál quiere o invítalo a elegir mediante mirada, gesto o palabra.",
+        "Espera unos segundos sin responder por él inmediatamente.",
+        "Reconoce la elección que comunica, sea cual sea la forma de expresarla.",
         "Comenta una característica del alimento mientras continúan la rutina.",
       ],
       accompany:
         "Puedes decir: «¿Banano o pan?». Si señala uno, responde: «Elegiste pan». No exijas que nombre el alimento para recibirlo.",
       adapt:
-        "Si la elección entre dos opciones es difícil, presenta una a la vez. La actividad no debe retrasar la comida ni presionar al niño a comer algo que rechaza.",
+        "Si elegir entre dos opciones resulta difícil, presenta una a la vez. La actividad no debe retrasar la comida ni presionar al niño a probar o comer algo que rechaza.",
       closing: "¿Cómo expresó su elección?",
+      remember:
+        "Respeta las alergias conocidas, las indicaciones alimentarias de la familia y la seguridad apropiada para la edad. El objetivo es favorecer la comunicación, no evaluar ni controlar cuánto come.",
       interests: ["cocina", "animales", "naturaleza"],
       download: null,
       adaptations: {
@@ -483,8 +507,8 @@ window.CEC.data = (function () {
       title: "¿Qué hacemos después?",
       tagline: "Anticipar pasos de una rutina",
       summary: "Comentar juntos qué sigue en una rutina conocida.",
-      ages: [3, 4, 5],
-      ageNote: "Simplificar para niños más pequeños",
+      ages: [5],
+      ageNote: "Usar objetos de la rutina; simplificar si hace falta",
       primaryArea: "comprension",
       areas: ["comprension", "expresion", "interaccion"],
       momentos: ["rutinas"],
@@ -492,19 +516,25 @@ window.CEC.data = (function () {
       duration: "5 minutos",
       materialsId: "casa",
       strategyIds: ["modela-el-lenguaje", "apoya-la-comprension"],
+      objective:
+        "Apoyar la comprensión y anticipación de los pasos de una rutina conocida, usando lenguaje sencillo, objetos o imágenes como apoyos.",
       materials: ["Dos o tres imágenes de una rutina conocida o los propios objetos de la rutina."],
-      before: "Elige una rutina familiar, como lavarse las manos, ponerse los zapatos o guardar juguetes.",
+      before:
+        "Elige una rutina familiar, como lavarse las manos, ponerse los zapatos o guardar juguetes. Ten a mano los objetos o imágenes que puedan ayudar a mostrar los pasos.",
       steps: [
-        "Conversen sobre lo que están haciendo ahora.",
-        "Muestra o nombra el siguiente paso.",
-        "Invita al niño a elegir entre dos acciones posibles cuando corresponda.",
-        "Sigue la rutina y comenta cada paso de forma natural.",
+        "Conversen brevemente sobre lo que están haciendo en ese momento.",
+        "Muestra o nombra el siguiente paso con una frase sencilla.",
+        "Cuando corresponda, invita al niño a elegir entre dos acciones posibles.",
+        "Sigan la rutina y comenta cada paso de forma natural.",
+        "Si lo necesita, vuelve a mostrar el objeto o señala la acción en lugar de repetir muchas instrucciones.",
       ],
       accompany:
-        "Puedes decir: «Primero guardamos los bloques y después elegimos un cuento». Si necesita apoyo, muestra el objeto o señala la acción.",
+        "Puedes decir: «Primero guardamos los bloques y después elegimos un cuento». Si necesita apoyo, muestra el objeto o señala la acción que viene a continuación.",
       adapt:
-        "Usa una sola indicación a la vez si la secuencia resulta difícil. Si el niño ya comprende la rutina, invítalo a contar qué sigue, sin exigir una respuesta verbal.",
+        "Usa una sola indicación a la vez si la secuencia resulta difícil. Si el niño ya comprende la rutina, invítalo a contar o mostrar qué sigue, sin exigir una respuesta verbal.",
       closing: "¿Qué apoyo le permitió anticipar el siguiente paso?",
+      remember:
+        "Mantén la rutina natural y flexible. El propósito no es que el niño memorice una secuencia perfecta, sino ayudarle a comprender qué está pasando y qué puede ocurrir después.",
       interests: ["cocina", "musica"],
       download: null,
       adaptations: {
@@ -552,8 +582,17 @@ window.CEC.data = (function () {
       activity.ages.every((age) => getAge(age)) &&
       activity.areas.every((id) => getArea(id)) &&
       getArea(activity.primaryArea) &&
-      getDuration(activity.durationId) &&
+      activity.areas.includes(activity.primaryArea) &&
+      (!activity.durationId || getDuration(activity.durationId)) &&
       getMaterial(activity.materialsId) &&
+      activity.objective &&
+      activity.materials.length > 0 &&
+      activity.before &&
+      activity.steps.length > 0 &&
+      activity.accompany &&
+      activity.adapt &&
+      activity.closing &&
+      activity.remember &&
       momentos.every((id) => getMoment(id)) &&
       strategyIds.every((id) => getStrategy(id));
     if (!valid) console.warn(`Crece en Casa: «${activity.id}» tiene datos inválidos y no se mostrará.`);
@@ -591,8 +630,10 @@ window.CEC.data = (function () {
         if (filters.moment && (activity.momentos || []).includes(filters.moment)) score += 10;
         if (skill && activity.primaryArea === skill.areaId) score += 6;
         else if (skill && activity.areas.includes(skill.areaId)) score += 3;
-        if (duration && activity.durationId === duration.durationId) score += 5;
-        else if (wantedRank && Math.abs((durationRank[activity.durationId] || 0) - wantedRank) === 1) score += 2;
+        if (duration && activity.durationId) {
+          if (activity.durationId === duration.durationId) score += 5;
+          else if (wantedRank && Math.abs((durationRank[activity.durationId] || 0) - wantedRank) === 1) score += 2;
+        }
         if (interest && (activity.interests || []).includes(interest)) score += 4;
         return { activity, score };
       })

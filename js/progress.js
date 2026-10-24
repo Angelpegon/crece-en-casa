@@ -47,13 +47,16 @@ window.CEC.progress = (function () {
     return read()[entryKey(type, id)] || null;
   }
 
-  function set(type, id, { state, moment } = {}) {
-    if (!STATES[state]) return false;
+  function set(type, id, { state, moment, note } = {}) {
     const data = read();
     const key = entryKey(type, id);
+    const prev = data[key] || {};
+    const nextState = state || prev.state || (note !== undefined ? "explored" : "");
+    if (!STATES[nextState]) return false;
     data[key] = {
-      state,
-      moment: moment || null,
+      state: nextState,
+      moment: moment !== undefined ? moment || null : prev.moment || null,
+      note: note !== undefined ? String(note).slice(0, 500) : prev.note || null,
       updatedAt: new Date().toISOString(),
     };
     return write(data);

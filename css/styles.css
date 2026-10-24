@@ -859,6 +859,10 @@ select {
   font-weight: 600;
 }
 
+.activity-card__optional {
+  font-weight: 400;
+}
+
 .activity-card__actions {
   position: relative;
   z-index: 1;
