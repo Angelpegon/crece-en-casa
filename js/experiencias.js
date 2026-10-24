@@ -4,7 +4,6 @@
   const root = document.querySelector("[data-experience-flow]");
   if (!root || !data || !ui) return;
 
-  const STORAGE_KEY = "crece-en-casa:experiencia-flujo";
   const MOMENT_ALERT_DURATION_MS = 5000;
   const esc = ui.escapeHTML;
 
@@ -55,27 +54,15 @@
 
   function loadState() {
     try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
-      if (!raw) return { ...emptyState };
-      const parsed = JSON.parse(raw);
-      return { ...emptyState, ...parsed, error: "", shareOpen: false, momentAlert: false };
+      sessionStorage.removeItem("crece-en-casa:experiencia-flujo");
     } catch (error) {
-      return { ...emptyState };
+      // El estado inicial también se restablece en memoria si el almacenamiento no está disponible.
     }
-  }
-
-  function persist() {
-    try {
-      const { error, shareOpen, momentAlert, ...rest } = state;
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
-    } catch (error) {
-      /* El flujo sigue en memoria si sessionStorage no está disponible. */
-    }
+    return { ...emptyState };
   }
 
   function setState(patch) {
     state = { ...state, ...patch };
-    persist();
     render();
   }
 
@@ -138,7 +125,7 @@
     return `
       <div class="exp-feedback${compact ? " exp-feedback--compact" : ""}"${announceChange ? ' role="status"' : ""}${field ? ` data-exp-feedback-field="${field}"` : ""}>
         <span class="exp-feedback__spark" aria-hidden="true">✦</span>
-        ${compact ? "" : `<img class="exp-feedback__mascot" src="assets/img/temporal/home-zorro.png" width="180" height="180" alt="" loading="lazy" decoding="async">`}
+        ${compact ? "" : `<img class="exp-feedback__mascot" src="assets/img/temporal/home-zorro-cutout.png" width="180" height="180" alt="" loading="lazy" decoding="async">`}
         <span class="exp-feedback__copy">
           <strong class="exp-feedback__title">${esc(title)}</strong>
           <span>${esc(message)}</span>
@@ -227,6 +214,9 @@
     const current = STEPS[state.step - 1];
     return `
       <ol class="exp-stepper" aria-label="Progreso de la experiencia">
+        <li class="exp-stepper__track" aria-hidden="true">
+          <span style="width:${(state.step - 1) / (STEPS.length - 1) * 100}%"></span>
+        </li>
         ${STEPS.map((step) => {
           const isCurrent = step.n === state.step;
           const done = step.n < state.step;
@@ -306,7 +296,7 @@
         <div class="exp-choice-toast__backdrop" aria-hidden="true"></div>
         <div class="exp-choice-toast__card">
           <span class="exp-choice-toast__spark" aria-hidden="true">✦</span>
-          <img src="assets/img/temporal/home-zorro.png" width="180" height="180" alt="" class="exp-choice-toast__mascot">
+          <img src="assets/img/temporal/home-zorro-cutout.png" width="180" height="180" alt="" class="exp-choice-toast__mascot">
           <p class="exp-eyebrow">Un buen comienzo</p>
           <h2 id="exp-moment-alert-title">¡Encontraste una oportunidad!</h2>
           <p id="exp-moment-alert-message">Partir de ${esc(momentLabel())} les da una idea cercana para conversar, jugar y conectar a su manera.</p>
@@ -451,7 +441,7 @@
     return `
       <div class="exp-panel">
         ${stepper()}
-        <img class="exp-deco" src="assets/img/temporal/home-zorro.png" width="180" height="180" alt="" decoding="async">
+        <img class="exp-deco" src="assets/img/temporal/home-zorro-cutout.png" width="180" height="180" alt="" decoding="async">
         <h2 class="exp-title exp-title--center" tabindex="-1">¡Perfecto!</h2>
         <p class="exp-lead exp-lead--center">Esta idea toma en cuenta ${esc(matchDetails)}. Puedes cambiarla si otra les llama más.</p>
         ${positiveFeedback(`La propuesta ${main.title} es solo una invitación. Pueden adaptarla y seguir el interés de tu niño.`, true, { title: "¡Zorrito encontró una idea para ustedes!" })}
@@ -679,7 +669,6 @@
     clearTimeout(momentAlertTimer);
     momentAlertTimer = null;
     state = { ...state, momentAlert: false };
-    persist();
     render();
     focusControl("[data-exp-moment]", "data-exp-moment", state.moment);
   }
@@ -833,11 +822,6 @@
   function restart() {
     clearTimeout(momentAlertTimer);
     momentAlertTimer = null;
-    try {
-      sessionStorage.removeItem(STORAGE_KEY);
-    } catch (error) {
-      /* no-op */
-    }
     state = { ...emptyState };
     render();
     announce("Puedes crear otra experiencia.");
@@ -964,7 +948,6 @@
     const changedControl = event.target;
     if (changedControl.name === "interestOther") {
       state = { ...state, ...next, error: "" };
-      persist();
       updateDetailsProgress();
       return;
     }
@@ -980,7 +963,6 @@
   root.addEventListener("input", (event) => {
     if (event.target.name !== "interestOther") return;
     state = { ...state, interestOther: event.target.value.trim() };
-    persist();
     updateDetailsProgress();
     updateInterestFeedback();
   });

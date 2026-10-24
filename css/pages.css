@@ -908,7 +908,7 @@ html:not(.js) .filters {
   margin-inline: auto;
   padding: 1.15rem 1.2rem 1.35rem;
   border-radius: 1.6rem;
-  background: var(--c-surface);
+  background: #feead8;
   box-shadow: var(--shadow-soft);
 }
 
@@ -1378,6 +1378,8 @@ html:not(.js) .filters {
 
   .exp-detail-progress__track > span,
   .exp-activity-progress__track > span,
+  .exp-stepper__track > span,
+  .exp-stepper__num,
   .exp-observation {
     transition: none;
   }
@@ -1425,29 +1427,57 @@ html:not(.js) .filters {
 }
 
 .exp-stepper {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.3rem;
-  width: min(100%, 12.5rem);
+  align-items: center;
+  gap: 0;
+  width: min(100%, 34rem);
   margin: 0 auto;
   padding: 0;
   list-style: none;
 }
 
 .exp-stepper__item {
+  position: relative;
+  z-index: 1;
   display: grid;
   justify-items: center;
+}
+
+.exp-stepper__track {
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  right: calc(100% / 12);
+  left: calc(100% / 12);
+  height: 0.3rem;
+  overflow: hidden;
+  transform: translateY(-50%);
+  border-radius: var(--radius-pill);
+  background: #d8c5b2;
+}
+
+.exp-stepper__track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #3f6f5f;
+  transition: width 280ms ease;
 }
 
 .exp-stepper__num {
   display: grid;
   place-items: center;
-  width: 0.55rem;
-  height: 0.55rem;
+  width: 1.9rem;
+  height: 1.9rem;
+  border: 2px solid #bba58f;
   border-radius: 50%;
-  background: var(--c-line);
-  color: transparent;
-  font-size: 0;
+  background: #fffaf5;
+  color: #57483b;
+  font-size: 0.82rem;
+  font-weight: 800;
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
 }
 
 .exp-stepper__name {
@@ -1459,13 +1489,17 @@ html:not(.js) .filters {
 }
 
 .exp-stepper__item--done .exp-stepper__num {
-  background: var(--c-sage);
+  border-color: #3f6f5f;
+  background: #3f6f5f;
+  color: #fff;
 }
 
 .exp-stepper__item--current .exp-stepper__num {
-  width: 0.7rem;
-  height: 0.7rem;
+  transform: scale(1.12);
+  border-color: #244f3e;
   background: #3f6f5f;
+  color: #fff;
+  box-shadow: 0 0 0 4px #b9d7c6, 0 2px 8px rgb(28 53 50 / 22%);
 }
 
 .exp-moments.moment-grid--five {
