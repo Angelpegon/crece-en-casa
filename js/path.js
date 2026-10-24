@@ -45,7 +45,9 @@
             (entry) => `
           <li>
             <a href="${hrefFor(entry)}">
-              <span class="path-list__type">${esc(entry.type)}</span>
+              <span class="path-list__type">${esc(
+                entry.type === "activity" ? "Actividad" : entry.type === "strategy" ? "Idea" : entry.type === "challenge" ? "Oportunidad" : entry.type
+              )}</span>
               <strong>${esc(labelFor(entry))}</strong>
               <span>${esc(progress.STATES[entry.state] || entry.state)}</span>
             </a>

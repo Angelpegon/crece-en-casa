@@ -63,16 +63,31 @@
   }
 
   function related(activity) {
-    const others = data.activities
-      .filter((item) => item.id !== activity.id && item.ages.some((age) => activity.ages.includes(age)))
-      .slice(0, 3);
-    if (!others.length) return "";
+    const rest = data.activities.filter((item) => item.id !== activity.id);
+    const byArea = rest.filter(
+      (item) =>
+        item.primaryArea === activity.primaryArea ||
+        item.areas.some((id) => activity.areas.includes(id))
+    );
+    const byNearbyAge = rest.filter((item) => Math.abs((item.ages[0] || 0) - (activity.ages[0] || 0)) <= 1);
+    const picked = [];
+    const seen = new Set();
+    [byArea, byNearbyAge, rest].forEach((group) => {
+      group.forEach((item) => {
+        if (seen.has(item.id) || picked.length >= 3) return;
+        seen.add(item.id);
+        picked.push(item);
+      });
+    });
+    if (!picked.length) return "";
+    const area = data.getArea(activity.primaryArea);
+    const title = area ? `Otras actividades de ${area.label.toLowerCase()}` : "Otras actividades";
     return `
       <section class="section related" aria-labelledby="related-title">
         <div class="container">
-          <h2 class="related__title" id="related-title">Otras actividades para ${ui.formatAges(activity.ages)}</h2>
+          <h2 class="related__title" id="related-title">${esc(title)}</h2>
           <ul class="activity-grid">
-            ${others.map((item) => `<li>${ui.activityCard(item)}</li>`).join("")}
+            ${picked.map((item) => `<li>${ui.activityCard(item)}</li>`).join("")}
           </ul>
         </div>
       </section>`;

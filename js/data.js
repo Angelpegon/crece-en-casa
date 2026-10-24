@@ -49,10 +49,11 @@ window.CEC.data = (function () {
     { id: "narracion", label: "Narración y conversación", areaId: "interaccion" },
   ];
 
+  /* Tiempo disponible de la familia (orientativo). Se alinea a duraciones reales de las fichas. */
   const experienceDurations = [
     { id: "3", label: "3 min", durationId: "2-5" },
     { id: "5", label: "5 min", durationId: "5-10" },
-    { id: "10", label: "10 min", durationId: "10-15" },
+    { id: "10", label: "10 min", durationId: "5-10" },
   ];
 
   const interests = [
@@ -337,7 +338,7 @@ window.CEC.data = (function () {
       ageNote: "Adaptar los objetos y la dificultad",
       primaryArea: "vocabulario",
       areas: ["vocabulario", "expresion", "interaccion"],
-      momentos: ["juego"],
+      momentos: ["juego", "afuera"],
       durationId: "5-10",
       duration: "5–10 minutos",
       materialsId: "casa",
@@ -578,7 +579,7 @@ window.CEC.data = (function () {
     const momentos = activity.momentos || [];
     const strategyIds = activity.strategyIds || [];
     const valid =
-      activity.ages.length > 0 &&
+      activity.ages.length === 1 &&
       activity.ages.every((age) => getAge(age)) &&
       activity.areas.every((id) => getArea(id)) &&
       getArea(activity.primaryArea) &&
@@ -593,6 +594,7 @@ window.CEC.data = (function () {
       activity.adapt &&
       activity.closing &&
       activity.remember &&
+      momentos.length > 0 &&
       momentos.every((id) => getMoment(id)) &&
       strategyIds.every((id) => getStrategy(id));
     if (!valid) console.warn(`Crece en Casa: «${activity.id}» tiene datos inválidos y no se mostrará.`);
@@ -626,13 +628,16 @@ window.CEC.data = (function () {
     const ranked = validActivities
       .map((activity) => {
         let score = 0;
-        if (hasAge && activity.ages.includes(age)) score += 8;
+        const activityAge = activity.ages[0];
+        if (hasAge && activity.ages.includes(age)) score += 10;
+        else if (hasAge && Number.isFinite(activityAge) && Math.abs(activityAge - age) === 1) score += 4;
         if (filters.moment && (activity.momentos || []).includes(filters.moment)) score += 10;
         if (skill && activity.primaryArea === skill.areaId) score += 6;
         else if (skill && activity.areas.includes(skill.areaId)) score += 3;
+        /* Duración es orientativa: suma puntos, no determina sola la elección. */
         if (duration && activity.durationId) {
-          if (activity.durationId === duration.durationId) score += 5;
-          else if (wantedRank && Math.abs((durationRank[activity.durationId] || 0) - wantedRank) === 1) score += 2;
+          if (activity.durationId === duration.durationId) score += 3;
+          else if (wantedRank && Math.abs((durationRank[activity.durationId] || 0) - wantedRank) === 1) score += 1;
         }
         if (interest && (activity.interests || []).includes(interest)) score += 4;
         return { activity, score };
@@ -642,12 +647,15 @@ window.CEC.data = (function () {
     const matches = ranked.filter((item) => item.score > 0);
     const main = matches[0] ? matches[0].activity : null;
     const alternatives = matches.slice(1, 3).map((item) => item.activity);
-    const extended = ranked
-      .map((item) => item.activity)
-      .find((activity) => {
-        if (!main || activity.id === main.id) return false;
-        return (durationRank[activity.durationId] || 0) > (durationRank[main.durationId] || 0);
-      }) || null;
+    const extended =
+      ranked
+        .map((item) => item.activity)
+        .find((activity) => {
+          if (!main || activity.id === main.id || !activity.durationId || !main.durationId) return false;
+          return (durationRank[activity.durationId] || 0) > (durationRank[main.durationId] || 0);
+        }) ||
+      alternatives[0] ||
+      null;
 
     return { main, alternatives, extended, ranked: matches };
   }

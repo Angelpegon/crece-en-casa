@@ -90,8 +90,12 @@ window.CEC.ui = (function () {
           </h${headingLevel}>
           <p class="activity-card__tagline">${escapeHTML(activity.tagline)}</p>
           ${primary ? `<p class="activity-card__area">${escapeHTML(primary.label)}</p>` : ""}
-          ${activity.duration ? `<p class="activity-card__meta">${icon("i-clock")} ${formatDuration(activity, { html: true })}</p>` : ""}
-          <a class="btn btn--outline btn--small" href="${activityUrl(activity)}">Ver actividad</a>
+          ${
+            activity.duration
+              ? `<p class="activity-card__meta">${icon("i-clock")} ${formatDuration(activity, { html: true })}</p>`
+              : ""
+          }
+          <a class="btn btn--outline btn--small" href="${activityUrl(activity)}">Ver ficha</a>
           ${actions}
         </div>
       </article>`;
