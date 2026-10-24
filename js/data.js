@@ -26,11 +26,11 @@ window.CEC.data = (function () {
   ];
 
   const moments = [
-    { id: "comida", label: "Preparando o comiendo", shortLabel: "Comida", icon: "i-casa", tone: "coral" },
-    { id: "rutinas", label: "Vistiéndose", shortLabel: "Rutinas", icon: "i-brote", tone: "green" },
-    { id: "juego", label: "Jugando en casa", shortLabel: "Juego", icon: "i-juego", tone: "yellow" },
-    { id: "afuera", label: "Caminando o explorando afuera", shortLabel: "Afuera", icon: "i-interaccion", tone: "blue" },
-    { id: "lectura", label: "Leyendo un cuento", shortLabel: "Lectura", icon: "i-vocabulario", tone: "lavender" },
+    { id: "comida", label: "Preparando o comiendo", flowLabel: "Preparando o comiendo alimentos", shortLabel: "Comida", icon: "i-casa", tone: "coral", image: image("momento-comida.png", 237, 237) },
+    { id: "rutinas", label: "Vistiéndose", flowLabel: "Vistiéndose", shortLabel: "Rutinas", icon: "i-brote", tone: "green", image: image("momento-vestirse.png", 230, 230) },
+    { id: "juego", label: "Jugando en casa", flowLabel: "Jugando en casa", shortLabel: "Juego", icon: "i-juego", tone: "yellow", image: image("momento-juego.png", 224, 224) },
+    { id: "afuera", label: "Caminando o explorando afuera", flowLabel: "Caminando o explorando afuera", shortLabel: "Afuera", icon: "i-interaccion", tone: "blue", image: image("momento-afuera.png", 227, 227) },
+    { id: "lectura", label: "Leyendo un cuento", flowLabel: "Leyendo un cuento", shortLabel: "Lectura", icon: "i-vocabulario", tone: "lavender", image: image("momento-cuento.png", 226, 226) },
   ];
 
   const durations = [
@@ -41,6 +41,30 @@ window.CEC.data = (function () {
 
   /* Solo «Objetos de casa» en esta versión; Imprimible queda oculto. */
   const materials = [{ id: "casa", label: "Objetos de casa" }];
+
+  const experienceSkills = [
+    { id: "vocabulario", label: "Vocabulario", areaId: "vocabulario" },
+    { id: "comprension", label: "Comprensión del lenguaje", areaId: "comprension" },
+    { id: "combinacion", label: "Combinación de palabras y frases", areaId: "expresion" },
+    { id: "narracion", label: "Narración y conversación", areaId: "interaccion" },
+  ];
+
+  const experienceDurations = [
+    { id: "3", label: "3 min", durationId: "2-5" },
+    { id: "5", label: "5 min", durationId: "5-10" },
+    { id: "10", label: "10 min", durationId: "10-15" },
+  ];
+
+  const interests = [
+    { id: "animales", label: "Animales", icon: "i-paw" },
+    { id: "vehiculos", label: "Carros y vehículos", icon: "i-car" },
+    { id: "musica", label: "Música", icon: "i-music" },
+    { id: "naturaleza", label: "Naturaleza", icon: "i-leaf" },
+    { id: "cocina", label: "Objetos cotidianos y cocina", icon: "i-bowl" },
+    { id: "otro", label: "Otro interés", icon: "i-spark" },
+  ];
+
+  const durationRank = { "2-5": 1, "5-10": 2, "10-15": 3 };
 
   const strategies = [
     {
@@ -290,6 +314,14 @@ window.CEC.data = (function () {
       adapt:
         "Si el niño aún no usa palabras, acepta miradas, gestos y sonidos; usa imágenes grandes y pocas páginas. Si quiere continuar, invita a anticipar qué podría pasar o a contar la historia a su manera.",
       closing: "¿Qué imagen llamó más su atención?",
+      interests: ["animales", "naturaleza"],
+      download: null,
+      adaptations: {
+        corta: "Mira solo la portada y una página. Nombra lo que señala y cierra el cuento con una sonrisa.",
+        sencilla: "Usa dos o tres imágenes grandes. Acepta mirada, gesto o sonido como respuesta.",
+        noQuiere: "Deja el cuento a la vista y comenta tú una imagen, sin insistir en que se siente a leer.",
+        sinMateriales: "Inventen juntos lo que hay en la habitación: «Había una vez una cuchara que salió a pasear».",
+      },
     },
     {
       id: "la-bolsa-sorpresa",
@@ -321,6 +353,14 @@ window.CEC.data = (function () {
       adapt:
         "Para niños más pequeños, usa dos objetos familiares y nómbralos. Para quienes usan más palabras, describe tamaño, función o acciones. Mantén supervisión adulta durante toda la actividad.",
       closing: "¿Qué objeto quiso explorar más?",
+      interests: ["cocina", "vehiculos", "animales"],
+      download: null,
+      adaptations: {
+        corta: "Saca un solo objeto, nómbralo y guarda la bolsa. Dos minutos bastan.",
+        sencilla: "Usa dos objetos grandes y familiares. Nombra uno y espera su gesto.",
+        noQuiere: "Saca tú un objeto y coméntalo en voz alta, sin pedirle que meta la mano.",
+        sinMateriales: "Usa las manos: «¿Qué hay aquí?» y nombra una prenda o un juguete que ya tenga cerca.",
+      },
     },
     {
       id: "donde-esta",
@@ -352,6 +392,14 @@ window.CEC.data = (function () {
       adapt:
         "Empieza con un objeto visible y una indicación. Después, si está preparado, ofrece dos objetos o instrucciones como «Pon el oso dentro». No convertirlo en examen.",
       closing: "¿Qué apoyo le ayudó: la palabra, el gesto o ver el objeto?",
+      interests: ["animales", "cocina"],
+      download: null,
+      adaptations: {
+        corta: "Muestra el juguete, nómbralo y dáselo. Una sola búsqueda es suficiente.",
+        sencilla: "Deja el objeto a media vista. Di «busca» y señala al mismo tiempo.",
+        noQuiere: "Esconde el objeto de forma visible para ti y comenta: «El oso está descansando». Si no busca, no insistas.",
+        sinMateriales: "Usa las manos: cubre un objeto cotidiano con una toalla o con tus palmas.",
+      },
     },
     {
       id: "construimos-juntos",
@@ -383,6 +431,14 @@ window.CEC.data = (function () {
       adapt:
         "Si aún no construye una torre, pueden meter y sacar objetos de un recipiente. Si desea dirigir el juego, síguelo y comenta sus ideas. Supervisar y evitar piezas pequeñas.",
       closing: "¿Cómo se comunicaron para continuar el juego?",
+      interests: ["vehiculos", "cocina"],
+      download: null,
+      adaptations: {
+        corta: "Coloca una pieza, espera su turno y cierra: «Listo, nuestra torre».",
+        sencilla: "Metan y saquen objetos de un recipiente grande, nombrando «dentro» y «fuera».",
+        noQuiere: "Construye tú y comenta lo que haces. Si se acerca, ofrécele una pieza sin pedirle que juegue.",
+        sinMateriales: "Apilen cajas, tapas o libros que ya estén en la habitación, siempre con supervisión.",
+      },
     },
     {
       id: "elegimos-la-merienda",
@@ -413,6 +469,14 @@ window.CEC.data = (function () {
       adapt:
         "Si la elección entre dos opciones es difícil, presenta una a la vez. La actividad no debe retrasar la comida ni presionar al niño a comer algo que rechaza.",
       closing: "¿Cómo expresó su elección?",
+      interests: ["cocina", "animales", "naturaleza"],
+      download: null,
+      adaptations: {
+        corta: "Muestra una sola opción, nómbrala y sirve. Un intercambio breve basta.",
+        sencilla: "Presenta un alimento a la vez. Acepta mirada o gesto como elección.",
+        noQuiere: "Nombra lo que hay en la mesa sin preguntar. Si no elige, continúa la comida con calma.",
+        sinMateriales: "Usa lo que ya está servido. Nombra colores, olores o si está caliente o frío.",
+      },
     },
     {
       id: "que-hacemos-despues",
@@ -441,6 +505,14 @@ window.CEC.data = (function () {
       adapt:
         "Usa una sola indicación a la vez si la secuencia resulta difícil. Si el niño ya comprende la rutina, invítalo a contar qué sigue, sin exigir una respuesta verbal.",
       closing: "¿Qué apoyo le permitió anticipar el siguiente paso?",
+      interests: ["cocina", "musica"],
+      download: null,
+      adaptations: {
+        corta: "Nombra el paso de ahora y el que sigue. Luego continúen la rutina.",
+        sencilla: "Una sola indicación: «Ahora los zapatos», con el objeto a la vista.",
+        noQuiere: "Haz tú el siguiente paso en voz alta. Si no participa, no conviertas la rutina en una actividad extra.",
+        sinMateriales: "Usa los objetos de la propia rutina: jabón, zapatos o el gancho de la toalla.",
+      },
     },
   ];
 
@@ -492,12 +564,62 @@ window.CEC.data = (function () {
     return validActivities.find((activity) => activity.id === id);
   }
 
+  function getExperienceSkill(id) {
+    return experienceSkills.find((item) => item.id === id);
+  }
+
+  function getExperienceDuration(id) {
+    return experienceDurations.find((item) => item.id === id);
+  }
+
+  function getInterest(id) {
+    return interests.find((item) => item.id === id);
+  }
+
+  function recommendExperiences(filters = {}) {
+    const skill = getExperienceSkill(filters.skill);
+    const duration = getExperienceDuration(filters.duration);
+    const wantedRank = duration ? durationRank[duration.durationId] : null;
+    const age = Number(filters.age);
+    const hasAge = Number.isFinite(age) && age > 0;
+    const interest = filters.interest && filters.interest !== "otro" ? filters.interest : "";
+
+    const ranked = validActivities
+      .map((activity) => {
+        let score = 0;
+        if (hasAge && activity.ages.includes(age)) score += 8;
+        if (filters.moment && (activity.momentos || []).includes(filters.moment)) score += 10;
+        if (skill && activity.primaryArea === skill.areaId) score += 6;
+        else if (skill && activity.areas.includes(skill.areaId)) score += 3;
+        if (duration && activity.durationId === duration.durationId) score += 5;
+        else if (wantedRank && Math.abs((durationRank[activity.durationId] || 0) - wantedRank) === 1) score += 2;
+        if (interest && (activity.interests || []).includes(interest)) score += 4;
+        return { activity, score };
+      })
+      .sort((a, b) => b.score - a.score || a.activity.title.localeCompare(b.activity.title, "es"));
+
+    const matches = ranked.filter((item) => item.score > 0);
+    const main = matches[0] ? matches[0].activity : null;
+    const alternatives = matches.slice(1, 3).map((item) => item.activity);
+    const extended = ranked
+      .map((item) => item.activity)
+      .find((activity) => {
+        if (!main || activity.id === main.id) return false;
+        return (durationRank[activity.durationId] || 0) > (durationRank[main.durationId] || 0);
+      }) || null;
+
+    return { main, alternatives, extended, ranked: matches };
+  }
+
   return {
     ages,
     areas,
     moments,
     durations,
     materials,
+    experienceSkills,
+    experienceDurations,
+    interests,
     strategies,
     challenges,
     activities: validActivities,
@@ -506,8 +628,12 @@ window.CEC.data = (function () {
     getMoment,
     getDuration,
     getMaterial,
+    getExperienceSkill,
+    getExperienceDuration,
+    getInterest,
     getStrategy,
     getChallenge,
     getActivity,
+    recommendExperiences,
   };
 })();

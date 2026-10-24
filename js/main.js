@@ -9,13 +9,16 @@
 
     const label = toggle.querySelector("[data-nav-label]");
     const iconUse = toggle.querySelector("use");
+    const backdrop = document.querySelector("[data-nav-backdrop]");
 
     function setOpen(open) {
-      toggle.setAttribute("aria-expanded", String(open));
-      menu.classList.toggle("is-open", open);
-      document.body.classList.toggle("is-nav-open", open && MOBILE_QUERY.matches);
-      if (label) label.textContent = open ? "Cerrar menú" : "Abrir menú";
-      if (iconUse) iconUse.setAttribute("href", `assets/icons/sprite.svg#${open ? "i-close" : "i-menu"}`);
+      const visible = open && MOBILE_QUERY.matches;
+      toggle.setAttribute("aria-expanded", String(visible));
+      menu.classList.toggle("is-open", visible);
+      document.body.classList.toggle("is-nav-open", visible);
+      if (backdrop) backdrop.hidden = !visible;
+      if (label) label.textContent = visible ? "Cerrar menú" : "Abrir menú";
+      if (iconUse) iconUse.setAttribute("href", `assets/icons/sprite.svg#${visible ? "i-close" : "i-menu"}`);
     }
 
     function isOpen() {
@@ -52,6 +55,27 @@
     }
   }
 
+  function setupSidebarDropdowns() {
+    const menu = document.querySelector("[data-nav-menu]");
+    if (!menu) return;
+
+    menu.addEventListener("click", (event) => {
+      const toggle = event.target.closest("[data-side-nav-toggle]");
+      if (!toggle) return;
+
+      const panel = document.getElementById(toggle.getAttribute("aria-controls"));
+      if (!panel) return;
+
+      const open = toggle.getAttribute("aria-expanded") !== "true";
+      menu.querySelectorAll("[data-side-nav-toggle]").forEach((item) => {
+        const itemPanel = document.getElementById(item.getAttribute("aria-controls"));
+        const expanded = item === toggle && open;
+        item.setAttribute("aria-expanded", String(expanded));
+        if (itemPanel) itemPanel.hidden = !expanded;
+      });
+    });
+  }
+
   function setupFooterYear() {
     document.querySelectorAll("[data-current-year]").forEach((node) => {
       node.textContent = String(new Date().getFullYear());
@@ -59,5 +83,6 @@
   }
 
   setupNavigation();
+  setupSidebarDropdowns();
   setupFooterYear();
 })();

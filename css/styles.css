@@ -349,11 +349,26 @@ select {
   border-bottom: 1px solid transparent;
 }
 
-.site-header__inner {
+.site-header__inner,
+.site-header__bar {
   display: flex;
   align-items: center;
   gap: var(--space-4);
   min-height: var(--header-h);
+}
+
+.site-header__bar {
+  justify-content: space-between;
+}
+
+.nav-backdrop {
+  position: fixed;
+  z-index: 55;
+  inset: var(--header-h) 0 0 0;
+  border: 0;
+  padding: 0;
+  background: rgb(28 53 50 / 0.4);
+  cursor: pointer;
 }
 
 .brand {
@@ -978,7 +993,7 @@ select {
   }
 }
 
-/* ---------- 12. Barra lateral (páginas distintas de Inicio) ---------- */
+/* ---------- 12. Barra lateral (layout de todo el sitio) ---------- */
 /* body es flex column: sin width/flex el shell se encoge al contenido y se centra. */
 .page-shell {
   display: flex;
@@ -1004,12 +1019,16 @@ select {
 }
 
 @media (min-width: 64em) {
+  .has-page-sidebar .site-header .container,
+  .has-page-sidebar .site-footer .container {
+    width: min(100% - 1.5rem, calc(var(--container) + 17.5rem + var(--space-5)));
+  }
+
   .page-shell {
     display: grid;
     grid-template-columns: 17.5rem minmax(0, 1fr);
     align-items: start;
-    /* Misma caja que el header (.container) para alinear marca y sidebar */
-    width: min(100% - 2.5rem, var(--container));
+    width: min(100% - 1.5rem, calc(var(--container) + 17.5rem + var(--space-5)));
     max-width: none;
     margin-inline: auto;
     padding-inline: 0;
@@ -1020,10 +1039,11 @@ select {
     position: sticky;
     top: calc(var(--header-h) + 0.75rem);
     width: auto;
-    gap: var(--space-5);
+    gap: var(--space-4);
+    height: calc(100dvh - var(--header-h) - 1.5rem);
     max-height: calc(100dvh - var(--header-h) - 1.5rem);
-    margin: var(--space-4) 0 var(--space-6);
-    padding: var(--space-5) var(--space-4);
+    margin: 0.75rem 0;
+    padding: var(--space-4);
     overflow: auto;
     border-radius: 1.5rem;
   }
@@ -1032,11 +1052,37 @@ select {
     min-width: 0;
   }
 
-  .page-shell .page-hero .container,
-  .page-shell .section .container {
+  .page-shell > main .container {
     width: 100%;
     max-width: none;
-    padding-inline: clamp(1rem, 2.5vw, 2rem);
+    padding-inline: clamp(0.25rem, 1.2vw, 0.75rem);
+  }
+
+}
+
+@media (max-width: 63.99em) {
+  .js .page-sidebar {
+    position: fixed;
+    z-index: 60;
+    top: var(--header-h);
+    left: 0;
+    bottom: 0;
+    width: min(20.5rem, calc(100vw - 2.75rem));
+    height: auto;
+    max-height: none;
+    margin: 0;
+    border-radius: 0 1.35rem 1.35rem 0;
+    transform: translateX(-110%);
+    visibility: hidden;
+    transition: transform 0.22s ease, visibility 0s linear 0.22s;
+    overflow: auto;
+  }
+
+  .js .page-sidebar.is-open {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.22s ease, visibility 0s;
+    box-shadow: 0 18px 40px -18px rgb(28 53 50 / 0.45);
   }
 }
 
@@ -1057,6 +1103,7 @@ select {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  width: 100%;
   min-height: 2.75rem;
   padding: 0.55rem 0.85rem;
   border-radius: 1rem;
@@ -1064,8 +1111,30 @@ select {
   font-family: var(--font-body);
   font-size: 0.98rem;
   font-weight: 700;
+  text-align: left;
   text-decoration: none;
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.side-nav__toggle {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.side-nav__chevron {
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: none;
+  margin-left: auto;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-0.125rem);
+  transition: transform 0.2s ease;
+}
+
+.side-nav__toggle[aria-expanded="true"] .side-nav__chevron {
+  transform: rotate(225deg) translate(-0.125rem, -0.125rem);
 }
 
 .side-nav__link .nav-icon {
@@ -1079,7 +1148,8 @@ select {
   background: rgb(119 170 151 / 0.12);
 }
 
-.side-nav__link--active {
+.side-nav__link--active,
+.side-nav__link--active:hover {
   background: #3f6f5f;
   color: #fff;
 }
@@ -1128,21 +1198,42 @@ select {
 }
 
 .page-sidebar__foot {
+  flex-shrink: 0;
   margin-top: auto;
   padding-top: var(--space-4);
   text-align: center;
 }
 
 .page-sidebar__fox {
-  display: none;
-  width: min(9rem, 70%);
+  display: block;
+  width: min(7.5rem, 68%);
   height: auto;
   margin: 0 auto 0.75rem;
 }
 
 @media (min-width: 64em) {
   .page-sidebar__fox {
+    width: min(8rem, 70%);
+  }
+}
+
+@media (max-height: 52em) {
+  .page-sidebar__fox {
+    display: none;
+  }
+}
+
+@media print {
+  .site-header,
+  .page-sidebar,
+  .nav-backdrop {
+    display: none !important;
+  }
+
+  .page-shell {
     display: block;
+    width: auto;
+    padding: 0;
   }
 }
 

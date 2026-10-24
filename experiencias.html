@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Experiencias | Crece en Casa</title>
-  <meta name="description" content="Elige un momento cotidiano y crea una experiencia para acompañar la comunicación de tu niño.">
+  <title>Experiencias para compartir | Crece en Casa</title>
+  <meta name="description" content="Convierte los momentos de cada día en oportunidades para comunicarse, jugar y crecer juntos.">
   <meta name="theme-color" content="#fef9f3">
   <script>document.documentElement.classList.add("js");</script>
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
@@ -12,15 +12,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/pages.css">
   <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header" data-site-header></header>
 
   <main id="contenido">
-    <section class="page-hero page-hero--coral" aria-labelledby="page-title">
+    <section class="exp-hero" aria-labelledby="page-title">
       <div class="container">
         <nav class="breadcrumb" aria-label="Ruta de navegación">
           <ol>
@@ -29,66 +29,39 @@
             <li aria-current="page">Experiencias</li>
           </ol>
         </nav>
-        <h1 id="page-title">Experiencias</h1>
-        <p class="page-hero__lead">
-          Elige el momento que están viviendo y te proponemos actividades para convertirlo
-          en una experiencia de comunicación.
-        </p>
+        <div class="exp-hero__banner">
+          <h1 class="visually-hidden" id="page-title">Experiencias para compartir</h1>
+          <p class="visually-hidden">
+            Convierte los momentos de cada día en oportunidades para comunicarse, jugar y crecer juntos.
+            Personalizadas para tu familia, cortas y prácticas de 3, 5 o 10 minutos, con lo que tienes en casa
+            y desde la fonoaudiología con mucho cariño. El lenguaje sucede en las pequeñas acciones que vivimos cada día.
+          </p>
+          <img class="exp-hero__art" src="assets/img/temporal/experiencias-banner.png" width="4338" height="610" alt="" decoding="async">
+        </div>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="momentos-title">
+    <section class="section exp-flow-section" aria-labelledby="flujo-title">
       <div class="container">
-        <header class="section-heading">
-          <h2 id="momentos-title">Elige tu momento</h2>
-          <p>Cada momento del día puede abrir una conversación.</p>
-        </header>
-        <ul class="moment-grid moment-grid--five tip-grid tip-grid--three">
-          <li>
-            <a class="moment-tile moment-tile--coral" href="explorar-actividades.html?momento=comida">
-              <img class="moment-tile__img" src="assets/img/temporal/nino1.jpeg?v=2" width="306" height="305" alt="" loading="lazy">
-              <span class="moment-tile__title">Preparando o comiendo</span>
-              <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="moment-tile moment-tile--lavender" href="explorar-actividades.html?momento=rutinas">
-              <img class="moment-tile__img" src="assets/img/temporal/nino2.jpeg?v=2" width="298" height="308" alt="" loading="lazy">
-              <span class="moment-tile__title">Vistiéndose</span>
-              <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="moment-tile moment-tile--sage" href="explorar-actividades.html?momento=juego">
-              <img class="moment-tile__img" src="assets/img/temporal/nino3.jpeg?v=2" width="277" height="311" alt="" loading="lazy">
-              <span class="moment-tile__title">Jugando en casa</span>
-              <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="moment-tile moment-tile--sky" href="explorar-actividades.html?momento=afuera">
-              <img class="moment-tile__img" src="assets/img/temporal/nino4.jpeg?v=2" width="297" height="320" alt="" loading="lazy">
-              <span class="moment-tile__title">Caminando o explorando afuera</span>
-              <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
-            </a>
-          </li>
-          <li>
-            <a class="moment-tile moment-tile--pink" href="explorar-actividades.html?momento=lectura">
-              <img class="moment-tile__img" src="assets/img/temporal/nino5.jpeg?v=2" width="313" height="317" alt="" loading="lazy">
-              <span class="moment-tile__title">Leyendo un cuento</span>
-              <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
-            </a>
-          </li>
-        </ul>
-        <p style="margin-top: var(--space-6);">
-          <a class="btn btn--outline" href="explorar-actividades.html">Ver todas las actividades</a>
-        </p>
+        <h2 class="visually-hidden" id="flujo-title">Crea tu experiencia</h2>
+        <div id="flujo-experiencias" data-experience-flow>
+          <noscript>
+            <p class="notice notice--warm">Para crear tu experiencia necesitas activar JavaScript en tu navegador.</p>
+            <p><a class="btn btn--outline" href="explorar-actividades.html">Ver todas las actividades</a></p>
+          </noscript>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer" data-site-footer></footer>
+  <script src="js/data.js" defer></script>
+  <script src="js/ui.js" defer></script>
+  <script src="js/progress.js" defer></script>
+  <script src="js/album.js" defer></script>
+  <script src="js/session.js" defer></script>
   <script src="js/chrome.js" defer></script>
   <script src="js/main.js" defer></script>
+  <script src="js/experiencias.js" defer></script>
 </body>
 </html>
