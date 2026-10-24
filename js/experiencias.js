@@ -5,6 +5,7 @@
   if (!root || !data || !ui) return;
 
   const STORAGE_KEY = "crece-en-casa:experiencia-flujo";
+  const MOMENT_ALERT_DURATION_MS = 5000;
   const esc = ui.escapeHTML;
 
   const STEPS = [
@@ -42,6 +43,7 @@
     saveMessage: "",
     saveError: "",
     shareOpen: false,
+    momentAlert: false,
     error: "",
     activityStep: 0,
     activityStopped: false,
@@ -49,13 +51,14 @@
   };
 
   let state = loadState();
+  let momentAlertTimer = null;
 
   function loadState() {
     try {
       const raw = sessionStorage.getItem(STORAGE_KEY);
       if (!raw) return { ...emptyState };
       const parsed = JSON.parse(raw);
-      return { ...emptyState, ...parsed, error: "", shareOpen: false };
+      return { ...emptyState, ...parsed, error: "", shareOpen: false, momentAlert: false };
     } catch (error) {
       return { ...emptyState };
     }
@@ -63,7 +66,7 @@
 
   function persist() {
     try {
-      const { error, shareOpen, ...rest } = state;
+      const { error, shareOpen, momentAlert, ...rest } = state;
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
     } catch (error) {
       /* El flujo sigue en memoria si sessionStorage no está disponible. */
@@ -83,10 +86,13 @@
   }
 
   function goTo(step) {
+    clearTimeout(momentAlertTimer);
+    momentAlertTimer = null;
     setState({
       step,
       error: "",
       shareOpen: false,
+      momentAlert: false,
       openAdapt: step === 5 ? state.observation === "observed" ? "noQuiere" : state.openAdapt : "",
     });
     const heading = root.querySelector("h2, h3");
@@ -263,7 +269,6 @@
   }
 
   function renderStep1() {
-    const selectedMoment = state.moment ? positiveFeedback(`¡Buen punto de partida! ${momentLabel()} ya ofrece oportunidades para conversar, jugar y conectar a su manera.`, true, { title: "¡Encontraste una oportunidad!" }) : "";
     return `
       <div class="exp-panel">
         ${stepper()}
@@ -289,9 +294,23 @@
           </ul>
         </fieldset>
         ${fieldError("moment", "Elige el momento que más se parezca a lo que están haciendo.")}
-        ${selectedMoment}
         <p class="exp-help">Puedes elegir la opción que más se parezca a tu rutina.</p>
         ${navButtons({ nextLabel: "Siguiente", nextAction: "step1-next", wide: true })}
+        ${state.momentAlert ? renderMomentAlert() : ""}
+      </div>`;
+  }
+
+  function renderMomentAlert() {
+    return `
+      <div class="exp-choice-toast" data-exp-moment-dialog role="status" aria-live="polite" aria-atomic="true" aria-labelledby="exp-moment-alert-title">
+        <div class="exp-choice-toast__backdrop" aria-hidden="true"></div>
+        <div class="exp-choice-toast__card">
+          <span class="exp-choice-toast__spark" aria-hidden="true">✦</span>
+          <img src="assets/img/temporal/home-zorro.png" width="180" height="180" alt="" class="exp-choice-toast__mascot">
+          <p class="exp-eyebrow">Un buen comienzo</p>
+          <h2 id="exp-moment-alert-title">¡Encontraste una oportunidad!</h2>
+          <p id="exp-moment-alert-message">Partir de ${esc(momentLabel())} les da una idea cercana para conversar, jugar y conectar a su manera.</p>
+        </div>
       </div>`;
   }
 
@@ -598,6 +617,9 @@
           <p class="exp-lead exp-lead--center">${esc(state.saveMessage || "La experiencia quedó guardada anteriormente en este navegador.")}</p>
           ${positiveFeedback("No hay una única forma correcta de vivir este momento. Puedes volver a esta experiencia cuando quieras.", true, { title: "¡Un recuerdo para celebrar!" })}
           ${state.saveError ? `<p class="notice notice--warm" role="status">${esc(state.saveError)}</p>` : ""}
+          <div class="exp-nav">
+            <button class="btn btn--outline" type="button" data-exp-go="5">Volver a adaptaciones</button>
+          </div>
           <div class="exp-actions exp-actions--stack">
             <a class="btn btn--sage" href="mi-camino.html">Ir a mi historia ${icon("i-arrow")}</a>
             <button class="btn btn--outline" type="button" data-exp-action="share-open">Compartir en la comunidad</button>
@@ -651,6 +673,15 @@
     };
     const view = views[state.step] || renderStep1;
     root.innerHTML = liveRegion() + view();
+  }
+
+  function closeMomentAlert() {
+    clearTimeout(momentAlertTimer);
+    momentAlertTimer = null;
+    state = { ...state, momentAlert: false };
+    persist();
+    render();
+    focusControl("[data-exp-moment]", "data-exp-moment", state.moment);
   }
 
   function validateStep1() {
@@ -800,6 +831,8 @@
   }
 
   function restart() {
+    clearTimeout(momentAlertTimer);
+    momentAlertTimer = null;
     try {
       sessionStorage.removeItem(STORAGE_KEY);
     } catch (error) {
@@ -815,8 +848,10 @@
     const momentBtn = event.target.closest("[data-exp-moment]");
     if (momentBtn) {
       const id = momentBtn.getAttribute("data-exp-moment");
-      setState({ moment: id, error: "" });
+      clearTimeout(momentAlertTimer);
+      setState({ moment: id, error: "", momentAlert: true });
       focusControl("[data-exp-moment]", "data-exp-moment", id);
+      momentAlertTimer = setTimeout(closeMomentAlert, MOMENT_ALERT_DURATION_MS);
       return;
     }
 
@@ -872,6 +907,10 @@
         return;
       }
       if (action === "to-save") {
+        if (state.saved) {
+          goTo(6);
+          return;
+        }
         setState({ step: 6, saveIntent: "", saveMessage: "", saveError: "", shareOpen: false });
         const heading = root.querySelector("h2");
         if (heading) heading.focus();
@@ -947,6 +986,11 @@
   });
 
   root.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && state.momentAlert) {
+      event.preventDefault();
+      closeMomentAlert();
+      return;
+    }
     const tile = event.target.closest("[data-exp-moment]");
     if (!tile) return;
     const keys = ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp", "Home", "End"];

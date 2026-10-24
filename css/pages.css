@@ -903,7 +903,7 @@ html:not(.js) .filters {
 .exp-panel {
   display: grid;
   gap: var(--space-3);
-  width: min(100%, 26.5rem);
+  width: 100%;
   min-width: 0;
   margin-inline: auto;
   padding: 1.15rem 1.2rem 1.35rem;
@@ -1011,6 +1011,85 @@ html:not(.js) .filters {
   z-index: 1;
   display: grid;
   gap: 0.12rem;
+}
+
+.exp-choice-toast {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 1rem;
+  overflow: visible;
+  pointer-events: none;
+  border: 0;
+  color: var(--c-ink);
+}
+
+.exp-choice-toast__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(28 53 50 / 28%);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  animation: exp-backdrop-in 180ms ease-out both;
+}
+
+.exp-choice-toast__card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  width: min(32rem, 100%);
+  gap: 0.7rem;
+  max-height: calc(100dvh - 2rem);
+  padding: clamp(1.25rem, 5vw, 2rem);
+  overflow: auto;
+  border: 1px solid #d5e8d9;
+  border-radius: 1.5rem;
+  background: linear-gradient(145deg, #fff 0%, #f3f8ed 100%);
+  box-shadow: 0 1.2rem 4rem rgb(13 34 26 / 24%);
+  text-align: center;
+  animation: exp-cheer-in 280ms cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+.exp-choice-toast__mascot {
+  width: 6.5rem;
+  height: 6.5rem;
+  object-fit: contain;
+  animation: exp-mascot-bounce 520ms 80ms ease-out both;
+}
+
+.exp-choice-toast__card .exp-eyebrow {
+  justify-content: center;
+}
+
+.exp-choice-toast__card h2,
+.exp-choice-toast__card p {
+  margin: 0;
+}
+
+.exp-choice-toast__card h2 {
+  font-size: clamp(1.35rem, 1.1rem + 1vw, 1.75rem);
+}
+
+.exp-choice-toast__card > p:not(.exp-eyebrow) {
+  max-width: 27rem;
+  color: var(--c-text);
+  line-height: 1.55;
+}
+
+.exp-choice-toast__spark {
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+  color: #e8b84e;
+  font-size: 2.5rem;
+  animation: exp-sparkle 700ms 100ms ease-out both;
 }
 
 .exp-feedback__title {
@@ -1250,6 +1329,11 @@ html:not(.js) .filters {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+@keyframes exp-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @keyframes exp-mascot-bounce {
   0% { transform: translateY(0.7rem) rotate(-8deg); }
   65% { transform: translateY(-0.35rem) rotate(4deg); }
@@ -1284,6 +1368,10 @@ html:not(.js) .filters {
   .exp-feedback,
   .exp-feedback__mascot,
   .exp-feedback__spark,
+  .exp-choice-toast__backdrop,
+  .exp-choice-toast__card,
+  .exp-choice-toast__mascot,
+  .exp-choice-toast__spark,
   .exp-activity-progress__steps > .is-done {
     animation: none;
   }
@@ -1454,23 +1542,27 @@ button.moment-tile.is-selected {
 }
 
 .exp-panel .chip-group--icons {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
   gap: 0.45rem;
 }
 
-.exp-panel .chip-group--icons .chip,
-.exp-panel .chip-group--icons .chip > span {
-  width: 100%;
+.exp-panel .chip-group--icons .chip {
+  width: auto;
   min-width: 0;
+  max-width: 100%;
 }
 
 .exp-panel .chip--icon > span {
   justify-content: flex-start;
   gap: 0.4rem;
+  width: auto;
+  max-width: 100%;
   min-height: 2.45rem;
   padding: 0.35rem 0.7rem;
   font-size: 0.78rem;
+  white-space: nowrap;
 }
 
 .exp-panel .chip__glyph {
@@ -1815,35 +1907,24 @@ button.moment-tile.is-selected {
 }
 
 @media (min-width: 48em) {
-  .exp-panel {
-    width: min(100%, 44rem);
-  }
-
   .exp-hero__banner {
     border-radius: 1rem;
   }
 }
 
 @media (min-width: 64em) {
-  .exp-panel {
-    width: min(100%, 58rem);
-  }
-
   .exp-moments.moment-grid--five {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
   .exp-form {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
     column-gap: var(--space-5);
   }
 
   .exp-form > .exp-nav {
     grid-column: 1 / -1;
-  }
-
-  .exp-panel .chip-group--icons {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .exp-hero {
