@@ -4,15 +4,14 @@
     const root = document.querySelector("[data-experience-flow]");
     if (!root || !data || !ui) return;
 
-  const MOMENT_ALERT_DURATION_MS = 5000;
-  const PLAY_CHEER_DURATION_MS = 2200;
-  const esc = ui.escapeHTML;
+    const MOMENT_ALERT_DURATION_MS = 5000;
+    const esc = ui.escapeHTML;
 
     const STEPS = [
         { n: 1, name: "Elegir mi momento" },
         { n: 2, name: "Personalizar la experiencia" },
         { n: 3, name: "Resultados personalizados" },
-        { n: 4, name: "Experiencia paso a paso" },
+        { n: 4, name: "Recordar la experiencia" },
         { n: 5, name: "Adaptaciones y más opciones" },
         { n: 6, name: "Guardar y compartir" },
     ];
@@ -42,18 +41,14 @@
         saveIntent: "",
         saveMessage: "",
         saveError: "",
-    shareOpen: false,
-    momentAlert: false,
-    cheerOpen: false,
-    error: "",
-    activityStep: 0,
-    activityStopped: false,
-    observation: "",
-  };
+        shareOpen: false,
+        momentAlert: false,
+        error: "",
+        activityStep: 0,
+    };
 
-  let state = loadState();
-  let momentAlertTimer = null;
-  let playCheerTimer = null;
+    let state = loadState();
+    let momentAlertTimer = null;
 
     function loadState() {
         try {
@@ -75,47 +70,26 @@
         if (control) control.focus({ preventScroll: true });
     }
 
-  function clearPlayCheer() {
-    clearTimeout(playCheerTimer);
-    playCheerTimer = null;
-  }
+    function advancePlayStep() {
+        setState({ activityStep: (state.activityStep || 0) + 1 });
+        const nextHeading = root.querySelector("#exp-playalong-title");
+        if (nextHeading) nextHeading.focus();
+        else root.querySelector("[data-exp-action='to-adapt']")?.focus();
+    }
 
-  function advancePlayStep() {
-    clearPlayCheer();
-    const stopForToday = state.observation === "observed";
-    setState({
-      cheerOpen: false,
-      activityStep: stopForToday ? state.activityStep : state.activityStep + 1,
-      activityStopped: stopForToday,
-      observation: stopForToday ? state.observation : "",
-    });
-    const nextHeading = root.querySelector("#exp-playalong-title");
-    if (nextHeading) nextHeading.focus();
-    else root.querySelector("[data-exp-action='to-adapt']")?.focus();
-  }
-
-  function celebrateObservation(id) {
-    clearPlayCheer();
-    setState({ observation: id, cheerOpen: true });
-    playCheerTimer = setTimeout(advancePlayStep, PLAY_CHEER_DURATION_MS);
-  }
-
-  function goTo(step) {
-    clearTimeout(momentAlertTimer);
-    momentAlertTimer = null;
-    clearPlayCheer();
-    setState({
-      step,
-      error: "",
-      shareOpen: false,
-      momentAlert: false,
-      cheerOpen: false,
-      openAdapt: step === 5 ? state.observation === "observed" ? "noQuiere" : state.openAdapt : "",
-    });
-    const heading = root.querySelector("h2, h3");
-    if (heading) heading.focus();
-    root.scrollIntoView({ block: "start", behavior: "smooth" });
-  }
+    function goTo(step) {
+        clearTimeout(momentAlertTimer);
+        momentAlertTimer = null;
+        setState({
+            step,
+            error: "",
+            shareOpen: false,
+            momentAlert: false,
+        });
+        const heading = root.querySelector("h2, h3");
+        if (heading) heading.focus();
+        root.scrollIntoView({ block: "start", behavior: "smooth" });
+    }
 
     function currentActivity() {
         return data.getActivity(state.activityId);
@@ -234,13 +208,11 @@
         if (feedback) feedback.textContent = fieldMessage("interest");
     }
 
-    function activityProgress(activityStep, total, { stopped = false } = {}) {
+    function activityProgress(activityStep, total) {
         const completed = Math.min(activityStep, total);
-        const label = stopped
-            ? `Pausamos aquí · ${completed} de ${total}`
-            : completed === total
-                ? "¡Momento compartido!"
-                : `Vamos juntos · ${completed} de ${total}`;
+        const label = completed === total
+            ? "Momento ya compartido"
+            : `Idea ${Math.min(activityStep + 1, total)} de ${total}`;
         return `
       <div class="exp-activity-progress" role="progressbar" aria-label="${completed} de ${total} ideas compartidas" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${completed}">
         <span class="exp-activity-progress__label">${label}</span>
@@ -253,6 +225,107 @@
         const cut = text.indexOf(". ");
         if (cut === -1) return esc(text);
         return `<strong>${esc(text.slice(0, cut + 1))}</strong> ${esc(text.slice(cut + 2))}`;
+    }
+
+    function buildObserveGuide(activity, stepIndex) {
+        const total = (activity.steps || []).length;
+        const stepText = String(activity.steps[stepIndex] || "");
+        const stepLower = stepText.toLowerCase();
+        const ageValue = Number((activity.ages && activity.ages[0]) || state.age || 3);
+        const areaId = activity.primaryArea || state.skill || "interaccion";
+        const area = data.getArea(areaId);
+        const age = data.getAge(ageValue);
+        const moment = data.getMoment(state.moment) || activityMoment(activity);
+        const strategies = (activity.strategyIds || [])
+            .map((id) => data.getStrategy(id))
+            .filter(Boolean);
+        const strategy = strategies[stepIndex % Math.max(strategies.length, 1)] || strategies[0];
+        const isFirst = stepIndex === 0;
+        const isLast = stepIndex >= total - 1;
+
+        const ageCue = {
+            2: "una mirada, un gesto, un sonido o acercarse a ti",
+            3: "señalar, una palabra, un gesto o buscar tu cara",
+            4: "una frase corta, un comentario o invitarte a seguir",
+            5: "contar, anticipar, elegir con palabras o explicar a su manera",
+        }[ageValue] || "un gesto, una mirada o una palabra";
+
+        const areaLead = {
+            vocabulario: "Las palabras también se descubren en lo cotidiano.",
+            comprension: "Comprender también se ve en cómo responde.",
+            expresion: "A veces, un pequeño gesto dice mucho.",
+            interaccion: "La conexión se nota en los turnos que comparten.",
+        }[areaId] || "A veces, un pequeño gesto dice mucho.";
+
+        let focus = "cómo participa y qué te comunica a su manera";
+        if (/miren|mira|observ|portada|atenci/.test(stepLower)) {
+            focus = "hacia dónde va su mirada y qué elige explorar primero";
+        } else if (/seña|elige|elegir|opción|pregun/.test(stepLower)) {
+            focus = "cómo te hace saber su elección: mirada, gesto, sonido o palabra";
+        } else if (/coment|nombr|di |dice|frase/.test(stepLower)) {
+            focus = "si retoma algo de lo que nombraste o aporta su propia idea";
+        } else if (/pausa|espera|tiempo|sin responder/.test(stepLower)) {
+            focus = "qué ocurre en la pausa: si te mira, insiste, espera o cambia de interés";
+        } else if (/busca|instruc|indica|muestra|siguiente paso|anticipa/.test(stepLower)) {
+            focus = "si la palabra, el gesto o el objeto le ayudaron a entender qué sigue";
+        } else if (/turno|altern|juntos|constru/.test(stepLower)) {
+            focus = "cómo se turnan: si te espera, te imita o propone el siguiente movimiento";
+        } else if (/compar|descub|otro uso|caracter/.test(stepLower)) {
+            focus = "qué características o usos le interesan y cómo te lo muestra";
+        } else if (/reconoce|particip|continú|continuen|sigan/.test(stepLower)) {
+            focus = "si quiere seguir, cambiar o cerrar el momento, y cómo te lo comunica";
+        } else if (isFirst) {
+            focus = "cómo se acerca a la propuesta y qué le despierta curiosidad";
+        } else if (isLast) {
+            focus = "qué quedó de este intercambio y cómo te hizo saber que listo o que quiere más";
+        }
+
+        const areaBody = {
+            vocabulario: `En vocabulario, fíjate si aparece un nombre, una característica o una acción nueva a través de ${ageCue}.`,
+            comprension: `En comprensión, observa si sigue la idea con apoyo de gestos, objetos o palabras sencillas —por ejemplo mediante ${ageCue}.`,
+            expresion: `En expresión, lo valioso es cómo te cuenta lo que quiere o siente, aunque sea con ${ageCue}.`,
+            interaccion: `En interacción, mira si hay ida y vuelta: te mira, responde y deja espacio, incluso con ${ageCue}.`,
+        }[areaId] || `Observa si te comunica algo mediante ${ageCue}.`;
+
+        const momentHint = moment
+            ? {
+                comida: "En la comida, cualquier señal de preferencia ya es comunicación.",
+                lectura: "En la lectura, detenerse en una imagen también es conversar.",
+                juego: "En el juego, imitar o acercarte a su idea fortalece el turno.",
+                rutinas: "En la rutina, anticipar el siguiente paso le da seguridad.",
+                afuera: "Afuera, lo que mira o señala puede abrir una mini conversación.",
+            }[moment.id]
+            : "";
+
+        const positionNote = isFirst
+            ? "Este primer paso abre el momento: no hace falta que salga “perfecto”."
+            : isLast
+                ? (activity.closing
+                    ? `Para cerrar, puedes preguntarte: ${activity.closing}`
+                    : "Al cerrar, basta con notar qué compartieron hoy.")
+                : "Cada paso suma; un solo intercambio atento ya cuenta.";
+
+        const helpBits = [];
+        if (activity.accompany) helpBits.push(activity.accompany);
+        if (strategy && strategy.tip) {
+            helpBits.push(`Pista de la estrategia «${strategy.title}»: ${strategy.tip}`);
+        } else if (strategy && strategy.example) {
+            helpBits.push(`Ejemplo: ${strategy.example}`);
+        }
+        if (!helpBits.length) {
+            helpBits.push("Mira con calma, sigue su interés y responde a lo que comunique, sin pedirle una forma concreta de responder.");
+        }
+
+        return {
+            lead: areaLead,
+            body: `En esta idea, presta atención a ${focus}.`,
+            areaBody,
+            closing: [momentHint, positionNote].filter(Boolean).join(" "),
+            helps: helpBits,
+            meta: [age && age.label, area && area.label, moment && (moment.shortLabel || moment.label)]
+                .filter(Boolean)
+                .join(" · "),
+        };
     }
 
     function stepper() {
@@ -522,7 +595,7 @@
       <div class="exp-panel exp-panel--result">
         ${stepper()}
         <h2 class="exp-title exp-title--center" tabindex="-1">¡Perfecto!</h2>
-        <p class="exp-lead exp-lead--center">Esta idea toma en cuenta ${esc(matchDetails)}. Puedes cambiarla si otra les llama más.</p>
+        <p class="exp-lead exp-lead--center">Esta idea tiene en cuenta ${esc(matchDetails)}. Puedes cambiarla si otra les llama más.</p>
         ${featuredActivity(main)}
         <p class="exp-result__invite" role="status">Es solo una invitación: pueden adaptarla y seguir el interés de tu niño.</p>
         ${otherAlts.length
@@ -539,22 +612,6 @@
       </div>`;
     }
 
-    function renderPlayCheer(observation) {
-        if (!state.cheerOpen || !observation) return "";
-        return `
-      <div class="exp-choice-toast exp-play-cheer" data-exp-play-cheer role="status" aria-live="polite" aria-atomic="true">
-        <button class="exp-choice-toast__backdrop" type="button" data-exp-cheer-continue aria-label="Continuar"></button>
-        <button class="exp-choice-toast__card" type="button" data-exp-cheer-continue>
-          <span class="exp-choice-toast__spark" aria-hidden="true">✦</span>
-          <img src="assets/img/temporal/home-zorro-cutout.png" width="180" height="180" alt="" class="exp-choice-toast__mascot">
-          <p class="exp-eyebrow">Momento celebrado</p>
-          <h2>${esc(observation.title)}</h2>
-          <p>${esc(observation.message)}</p>
-          <span class="exp-play-cheer__hint">Toca para seguir</span>
-        </button>
-      </div>`;
-    }
-
     function renderStep4() {
         const activity = currentActivity();
         if (!activity) return renderStep3();
@@ -563,38 +620,21 @@
         const area = data.getArea(activity.primaryArea);
         const materials = activity.materials && activity.materials.length ? activity.materials : [];
         const mismatch = ageMismatchNote(activity);
-        const cheers = {
-            interested: {
-                id: "interested",
-                title: "¡Se encontraron!",
-                message: "Ese momento juntos ya cuenta. ¡Qué valioso!",
-            },
-            communicated: {
-                id: "communicated",
-                title: "¡Hubo conexión!",
-                message: "Te contó algo a su manera. Eso también es conversar.",
-            },
-            observed: {
-                id: "observed",
-                title: "¡También cuenta!",
-                message: "Escuchar su ritmo también es acompañar con cariño.",
-            },
-        };
         const activityStep = state.activityStep || 0;
         const total = activity.steps.length;
-        const finished = state.activityStopped || activityStep >= total;
-        const observation = cheers[state.observation];
-        const liveCheerId = activityStep % 2 === 0 ? "interested" : "communicated";
+        const finished = activityStep >= total;
+        const isLastIdea = activityStep >= total - 1;
+        const observe = finished ? null : buildObserveGuide(activity, activityStep);
+        const observePanelId = `exp-observe-panel-${activityStep}`;
 
         const tips = `
       <details class="exp-play__tips">
-        <summary>Tips para este momento ${icon("i-info")}</summary>
+        <summary>Tips y ayudas para esta idea ${icon("i-info")}</summary>
         <div class="exp-play__tips-body">
-          ${
-            materials.length
-              ? `<p><strong>Materiales</strong></p><ul class="bullet-list">${materials.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`
-              : "<p><strong>Materiales:</strong> con lo que ya tienen en casa.</p>"
-          }
+          ${materials.length
+                ? `<p><strong>Materiales</strong></p><ul class="bullet-list">${materials.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`
+                : "<p><strong>Materiales:</strong> con lo que ya tenían en casa.</p>"
+            }
           ${activity.before ? `<p><strong>Antes:</strong> ${esc(activity.before)}</p>` : ""}
           ${activity.accompany ? `<p><strong>Acompañar:</strong> ${esc(activity.accompany)}</p>` : ""}
         </div>
@@ -605,59 +645,57 @@
         <div class="exp-play__done">
           <img class="exp-play__fox" src="assets/img/temporal/home-zorro-cutout.png" width="140" height="140" alt="" decoding="async">
           ${positiveFeedback(
-            state.observation === "observed"
-              ? "Observar, cambiar o parar también son formas de cuidarse."
-              : "Estar juntos ya cuenta; no hacía falta completar nada perfecto.",
-            true,
-            {
-              title: state.observation === "observed" ? "Un cierre con cuidado" : "¡Lo hicieron juntos!",
-              compact: true,
-            }
-          )}
-          ${
-            activity.closing
-              ? `<div class="exp-play__closing">
+                "Estar juntos ya contó; no hacía falta completar nada perfecto.",
+                true,
+                {
+                    title: "¡Lo vivieron juntos!",
+                    compact: true,
+                }
+            )}
+          ${activity.closing
+                ? `<div class="exp-play__closing">
                   <p class="exp-play__closing-label">Para cerrar</p>
                   <p class="exp-play__closing-q">${esc(activity.closing)}</p>
                 </div>`
-              : ""
-          }
+                : ""
+            }
           ${activity.remember ? `<p class="exp-play__remember">${esc(activity.remember)}</p>` : ""}
           ${navButtons({ back: 3, nextLabel: "Ver formas de adaptarlo", nextAction: "to-adapt" })}
         </div>`
             : `
         <section class="exp-play__stage" aria-labelledby="exp-playalong-title">
-          ${activityProgress(activityStep, total, { stopped: state.activityStopped })}
-          <div class="exp-play__step">
+          ${activityProgress(activityStep, total)}
+          <div class="exp-play__step exp-play__step--recall">
             <p class="exp-play__step-num">Idea ${activityStep + 1} de ${total}</p>
+            <p class="exp-play__recall">Lo que se propusieron</p>
             <h3 class="exp-play__step-title" id="exp-playalong-title">${formatStepText(activity.steps[activityStep])}</h3>
-            ${
-              activityStep === 0 && activity.before
+            ${activityStep === 0 && activity.before
                 ? `<p class="exp-play__prep">${esc(activity.before)}</p>`
                 : ""
             }
-            ${
-              activity.accompany
-                ? `<button class="exp-play__nudge" type="button" data-exp-toggle-hint aria-expanded="false">
-                    ${icon("i-spark")} Tip para acompañar
-                  </button>
-                  <p class="exp-play__nudge-body" data-exp-hint-body hidden>${esc(activity.accompany)}</p>`
-                : ""
-            }
+            <div class="exp-play__observe">
+              <button class="exp-play__observe-btn" type="button" data-exp-toggle-hint aria-expanded="false" aria-controls="${observePanelId}">
+                ${icon("i-spark")} Descubre qué puedes observar
+              </button>
+              <div class="exp-play__observe-panel" id="${observePanelId}" data-exp-hint-body hidden>
+                ${observe.meta ? `<p class="exp-play__observe-meta">${esc(observe.meta)}</p>` : ""}
+                <p class="exp-play__observe-lead">${esc(observe.lead)}</p>
+                <p>${esc(observe.body)}</p>
+                <p>${esc(observe.areaBody)}</p>
+                ${observe.closing ? `<p>${esc(observe.closing)}</p>` : ""}
+                <div class="exp-play__observe-helps">
+                  <p class="exp-play__observe-helps-label">Ayudas para familiarizarte</p>
+                  ${observe.helps.map((item) => `<p>${esc(item)}</p>`).join("")}
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="exp-play__celebrate">
-            <button class="exp-play__live" type="button" data-exp-observation="${liveCheerId}">
-              <span class="exp-play__live-burst" aria-hidden="true"></span>
-              <span class="exp-play__live-icon">${icon("i-spark")}</span>
-              <strong>¡Lo intentamos!</strong>
-              <span>Celebrar este momento y seguir a la siguiente idea</span>
-            </button>
-            <button class="exp-play__pause" type="button" data-exp-observation="observed">
-              Hoy prefirió pausar
+          <div class="exp-play__continue">
+            <button class="btn btn--outline" type="button" data-exp-play-next>
+              ${isLastIdea ? "Terminar momento" : "Siguiente idea"}
             </button>
           </div>
-        </section>
-        ${renderPlayCheer(observation)}`;
+        </section>`;
 
         return `
       <div class="exp-panel exp-panel--play">
@@ -666,9 +704,9 @@
           ${ui.imageTag(ui.activityImage(activity), {
             alt: activity.imageAlt || "",
             attrs: 'class="exp-play__thumb" decoding="async"',
-          })}
+        })}
           <div class="exp-play__header-copy">
-            <p class="exp-eyebrow">${icon("d-heart")} Viviendo la idea</p>
+            <p class="exp-eyebrow">${icon("d-heart")} Después de la idea</p>
             <h2 class="exp-title" tabindex="-1">${esc(activity.title)}</h2>
             <ul class="exp-play__chips">
               ${activityAge ? `<li>${esc(activityAge.label)}</li>` : ""}
@@ -888,8 +926,6 @@
             saveMessage: "",
             saveError: "",
             activityStep: 0,
-            activityStopped: false,
-            observation: "",
         });
         const heading = root.querySelector("h2");
         if (heading) heading.focus();
@@ -906,8 +942,6 @@
             saveMessage: "",
             saveError: "",
             activityStep: 0,
-            activityStopped: false,
-            observation: "",
         });
         const heading = root.querySelector("h2");
         if (heading) heading.focus();
@@ -973,15 +1007,14 @@
         if (heading) heading.focus();
     }
 
-  function restart() {
-    clearTimeout(momentAlertTimer);
-    momentAlertTimer = null;
-    clearPlayCheer();
-    state = { ...emptyState };
-    render();
-    announce("Puedes crear otra experiencia.");
-    root.scrollIntoView({ block: "start", behavior: "smooth" });
-  }
+    function restart() {
+        clearTimeout(momentAlertTimer);
+        momentAlertTimer = null;
+        state = { ...emptyState };
+        render();
+        announce("Puedes crear otra experiencia.");
+        root.scrollIntoView({ block: "start", behavior: "smooth" });
+    }
 
     root.addEventListener("click", (event) => {
         const momentBtn = event.target.closest("[data-exp-moment]");
@@ -994,36 +1027,28 @@
             return;
         }
 
-    const observationBtn = event.target.closest("[data-exp-observation]");
-    if (observationBtn) {
-      const id = observationBtn.getAttribute("data-exp-observation");
-      observationBtn.classList.add("is-pop");
-      celebrateObservation(id);
-      return;
-    }
+        const hintToggle = event.target.closest("[data-exp-toggle-hint]");
+        if (hintToggle) {
+            const body = root.querySelector("[data-exp-hint-body]");
+            if (!body) return;
+            const open = body.hasAttribute("hidden");
+            if (open) {
+                body.removeAttribute("hidden");
+                body.classList.add("is-open");
+            } else {
+                body.setAttribute("hidden", "");
+                body.classList.remove("is-open");
+            }
+            hintToggle.setAttribute("aria-expanded", open ? "true" : "false");
+            hintToggle.classList.toggle("is-open", open);
+            return;
+        }
 
-    const cheerContinue = event.target.closest("[data-exp-cheer-continue]");
-    if (cheerContinue) {
-      advancePlayStep();
-      return;
-    }
-
-    const hintToggle = event.target.closest("[data-exp-toggle-hint]");
-    if (hintToggle) {
-      const body = root.querySelector("[data-exp-hint-body]");
-      if (!body) return;
-      const open = body.hasAttribute("hidden");
-      if (open) body.removeAttribute("hidden");
-      else body.setAttribute("hidden", "");
-      hintToggle.setAttribute("aria-expanded", open ? "true" : "false");
-      return;
-    }
-
-    const playNextBtn = event.target.closest("[data-exp-play-next]");
-    if (playNextBtn) {
-      advancePlayStep();
-      return;
-    }
+        const playNextBtn = event.target.closest("[data-exp-play-next]");
+        if (playNextBtn) {
+            advancePlayStep();
+            return;
+        }
 
         const saveIntentBtn = event.target.closest("[data-exp-save-intent]");
         if (saveIntentBtn) {
