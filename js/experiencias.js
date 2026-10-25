@@ -49,6 +49,8 @@
         activityStep: 0,
         activityStopped: false,
         observation: "",
+        triedStatus: "",
+        livedSteps: [],
         experienceNote: "",
         experienceNoteOpen: false,
     };
@@ -82,18 +84,28 @@
         playCheerTimer = null;
     }
 
-    function advancePlayStep() {
+    function advancePlayStep({ skip = false } = {}) {
         clearPlayCheer();
-        const stopForToday = state.observation === "observed";
+        const stopForToday = !skip && state.observation === "observed";
+        const livedSteps = Array.isArray(state.livedSteps) ? [...state.livedSteps] : [];
+        if (!skip && state.observation && !livedSteps.includes(state.activityStep)) {
+            livedSteps.push(state.activityStep);
+        }
         setState({
             cheerOpen: false,
             activityStep: stopForToday ? state.activityStep : state.activityStep + 1,
             activityStopped: stopForToday,
             observation: stopForToday ? state.observation : "",
+            triedStatus: stopForToday ? state.triedStatus : "",
+            livedSteps,
         });
         const nextHeading = root.querySelector("#exp-playalong-title");
         if (nextHeading) nextHeading.focus();
         else root.querySelector("[data-exp-action='to-adapt']")?.focus();
+    }
+
+    function goToNextIdea() {
+        advancePlayStep({ skip: true });
     }
 
     function celebrateObservation(id) {
@@ -239,18 +251,35 @@
         if (feedback) feedback.textContent = fieldMessage("interest");
     }
 
-    function activityProgress(activityStep, total, { stopped = false } = {}) {
-        const completed = Math.min(activityStep, total);
+    function activityProgress(activityStep, total, { stopped = false, livedSteps = [] } = {}) {
+        const lived = livedSteps.filter((index) => index >= 0 && index < total);
+        const livedCount = lived.length;
+        const current = Math.min(Math.max(activityStep, 0), Math.max(total - 1, 0));
+        const position = stopped
+            ? Math.min(current + 1, total)
+            : activityStep >= total
+                ? total
+                : current + 1;
         const label = stopped
-            ? `Pausaron aquí · ${completed} de ${total}`
-            : completed === total
-                ? "¡Momento compartido!"
-                : `Ideas vividas · ${completed} de ${total}`;
+            ? `Pausaron aquí · ${livedCount || position} de ${total}`
+            : activityStep >= total
+                ? livedCount
+                    ? `¡Momento compartido! · ${livedCount} vividas`
+                    : "¡Momento compartido!"
+                : livedCount > 0
+                    ? `Ideas vividas · ${livedCount} de ${total}`
+                    : `Recorriendo · idea ${position} de ${total}`;
         return `
-      <div class="exp-activity-progress" role="progressbar" aria-label="${completed} de ${total} ideas vividas" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${completed}">
+      <div class="exp-activity-progress" role="progressbar" aria-label="${label}" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${position}">
         <span class="exp-activity-progress__label">${label}</span>
-        <span class="exp-activity-progress__track"><span style="width:${total ? completed / total * 100 : 0}%"></span></span>
-        <span class="exp-activity-progress__steps" aria-hidden="true">${Array.from({ length: total }, (_, index) => `<span class="${index < completed ? "is-done" : ""}">${index < completed ? "✓" : index + 1}</span>`).join("")}</span>
+        <span class="exp-activity-progress__track"><span style="width:${total ? (position / total) * 100 : 0}%"></span></span>
+        <span class="exp-activity-progress__steps" aria-hidden="true">${Array.from({ length: total }, (_, index) => {
+            const isLived = lived.includes(index);
+            const isCurrent = !stopped && activityStep < total && index === current;
+            const className = [isLived ? "is-done" : "", isCurrent ? "is-current" : ""].filter(Boolean).join(" ");
+            const content = isLived ? "✓" : index + 1;
+            return `<span class="${className}">${content}</span>`;
+        }).join("")}</span>
       </div>`;
     }
 
@@ -258,6 +287,16 @@
         const cut = text.indexOf(". ");
         if (cut === -1) return esc(text);
         return `<strong>${esc(text.slice(0, cut + 1))}</strong> ${esc(text.slice(cut + 2))}`;
+    }
+
+    function splitStepText(text) {
+        const raw = String(text || "").trim();
+        const cut = raw.indexOf(". ");
+        if (cut === -1) return { title: raw, body: "" };
+        return {
+            title: raw.slice(0, cut + 1).trim(),
+            body: raw.slice(cut + 2).trim(),
+        };
     }
 
     function stepper() {
@@ -528,7 +567,7 @@
       <div class="exp-panel exp-panel--result">
         ${stepper()}
         <h2 class="exp-title exp-title--center" tabindex="-1">¡Perfecto!</h2>
-        <p class="exp-lead exp-lead--center">Esta idea toma en cuenta ${esc(matchDetails)}. Puedes cambiarla si otra les llama más.</p>
+        <p class="exp-lead exp-lead--center">Esta idea tiene en cuenta ${esc(matchDetails)}. Puedes cambiarla si otra les llama más.</p>
         ${featuredActivity(main)}
         <p class="exp-result__invite" role="status">Es solo una invitación: pueden adaptarla y seguir el interés de tu niño.</p>
         ${otherAlts.length
@@ -602,93 +641,126 @@
         const total = activity.steps.length;
         const finished = state.activityStopped || activityStep >= total;
         const observation = reactions.find((item) => item.id === state.observation);
+        const triedStatus = state.triedStatus || "";
+        const isLastIdea = activityStep >= total - 1;
+        const nextIdeaLabel = isLastIdea ? "Terminar recorrido" : "Siguiente idea";
+        const ideaParts = splitStepText(activity.steps[activityStep]);
+        const ideaDescription = ideaParts.body || activity.before || "";
 
         const tipsBody = `
-          ${
-            materials.length
-              ? `<p><strong>Materiales</strong></p><ul class="bullet-list">${materials.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`
-              : "<p>Con lo que ya tienen en casa alcanza.</p>"
-          }
-          ${activity.before ? `<p><strong>Antes:</strong> ${esc(activity.before)}</p>` : ""}
+          ${materials.length
+                ? `<p><strong>Materiales</strong></p><ul class="bullet-list exp-play__tip-list">${materials.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>`
+                : "<p>Con lo que ya tienen en casa alcanza.</p>"
+            }
           ${activity.accompany ? `<p><strong>Acompañar:</strong> ${esc(activity.accompany)}</p>` : ""}
         `;
+
+        const nextIdeaNav = `
+          <div class="exp-play__idea-nav">
+            <button class="btn btn--sage exp-play__next-btn" type="button" data-exp-play-next>${esc(nextIdeaLabel)} ${icon("i-arrow")}</button>
+          </div>`;
+
+        let followUp = "";
+        if (!triedStatus) {
+            followUp = `
+          <article class="exp-play-card exp-play-card--ask" data-exp-followup>
+            <p class="exp-play-card__eyebrow">${icon("i-spark")} Un momento</p>
+            <h4 class="exp-play-card__title">¿Ya intentaron esta idea?</h4>
+            <p class="exp-play-card__lead">Pueden recorrerlas todas primero o celebrar si ya la vivieron.</p>
+            <div class="exp-play__ask" role="group" aria-label="¿Ya intentaron esta idea?">
+              <button class="exp-play__ask-btn exp-play__ask-btn--later" type="button" data-exp-tried="not-yet">
+                <span class="exp-play__ask-icon">${icon("i-info")}</span>
+                <strong>Todavía no</strong>
+                <span>Ver tips para intentarla</span>
+              </button>
+              <button class="exp-play__ask-btn exp-play__ask-btn--yes" type="button" data-exp-tried="tried">
+                <span class="exp-play__ask-icon">${icon("i-spark")}</span>
+                <strong>Sí, ya la intentamos</strong>
+                <span>Celebrar lo que pasó</span>
+              </button>
+            </div>
+          </article>
+          ${nextIdeaNav}`;
+        } else if (triedStatus === "not-yet") {
+            followUp = `
+          <article class="exp-play-card exp-play-card--tips" data-exp-followup>
+            <p class="exp-play-card__eyebrow">${icon("i-info")} Para hoy</p>
+            <h4 class="exp-play-card__title">Tips para acompañar</h4>
+            <p class="exp-play-card__lead">Apoyo práctico si quieren vivirla ahora.</p>
+            <div class="exp-play-card__body">${tipsBody}</div>
+            <button class="exp-play__ask-back" type="button" data-exp-tried="">Cambiar respuesta</button>
+          </article>
+          ${nextIdeaNav}`;
+        } else {
+            followUp = `
+          <article class="exp-play-card exp-play-card--celebrate" data-exp-followup>
+            <p class="exp-play-card__eyebrow">${icon("i-spark")} Celebrar</p>
+            <h4 class="exp-play-card__title">¿Qué pasó en el momento?</h4>
+            <p class="exp-play-card__lead">Elige lo que mejor describe lo vivido.</p>
+            <div class="exp-play__reactions" role="group" aria-label="Celebrar lo vivido">
+              ${reactions
+                    .map(
+                        (item, index) => `
+                <button class="exp-play__reaction exp-play__reaction--${item.tone}" type="button" data-exp-observation="${item.id}" style="--exp-stagger:${index}">
+                  <span class="exp-play__reaction-burst" aria-hidden="true"></span>
+                  <span class="exp-play__reaction-icon">${icon(item.icon)}</span>
+                  <strong>${esc(item.label)}</strong>
+                  <span>${esc(item.vibe)}</span>
+                </button>`
+                    )
+                    .join("")}
+            </div>
+            <div class="exp-play__story-inline">
+              <label class="exp-play__story-label" for="exp-play-note">Contar cómo fue <span>(opcional)</span></label>
+              <textarea id="exp-play-note" class="exp-play__story-input" name="experienceNote" rows="3" maxlength="280" placeholder="Un gesto, una palabra o algo que notaron…">${esc(state.experienceNote || "")}</textarea>
+            </div>
+            <button class="exp-play__ask-back" type="button" data-exp-tried="">Cambiar respuesta</button>
+          </article>
+          ${nextIdeaNav}`;
+        }
 
         const playBody = finished
             ? `
         <div class="exp-play__done">
           <img class="exp-play__fox" src="assets/img/temporal/home-zorro-cutout.png" width="140" height="140" alt="" decoding="async">
           ${positiveFeedback(
-            state.observation === "observed"
-              ? "Observar, cambiar o parar también fueron formas de cuidarse."
-              : "Estar juntos ya contó; no hacía falta completar nada perfecto.",
-            true,
-            {
-              title: state.observation === "observed" ? "Un cierre con cuidado" : "¡Lo hicieron juntos!",
-              compact: true,
+                state.observation === "observed"
+                    ? "Observar, cambiar o parar también fueron formas de cuidarse."
+                    : "Estar juntos ya contó; no hacía falta completar nada perfecto.",
+                true,
+                {
+                    title: state.observation === "observed" ? "Un cierre con cuidado" : "¡Lo hicieron juntos!",
+                    compact: true,
+                }
+            )}
+          ${(state.experienceNote || "").trim()
+                ? `<blockquote class="exp-play__note-recall"><p>${esc(state.experienceNote.trim())}</p></blockquote>`
+                : ""
             }
-          )}
-          ${
-            (state.experienceNote || "").trim()
-              ? `<blockquote class="exp-play__note-recall"><p>${esc(state.experienceNote.trim())}</p></blockquote>`
-              : ""
-          }
-          ${
-            activity.closing
-              ? `<div class="exp-play__closing">
+          ${activity.closing
+                ? `<div class="exp-play__closing">
                   <p class="exp-play__closing-label">Para cerrar</p>
                   <p class="exp-play__closing-q">${esc(activity.closing)}</p>
                 </div>`
-              : ""
-          }
+                : ""
+            }
           ${activity.remember ? `<p class="exp-play__remember">${esc(activity.remember)}</p>` : ""}
           ${navButtons({ back: 3, nextLabel: "Ver formas de adaptarlo", nextAction: "to-adapt" })}
         </div>`
             : `
         <section class="exp-play__stage" aria-labelledby="exp-playalong-title">
-          ${activityProgress(activityStep, total, { stopped: state.activityStopped })}
-          <article class="exp-play-card exp-play-card--idea">
-            <p class="exp-play-card__eyebrow">${icon("d-heart")} Idea vivida</p>
-            <p class="exp-play__step-num">Así fue la idea ${activityStep + 1} de ${total}</p>
-            <h3 class="exp-play__step-title" id="exp-playalong-title">${formatStepText(activity.steps[activityStep])}</h3>
-            ${
-              activityStep === 0 && activity.before
-                ? `<p class="exp-play__prep">${esc(activity.before)}</p>`
-                : ""
-            }
+          ${activityProgress(activityStep, total, {
+                stopped: state.activityStopped,
+                livedSteps: Array.isArray(state.livedSteps) ? state.livedSteps : [],
+            })}
+          <article class="exp-play-card exp-play-card--idea" data-idea-index="${activityStep}">
+            <span class="exp-play-card__spark" aria-hidden="true">✦</span>
+            <p class="exp-play-card__eyebrow">${icon("d-heart")} ${triedStatus === "tried" ? "Idea vivida" : "Idea"}</p>
+            <p class="exp-play__step-num">Idea ${activityStep + 1} de ${total}</p>
+            <h3 class="exp-play__step-title" id="exp-playalong-title">${esc(ideaParts.title)}</h3>
+            ${ideaDescription ? `<p class="exp-play__prep">${esc(ideaDescription)}</p>` : ""}
           </article>
-          <div class="exp-play-cards">
-            <article class="exp-play-card exp-play-card--tips">
-              <p class="exp-play-card__eyebrow">${icon("i-info")} Para hoy</p>
-              <h4 class="exp-play-card__title">Tips para acompañar</h4>
-              <p class="exp-play-card__lead">Si están viviendo la idea ahora, aquí tienen apoyo práctico.</p>
-              <div class="exp-play-card__body">${tipsBody}</div>
-            </article>
-            <article class="exp-play-card exp-play-card--celebrate">
-              <p class="exp-play-card__eyebrow">${icon("i-spark")} Celebrar</p>
-              <h4 class="exp-play-card__title">¿Qué pasó en el momento?</h4>
-              <p class="exp-play-card__lead">Elige lo que mejor describe lo vivido y seguimos.</p>
-              <div class="exp-play__reactions" role="group" aria-label="Celebrar lo vivido">
-                ${reactions
-                  .map(
-                    (item) => `
-                  <button class="exp-play__reaction exp-play__reaction--${item.tone}" type="button" data-exp-observation="${item.id}">
-                    <span class="exp-play__reaction-burst" aria-hidden="true"></span>
-                    <span class="exp-play__reaction-icon">${icon(item.icon)}</span>
-                    <strong>${esc(item.label)}</strong>
-                    <span>${esc(item.vibe)}</span>
-                  </button>`
-                  )
-                  .join("")}
-              </div>
-            </article>
-            <article class="exp-play-card exp-play-card--story">
-              <p class="exp-play-card__eyebrow">${icon("i-vocabulario")} Para después</p>
-              <h4 class="exp-play-card__title">Contar la experiencia</h4>
-              <p class="exp-play-card__lead">Si vuelven mañana —o cuando les nace— pueden dejar un recuerdo. Es opcional.</p>
-              <label class="exp-play__story-label" for="exp-play-note">Un gesto, una palabra o algo que notaron</label>
-              <textarea id="exp-play-note" class="exp-play__story-input" name="experienceNote" rows="3" maxlength="280" placeholder="Por ejemplo: sonrió al elegir, pidió más, miró y se acercó…">${esc(state.experienceNote || "")}</textarea>
-            </article>
-          </div>
+          ${followUp}
         </section>
         ${renderPlayCheer(observation)}`;
 
@@ -699,9 +771,9 @@
           ${ui.imageTag(ui.activityImage(activity), {
             alt: activity.imageAlt || "",
             attrs: 'class="exp-play__thumb" decoding="async"',
-          })}
+        })}
           <div class="exp-play__header-copy">
-            <p class="exp-eyebrow">${icon("d-heart")} Así lo vivieron</p>
+            <p class="exp-eyebrow">${icon("d-heart")} Recorriendo la idea</p>
             <h2 class="exp-title" tabindex="-1">${esc(activity.title)}</h2>
             <ul class="exp-play__chips">
               ${activityAge ? `<li>${esc(activityAge.label)}</li>` : ""}
@@ -922,6 +994,8 @@
             activityStep: 0,
             activityStopped: false,
             observation: "",
+            triedStatus: "",
+            livedSteps: [],
             experienceNote: "",
             experienceNoteOpen: false,
         });
@@ -942,6 +1016,8 @@
             activityStep: 0,
             activityStopped: false,
             observation: "",
+            triedStatus: "",
+            livedSteps: [],
             experienceNote: "",
             experienceNoteOpen: false,
         });
@@ -1069,9 +1145,34 @@
         }
 
 
+        const triedBtn = event.target.closest("[data-exp-tried]");
+        if (triedBtn) {
+            const value = triedBtn.getAttribute("data-exp-tried") || "";
+            if (triedBtn.classList.contains("exp-play__ask-btn")) {
+                triedBtn.classList.add("is-pick");
+                window.setTimeout(() => {
+                    setState({ triedStatus: value, cheerOpen: false });
+                    requestAnimationFrame(() => {
+                        const focusTarget = value === "tried"
+                            ? root.querySelector("[data-exp-observation]")
+                            : value === "not-yet"
+                                ? root.querySelector(".exp-play-card--tips .exp-play-card__title")
+                                : root.querySelector(".exp-play-card--ask .exp-play-card__title");
+                        if (!focusTarget) return;
+                        if (!focusTarget.hasAttribute("tabindex")) focusTarget.setAttribute("tabindex", "-1");
+                        focusTarget.focus({ preventScroll: true });
+                    });
+                }, 160);
+                return;
+            }
+            setState({ triedStatus: value, cheerOpen: false });
+            return;
+        }
+
         const playNextBtn = event.target.closest("[data-exp-play-next]");
         if (playNextBtn) {
-            advancePlayStep();
+            playNextBtn.classList.add("is-go");
+            window.setTimeout(() => goToNextIdea(), 140);
             return;
         }
 

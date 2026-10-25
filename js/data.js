@@ -307,11 +307,11 @@ window.CEC.data = (function () {
       before:
         "Siéntense juntos y elijan una historia que llame la atención del niño. No es necesario leer cada palabra; pueden detenerse en las imágenes que despierten su interés.",
       steps: [
-        "Miren juntos la portada y observen qué llama la atención del niño.",
-        "Permite que señale, mire o elija una imagen.",
-        "Comenta algo relacionado con lo que está observando.",
-        "Haz una pausa y dale tiempo para responder con mirada, gesto, sonido o palabra.",
-        "Continúa la historia siguiendo su interés y alternando comentarios con pausas.",
+        "Miren juntos la portada y observen qué llama la atención del niño. Pueden detenerse en lo que despierte más curiosidad.",
+        "Permite que señale, mire o elija una imagen. Esa elección ya es una forma de participar.",
+        "Comenta algo relacionado con lo que está observando. Un comentario breve basta para abrir el diálogo.",
+        "Haz una pausa y dale tiempo para responder con mirada, gesto, sonido o palabra. No hace falta llenar el silencio de inmediato.",
+        "Continúa la historia siguiendo su interés y alternando comentarios con pausas. Avancen al ritmo que les nazca.",
       ],
       accompany:
         "Si señala un perro, puedes decir: «¡Sí, un perro! Está corriendo». En lugar de hacer muchas preguntas seguidas, alterna comentarios y pausas para darle espacio a participar.",
@@ -351,11 +351,11 @@ window.CEC.data = (function () {
       before:
         "Coloca los objetos dentro de la bolsa y siéntate junto al niño. Invítalo a elegir cuál explorar, sin obligarlo a tocar algo que no quiera.",
       steps: [
-        "Invítalo a sacar o tocar un objeto, con supervisión adulta.",
-        "Observa qué hace, mira o señala.",
-        "Nombra el objeto y comenta una característica o acción relacionada.",
-        "Espera su respuesta, sin pedirle que repita obligatoriamente.",
-        "Si sigue interesado, compara dos objetos o descubre otro uso para uno de ellos.",
+        "Invítalo a sacar o tocar un objeto, con supervisión adulta. Deja que elija sin forzar el contacto.",
+        "Observa qué hace, mira o señala. Su exploración ya cuenta como mensaje.",
+        "Nombra el objeto y comenta una característica o acción relacionada. Una palabra clara y un detalle bastan.",
+        "Espera su respuesta, sin pedirle que repita obligatoriamente. Mirada, gesto o sonido también valen.",
+        "Si sigue interesado, compara dos objetos o descubre otro uso para uno de ellos. Sigan solo mientras haya ganas.",
       ],
       accompany:
         "Si saca una cuchara, puedes decir: «¡Una cuchara! La usamos para comer». Si hace un sonido, la mira o la señala, responde a ese intento de comunicación sin exigir que repita la palabra.",
@@ -393,12 +393,12 @@ window.CEC.data = (function () {
       before:
         "Muestra el juguete y después colócalo parcialmente debajo de una tela o dentro de un recipiente grande, siempre en un lugar visible y seguro.",
       steps: [
-        "Nombra el juguete y deja que el niño lo observe.",
-        "Ocúltalo parcialmente, sin hacerlo inaccesible ni generar frustración.",
-        "Da una instrucción breve, por ejemplo: «Busca el oso».",
-        "Espera y observa cómo responde.",
-        "Si lo necesita, acompaña la indicación con un gesto o señala el lugar.",
-        "Reconoce su participación y repitan el juego si quiere.",
+        "Nombra el juguete y deja que el niño lo observe. Presentarlo juntos abre el juego.",
+        "Ocúltalo parcialmente, sin hacerlo inaccesible ni generar frustración. Que quede a media vista ayuda.",
+        "Da una instrucción breve, por ejemplo: «Busca el oso». Una frase corta es suficiente.",
+        "Espera y observa cómo responde. Dale unos segundos antes de intervenir.",
+        "Si lo necesita, acompaña la indicación con un gesto o señala el lugar. El apoyo visual también comunica.",
+        "Reconoce su participación y repitan el juego si quiere. Celebren el intento, no solo el hallazgo.",
       ],
       accompany:
         "Usa frases cortas y dale tiempo. Si no encuentra el juguete, señala el lugar o acércaselo. Evita repetir la misma instrucción muchas veces seguidas.",
@@ -438,12 +438,12 @@ window.CEC.data = (function () {
       before:
         "Siéntense frente a los materiales y comiencen a construir algo sencillo juntos. Deja las piezas al alcance del niño y permite que proponga cómo jugar.",
       steps: [
-        "Coloca una pieza y comenta lo que estás haciendo.",
-        "Deja otra pieza al alcance del niño.",
-        "Espera su iniciativa o invítalo a participar con una frase breve.",
-        "Alternen turnos para colocar, retirar o mover piezas.",
-        "Comenten lo que sucede cuando la construcción crece, cambia o se cae.",
-        "Continúen según el interés del niño, sin exigir que construya de una forma determinada.",
+        "Coloca una pieza y comenta lo que estás haciendo. Modelar el turno invita a sumarse.",
+        "Deja otra pieza al alcance del niño. Tenerla cerca facilita su iniciativa.",
+        "Espera su iniciativa o invítalo a participar con una frase breve. Un «tu turno» suave basta.",
+        "Alternen turnos para colocar, retirar o mover piezas. El vaivén es la conversación del juego.",
+        "Comenten lo que sucede cuando la construcción crece, cambia o se cae. Nombrar lo que pasa sostiene el intercambio.",
+        "Continúen según el interés del niño, sin exigir que construya de una forma determinada. El disfrute importa más que el resultado.",
       ],
       accompany:
         "Puedes decir: «Mi turno… tu turno», «arriba», «se cayó» o «¡qué alta!». Los gestos, las miradas y las acciones del niño también forman parte de la interacción.",
@@ -481,11 +481,11 @@ window.CEC.data = (function () {
       before:
         "Durante una merienda habitual, muestra dos opciones apropiadas para el niño. No es necesario preparar comida adicional.",
       steps: [
-        "Nombra las dos opciones de manera clara y natural.",
-        "Pregunta cuál quiere o invítalo a elegir mediante mirada, gesto o palabra.",
-        "Espera unos segundos sin responder por él inmediatamente.",
-        "Reconoce la elección que comunica, sea cual sea la forma de expresarla.",
-        "Comenta una característica del alimento mientras continúan la rutina.",
+        "Nombra las dos opciones de manera clara y natural. Di los nombres con calma, sin apresurar la elección.",
+        "Pregunta cuál quiere o invítalo a elegir mediante mirada, gesto o palabra. Cualquier forma de señalar cuenta.",
+        "Espera unos segundos sin responder por él inmediatamente. Ese silencio le da espacio para decidir.",
+        "Reconoce la elección que comunica, sea cual sea la forma de expresarla. Confirmar lo que eligió cierra el mensaje.",
+        "Comenta una característica del alimento mientras continúan la rutina. Un detalle sencillo mantiene la conversación.",
       ],
       accompany:
         "Puedes decir: «¿Banano o pan?». Si señala uno, responde: «Elegiste pan». No exijas que nombre el alimento para recibirlo.",
@@ -523,11 +523,11 @@ window.CEC.data = (function () {
       before:
         "Elige una rutina familiar, como lavarse las manos, ponerse los zapatos o guardar juguetes. Ten a mano los objetos o imágenes que puedan ayudar a mostrar los pasos.",
       steps: [
-        "Conversen brevemente sobre lo que están haciendo en ese momento.",
-        "Muestra o nombra el siguiente paso con una frase sencilla.",
-        "Cuando corresponda, invita al niño a elegir entre dos acciones posibles.",
-        "Sigan la rutina y comenta cada paso de forma natural.",
-        "Si lo necesita, vuelve a mostrar el objeto o señala la acción en lugar de repetir muchas instrucciones.",
+        "Conversen brevemente sobre lo que están haciendo en ese momento. Nombrar el ahora ayuda a anticipar lo que sigue.",
+        "Muestra o nombra el siguiente paso con una frase sencilla. Una indicación clara orienta sin abrumar.",
+        "Cuando corresponda, invita al niño a elegir entre dos acciones posibles. Elegir también es comprender la rutina.",
+        "Sigan la rutina y comenta cada paso de forma natural. El comentario sostiene el hilo de lo que ocurre.",
+        "Si lo necesita, vuelve a mostrar el objeto o señala la acción en lugar de repetir muchas instrucciones. El apoyo visual puede bastar.",
       ],
       accompany:
         "Puedes decir: «Primero guardamos los bloques y después elegimos un cuento». Si necesita apoyo, muestra el objeto o señala la acción que viene a continuación.",
