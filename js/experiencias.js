@@ -435,43 +435,47 @@
         <p class="exp-lead">Esta información nos ayudará a recomendarte una experiencia especial.</p>
         ${detailsProgress()}
         <form class="exp-form" data-exp-form="details">
-          <fieldset class="exp-fieldset" data-field="age">
-            <legend class="exp-question">¿Qué edad tiene?</legend>
-            ${chipGroup(
+          <div class="exp-form__col exp-form__col--main">
+            <fieldset class="exp-fieldset" data-field="age">
+              <legend class="exp-question">¿Qué edad tiene?</legend>
+              ${chipGroup(
             "age",
             data.ages.map((age) => ({ id: String(age.value), label: age.label })),
             state.age
         )}
-            ${fieldFeedback("age")}
-            ${fieldError("age", "Elige la edad del niño.")}
-          </fieldset>
-          <fieldset class="exp-fieldset" data-field="skill">
-            <legend class="exp-question">¿Qué les gustaría disfrutar o practicar?</legend>
-            ${radioList("skill", data.experienceSkills, state.skill)}
-            ${fieldFeedback("skill")}
-            ${fieldError("skill", "Elige qué quieres favorecer.")}
-          </fieldset>
-          <fieldset class="exp-fieldset" data-field="duration">
-            <legend class="exp-question">Tiempo disponible <span class="exp-optional">(opcional)</span></legend>
-            ${chipGroup(
-            "duration",
-            [{ id: "", label: "Sin preferencia" }, ...data.experienceDurations],
-            state.duration || ""
-        )}
-            ${fieldFeedback("duration")}
-          </fieldset>
-          <fieldset class="exp-fieldset" data-field="interest">
-            <legend class="exp-question">Interés del niño</legend>
-            ${chipGroup("interest", data.interests, state.interest, { withIcons: true })}
-            ${state.interest === "otro"
+              ${fieldFeedback("age")}
+              ${fieldError("age", "Elige la edad del niño.")}
+            </fieldset>
+            <fieldset class="exp-fieldset" data-field="interest">
+              <legend class="exp-question">Interés del niño</legend>
+              ${chipGroup("interest", data.interests, state.interest, { withIcons: true })}
+              ${state.interest === "otro"
                 ? `<label class="exp-other" for="exp-interest-other">Describe su interés
                     <input id="exp-interest-other" name="interestOther" type="text" maxlength="60" value="${esc(state.interestOther)}" placeholder="Por ejemplo: dinosaurios">
                   </label>`
                 : ""
             }
-            ${fieldFeedback("interest")}
-            ${fieldError("interest", "Elige un interés o escribe otro.")}
-          </fieldset>
+              ${fieldFeedback("interest")}
+              ${fieldError("interest", "Elige un interés o escribe otro.")}
+            </fieldset>
+          </div>
+          <div class="exp-form__col exp-form__col--side">
+            <fieldset class="exp-fieldset" data-field="skill">
+              <legend class="exp-question">¿Qué les gustaría disfrutar o practicar?</legend>
+              ${radioList("skill", data.experienceSkills, state.skill)}
+              ${fieldFeedback("skill")}
+              ${fieldError("skill", "Elige qué quieres favorecer.")}
+            </fieldset>
+            <fieldset class="exp-fieldset" data-field="duration">
+              <legend class="exp-question">Tiempo disponible <span class="exp-optional">(opcional)</span></legend>
+              ${chipGroup(
+            "duration",
+            [{ id: "", label: "Sin preferencia" }, ...data.experienceDurations],
+            state.duration || ""
+        )}
+              ${fieldFeedback("duration")}
+            </fieldset>
+          </div>
           <div class="exp-nav">
             <button class="btn btn--outline" type="button" data-exp-go="1">Atrás</button>
             <button class="btn btn--sage" type="submit">Crear mi experiencia ${icon("i-arrow")}</button>
