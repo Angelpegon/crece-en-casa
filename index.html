@@ -16,7 +16,7 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/home.css?v=mockup15">
+    <link rel="stylesheet" href="css/home.css?v=welcome9">
 </head>
 
 <body>
@@ -205,8 +205,35 @@
 
     <footer class="site-footer" data-site-footer></footer>
 
+    <dialog class="home-welcome" data-home-welcome aria-labelledby="home-welcome-title">
+        <div class="home-welcome__panel">
+            <button class="home-welcome__close" type="button" data-home-welcome-close aria-label="Cerrar">
+                <svg class="icon" aria-hidden="true" focusable="false">
+                    <use href="assets/icons/sprite.svg#i-close"></use>
+                </svg>
+            </button>
+            <h2 class="visually-hidden" id="home-welcome-title">Crece en Casa</h2>
+            <p class="visually-hidden">
+                Pequeñas acciones, grandes conversaciones. Descubre cómo acompañar la comunicación
+                y el lenguaje de tu hijo en los momentos que ya comparten.
+            </p>
+            <div class="home-welcome__media">
+                <img
+                    class="home-welcome__img"
+                    src="assets/img/temporal/home-welcome-popup.jpg"
+                    width="682"
+                    height="1024"
+                    alt="Una mamá cocina pensativa mientras su hija señala un frasco. Pensamientos: quiero ayudarle a comunicarse, pero no sé cómo."
+                    decoding="async">
+                <a class="home-welcome__cta" href="experiencias.html" data-home-welcome-cta>
+                    <span class="visually-hidden">Descubre cómo hacerlo</span>
+                </a>
+            </div>
+        </div>
+    </dialog>
+
     <script src="js/chrome.js" defer></script>
-    <script src="js/main.js" defer></script>
+    <script src="js/main.js?v=welcome1" defer></script>
 </body>
 
 </html>

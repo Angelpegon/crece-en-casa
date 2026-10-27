@@ -742,3 +742,115 @@
     width: 6.25rem;
   }
 }
+
+/* ---------- Welcome popup (inicio) ---------- */
+.home-welcome {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  /* Ancho limitado por la altura para que quepa toda la imagen (incl. CTA) */
+  width: min(26rem, calc(100vw - 1.5rem), calc((100dvh - 1.25rem) * 682 / 1024));
+  max-width: calc(100vw - 1.5rem);
+  max-height: calc(100dvh - 1.25rem);
+  overflow: hidden;
+}
+
+.home-welcome::backdrop {
+  background: rgb(28 53 50 / 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.home-welcome__panel {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 1.35rem;
+  background: transparent;
+  box-shadow: 0 24px 48px -20px rgb(28 53 50 / 0.55);
+}
+
+.home-welcome__close {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.92);
+  color: var(--c-ink);
+  box-shadow: 0 8px 18px -12px rgb(28 53 50 / 0.55);
+  cursor: pointer;
+}
+
+.home-welcome__close:hover,
+.home-welcome__close:focus-visible {
+  background: #fff;
+  outline: 2px solid var(--c-sage);
+  outline-offset: 2px;
+}
+
+.home-welcome__close .icon {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.home-welcome__media {
+  position: relative;
+  line-height: 0;
+}
+
+.home-welcome__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+/*
+  Hit-area real sobre el CTA dibujado en la imagen.
+  El aspecto visual lo da la imagen; este enlace solo lo hace clicable.
+  Medido sobre el PNG (682×1024).
+*/
+.home-welcome__cta {
+  position: absolute;
+  left: 28.3%;
+  right: 27.9%;
+  bottom: 6.8%;
+  z-index: 1;
+  height: 5.2%;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.home-welcome__cta:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgb(47 90 74 / 0.45);
+}
+
+.home-welcome__cta:hover {
+  background: rgb(255 255 255 / 0.06);
+}
+
+@media (max-width: 22.5em) {
+  .home-welcome {
+    max-width: calc(100vw - 1rem);
+  }
+
+  .home-welcome__close {
+    top: 0.45rem;
+    right: 0.45rem;
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+}

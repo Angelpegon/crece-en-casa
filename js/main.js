@@ -82,7 +82,56 @@
     });
   }
 
+  function setupHomeWelcome() {
+    const dialog = document.querySelector("[data-home-welcome]");
+    if (!dialog || typeof dialog.showModal !== "function") return;
+
+    const STORAGE_KEY = "crece-en-casa:home-welcome-seen";
+    const closeBtn = dialog.querySelector("[data-home-welcome-close]");
+    const cta = dialog.querySelector("[data-home-welcome-cta]");
+
+    function markSeen() {
+      try {
+        sessionStorage.setItem(STORAGE_KEY, "1");
+      } catch (error) {
+        // Si el almacenamiento no está disponible, el popup puede repetirse.
+      }
+    }
+
+    function closeWelcome() {
+      markSeen();
+      if (dialog.open) dialog.close();
+    }
+
+    function openWelcome() {
+      if (dialog.open) return;
+      dialog.showModal();
+      closeBtn?.focus({ preventScroll: true });
+    }
+
+    closeBtn?.addEventListener("click", closeWelcome);
+    cta?.addEventListener("click", markSeen);
+
+    dialog.addEventListener("cancel", (event) => {
+      event.preventDefault();
+      closeWelcome();
+    });
+
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) closeWelcome();
+    });
+
+    let alreadySeen = false;
+    try {
+      alreadySeen = sessionStorage.getItem(STORAGE_KEY) === "1";
+    } catch (error) {
+      alreadySeen = false;
+    }
+    if (!alreadySeen) openWelcome();
+  }
+
   setupNavigation();
   setupSidebarDropdowns();
   setupFooterYear();
+  setupHomeWelcome();
 })();
