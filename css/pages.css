@@ -2173,9 +2173,146 @@ html:not(.js) .filters {
     gap: var(--space-5);
 }
 
+.exp-play__ideas--list {
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.exp-play__step-item {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.exp-play__step-item .exp-play__micro-cheer {
+    margin: 0;
+}
+
 .exp-play__idea-block {
     display: grid;
     gap: var(--space-3);
+}
+
+.exp-play__step-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.85rem 0.95rem;
+    border-radius: var(--radius-md);
+    background: var(--c-surface);
+    border: 1px solid #e2ebe4;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+@media (max-width: 28em) {
+    .exp-play__step-row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .exp-play__hecho {
+        justify-self: start;
+    }
+}
+
+.exp-play__step-row.is-done {
+    background: linear-gradient(180deg, #f3faf4 0%, #fafcf9 100%);
+    border-color: #c9e4d0;
+}
+
+.exp-play__step-copy {
+    display: grid;
+    grid-template-columns: 1.75rem minmax(0, 1fr);
+    gap: 0.65rem;
+    align-items: start;
+    min-width: 0;
+}
+
+.exp-play__ideas--list .exp-play__step-num {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin: 0.1rem 0 0;
+    border-radius: 999px;
+    background: var(--c-sage-soft);
+    color: #2f5a4a;
+    font-size: 0.85rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.exp-play__step-row.is-done .exp-play__step-num {
+    background: #2f5a4a;
+    color: #fff;
+}
+
+.exp-play__ideas--list .exp-play__step-title {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.35;
+}
+
+.exp-play__step-body {
+    margin: 0.25rem 0 0;
+    color: var(--c-text);
+    font-size: 0.9rem;
+    line-height: 1.45;
+}
+
+.exp-play__hecho {
+    flex-shrink: 0;
+    min-width: 5.5rem;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid #9fc4b0;
+    border-radius: var(--radius-pill);
+    background: #fff;
+    color: #2f5a4a;
+    font-size: 0.88rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.exp-play__hecho:hover,
+.exp-play__hecho:focus-visible {
+    background: var(--c-sage-soft);
+}
+
+.exp-play__hecho:focus-visible {
+    outline: 2px solid #2f5a4a;
+    outline-offset: 2px;
+}
+
+.exp-play__hecho.is-done {
+    background: #2f5a4a;
+    border-color: #2f5a4a;
+    color: #fff;
+    animation: exp-hecho-pop 0.35s cubic-bezier(0.2, 0.85, 0.3, 1);
+}
+
+.exp-play__micro-cheer {
+    margin: 0.35rem 0 0;
+    padding: 0.7rem 0.95rem;
+    border-radius: var(--radius-md);
+    background: linear-gradient(110deg, #eef8ef 0%, #f8f7e9 100%);
+    border: 1px solid #c9e4d0;
+    color: #244f3e;
+    font-size: 1rem;
+    font-weight: 800;
+    text-align: center;
+    animation: exp-idea-enter 0.35s cubic-bezier(0.2, 0.85, 0.3, 1);
+}
+
+.exp-play__micro-cheer.is-all {
+    font-size: 1.1rem;
+}
+
+@keyframes exp-hecho-pop {
+    0% { transform: scale(0.92); }
+    60% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 .exp-play__prep-card {
@@ -2185,6 +2322,22 @@ html:not(.js) .filters {
     border-radius: var(--radius-lg);
     background: linear-gradient(180deg, #fff 0%, var(--c-sage-tint) 100%);
     border: 1px solid rgb(119 170 151 / 0.28);
+}
+
+.exp-play__prep-card--compact {
+    gap: 0.45rem;
+    padding: 0.85rem 1rem;
+}
+
+.exp-play__prep-line {
+    margin: 0;
+    color: var(--c-text);
+    font-size: 0.92rem;
+    line-height: 1.45;
+}
+
+.exp-play__prep-line strong {
+    color: #2f5a4a;
 }
 
 .exp-play__prep-eyebrow {
@@ -2966,6 +3119,8 @@ html:not(.js) .filters {
     .exp-play__reaction,
     .exp-play__tip-list li,
     .exp-play__idea-nav,
+    .exp-play__hecho.is-done,
+    .exp-play__micro-cheer,
     .exp-activity-progress__steps>.is-current,
     .exp-activity-progress__track>span {
         animation: none;
@@ -3654,6 +3809,58 @@ button.moment-tile.is-selected {
     box-shadow: 0 0.35rem 1rem rgb(47 90 74 / 8%);
 }
 
+.exp-result--simple {
+    display: block;
+    margin: 0 0 var(--space-4);
+}
+
+@media (min-width: 48em) {
+    .exp-result--simple {
+        grid-template-columns: none;
+    }
+}
+
+.exp-result--simple .exp-result__card {
+    margin: 0;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.85rem 1rem;
+    padding: 0.85rem 1rem;
+}
+
+.exp-result--simple .exp-result__img {
+    width: 5.5rem;
+    height: 5.5rem;
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+.exp-result--simple .exp-result__body {
+    min-width: 0;
+}
+
+.exp-result--simple .exp-result__title {
+    font-size: clamp(1.2rem, 1.05rem + 0.5vw, 1.45rem);
+}
+
+.exp-result--simple .exp-result__tagline {
+    font-size: 0.95rem;
+}
+
+@media (min-width: 36em) {
+    .exp-result--simple .exp-result__card {
+        grid-template-columns: 6.5rem minmax(0, 1fr);
+        max-width: 36rem;
+    }
+
+    .exp-result--simple .exp-result__img {
+        width: 6.5rem;
+        height: 6.5rem;
+    }
+}
+
 .exp-result__card {
     display: grid;
     gap: var(--space-4);
@@ -3787,6 +3994,44 @@ button.moment-tile.is-selected {
 .exp-closing h3 {
     margin: 0;
     font-size: 1.05rem;
+}
+
+.exp-alts--collapsed {
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+.exp-alts__summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0;
+    cursor: pointer;
+    color: #2f5a4a;
+    font-weight: 800;
+    font-size: 0.92rem;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+    list-style: none;
+}
+
+.exp-alts__summary::-webkit-details-marker {
+    display: none;
+}
+
+.exp-alts__summary:hover,
+.exp-alts__summary:focus-visible {
+    color: #244f3e;
+}
+
+.exp-alts--collapsed:not([open]) .exp-alts__grid {
+    display: none;
+}
+
+.exp-alts--collapsed[open] .exp-alts__grid {
+    margin-top: 0.85rem;
 }
 
 .exp-alts {
