@@ -1,5 +1,5 @@
 /*
- * Álbum de momentos: notas locales en este navegador (sin fotos en servidor).
+ * Álbum de momentos: recuerdos locales en este navegador (foto opcional).
  */
 window.CEC = window.CEC || {};
 
@@ -37,16 +37,22 @@ window.CEC.album = (function () {
     return read().slice().sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
   }
 
-  function add({ title, note, momentId } = {}) {
-    const cleanTitle = String(title || "").trim().slice(0, 80);
-    const cleanNote = String(note || "").trim().slice(0, 280);
-    if (!cleanTitle) return null;
+  function add({ title, note, momentId, photo } = {}) {
+    const rawTitle = String(title || "").trim().slice(0, 80);
+    const cleanNote = String(note || "").trim().slice(0, 350);
+    const cleanPhoto =
+      typeof photo === "string" && photo.startsWith("data:image/") && photo.length < 900000
+        ? photo
+        : null;
+    if (!rawTitle && !cleanNote && !cleanPhoto) return null;
+
     const items = read();
     const entry = {
       id: `m-${Date.now().toString(36)}`,
-      title: cleanTitle,
+      title: rawTitle || "Un momento para recordar",
       note: cleanNote,
       momentId: momentId || null,
+      photo: cleanPhoto,
       createdAt: new Date().toISOString(),
     };
     items.push(entry);
