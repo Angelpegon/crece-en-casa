@@ -154,7 +154,7 @@
             <nav class="breadcrumb" aria-label="Ruta de navegación">
               <ol>
                 <li><a href="index.html">Inicio</a></li>
-                <li><a href="nuestro-rincon.html">Nuestro rincón</a></li>
+                <li><a href="mi-camino.html">Nuestro rincón</a></li>
                 <li aria-current="page">Mi camino</li>
               </ol>
             </nav>
@@ -315,7 +315,7 @@
           <li><strong>Exploran:</strong> eliges un área y realizan una experiencia en casa.</li>
           <li><strong>Guardan:</strong> al finalizar, pulsas «Listo, guardar» en la experiencia.</li>
           <li><strong>Aparece la huella:</strong> Mi camino registra esa experiencia y muestra el recorrido de la familia.</li>
-          <li><strong>Continúan:</strong> la <a href="guia-cuidadores.html">guía para cuidadores</a> ofrece ideas y oportunidades para probar cuando les resulte útil.</li>
+          <li><strong>Continúan:</strong> la <a href="ver-la-guia.html">guía para cuidadores</a> ofrece ideas y oportunidades para probar cuando les resulte útil.</li>
         </ol>
         <button class="btn btn--sage" type="button" data-camino-modal-close>Entendido</button>
       </div>

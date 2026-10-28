@@ -34,16 +34,16 @@
     },
     {
       id: "guia",
-      href: "guia-cuidadores.html",
+      href: "ver-la-guia.html",
       label: "Guía para cuidadores",
       icon: "i-guide",
       pages: [
-        "guia-cuidadores.html",
         "ver-la-guia.html",
         "ideas-que-acompanan.html",
         "cada-dia-una-oportunidad.html",
         "estrategia.html",
         "reto.html",
+        "guia-cuidadores.html",
         "guia.html",
       ],
       blurb: "Ideas y oportunidades para acompañar el lenguaje en casa.",
@@ -55,7 +55,7 @@
     },
     {
       id: "rincon",
-      href: "nuestro-rincon.html",
+      href: "mi-camino.html",
       label: "Nuestro rincón",
       icon: "i-story",
       pages: ["nuestro-rincon.html", "mi-camino.html", "mi-album.html"],
@@ -77,12 +77,8 @@
         "preguntas-frecuentes.html",
         "familias.html",
       ],
-      blurb: "Familias que comparten ideas, relatos y preguntas.",
-      children: [
-        { href: "comunidad.html", label: "Comunidad" },
-        { href: "experiencias-familias.html", label: "Experiencias de familias" },
-        { href: "preguntas-frecuentes.html", label: "Preguntas frecuentes" },
-      ],
+      blurb: null,
+      children: [],
     },
     {
       id: "sobre",
@@ -135,9 +131,7 @@
       const children = childLinks(section);
       const panel = hasChildren
         ? `<div class="side-nav__panel" id="${panelId}"${active ? "" : " hidden"}>${blurb}${children}</div>`
-        : active && blurb
-          ? `<div class="side-nav__panel">${blurb}</div>`
-          : "";
+        : "";
       const link = hasChildren
         ? `<button class="side-nav__link side-nav__toggle${active ? " side-nav__link--active" : ""}" type="button" aria-expanded="${active}" aria-controls="${panelId}" data-side-nav-toggle>
             ${icon(section.icon)}
@@ -234,8 +228,8 @@
             <h2 id="footer-nav-title">Explora</h2>
             <ul class="site-footer__links">
               <li><a href="actividades.html">Actividades</a></li>
-              <li><a href="guia-cuidadores.html">Guía para cuidadores</a></li>
-              <li><a href="nuestro-rincon.html">Nuestro rincón</a></li>
+              <li><a href="ver-la-guia.html">Guía para cuidadores</a></li>
+              <li><a href="mi-camino.html">Nuestro rincón</a></li>
               <li><a href="nuestra-comunidad.html">Nuestra comunidad</a></li>
               <li><a href="sobre.html">Sobre Crece en Casa</a></li>
               <li><a href="mi-espacio.html">Mi espacio</a></li>

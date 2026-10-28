@@ -12,7 +12,7 @@
       <nav class="breadcrumb" aria-label="Ruta de navegación">
         <ol>
           <li><a href="index.html">Inicio</a></li>
-          <li><a href="guia-cuidadores.html">Guía para cuidadores</a></li>
+          <li><a href="ver-la-guia.html">Guía para cuidadores</a></li>
           <li><a href="ideas-que-acompanan.html">Ideas que acompañan</a></li>
           <li aria-current="page">${esc(current)}</li>
         </ol>

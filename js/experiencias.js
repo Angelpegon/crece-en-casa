@@ -671,7 +671,7 @@
         <p class="exp-help">Compartir es opcional. Podrás revisar el contenido antes de publicarlo.</p>
         <div class="exp-nav">
           <button class="btn btn--outline" type="button" data-exp-action="share-cancel">Seguir aquí</button>
-          <a class="btn btn--sage" href="experiencias-familias.html">Ir a la comunidad</a>
+          <a class="btn btn--sage" href="nuestra-comunidad.html">Ir a la comunidad</a>
         </div>
       </div>`;
     }

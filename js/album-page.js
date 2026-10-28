@@ -131,7 +131,7 @@
             <nav class="breadcrumb" aria-label="Ruta de navegación">
               <ol>
                 <li><a href="index.html">Inicio</a></li>
-                <li><a href="nuestro-rincon.html">Nuestro rincón</a></li>
+                <li><a href="mi-camino.html">Nuestro rincón</a></li>
                 <li aria-current="page">Mi álbum</li>
               </ol>
             </nav>
@@ -230,21 +230,23 @@
       <div class="album-modal" data-album-modal hidden aria-hidden="true">
         <form class="album-modal__dialog" data-album-form role="dialog" aria-modal="true" aria-labelledby="album-modal-title" tabindex="-1">
           <button class="album-modal__close" type="button" data-album-close aria-label="Cerrar">×</button>
-          <h2 id="album-modal-title">Guardar un recuerdo 💌</h2>
-          <p>Guarda ese momento que quieres conservar. Puedes añadir solo una foto; escribir es opcional. No hay respuestas correctas ni recuerdos que debas completar.</p>
-          <label class="album-upload">
-            <span style="font-size:1.6rem" aria-hidden="true">📷</span>
-            <span data-album-upload-text>Añadir una fotografía <small>Opcional · Elige una imagen de tu dispositivo</small></span>
-            <input data-album-photo type="file" accept="image/*">
-          </label>
-          <label class="album-field">
-            Un título, si quieres
-            <input name="title" type="text" maxlength="70" placeholder="Ej. Nuestra tarde de cuentos">
-          </label>
-          <label class="album-field">
-            Una frase para recordarlo, si quieres
-            <textarea name="note" maxlength="350" rows="3" placeholder="Si quieres, escribe una frase para volver a este momento…"></textarea>
-          </label>
+          <div class="album-modal__body">
+            <h2 id="album-modal-title">Guardar un recuerdo 💌</h2>
+            <p>Guarda ese momento que quieres conservar. Puedes añadir solo una foto; escribir es opcional.</p>
+            <label class="album-upload">
+              <span style="font-size:1.6rem" aria-hidden="true">📷</span>
+              <span data-album-upload-text>Añadir una fotografía <small>Opcional · Elige una imagen de tu dispositivo</small></span>
+              <input data-album-photo type="file" accept="image/*">
+            </label>
+            <label class="album-field">
+              Un título, si quieres
+              <input name="title" type="text" maxlength="70" placeholder="Ej. Nuestra tarde de cuentos">
+            </label>
+            <label class="album-field">
+              Una frase para recordarlo, si quieres
+              <textarea name="note" maxlength="350" rows="3" placeholder="Si quieres, escribe una frase para volver a este momento…"></textarea>
+            </label>
+          </div>
           <div class="album-modal__actions">
             <button class="album-btn album-btn--ghost" type="button" data-album-close>Cancelar</button>
             <button class="album-btn" type="submit">Guardar recuerdo</button>

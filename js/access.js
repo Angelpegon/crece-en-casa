@@ -1,6 +1,6 @@
 /* Acceso local: crear o recuperar el nombre del espacio en este navegador. */
 (function () {
-  const { session, ui } = window.CEC;
+  const { session } = window.CEC;
   const form = document.querySelector("[data-access-form]");
   const status = document.querySelector("[data-access-status]");
   const nameInput = document.querySelector("[data-access-name]");
