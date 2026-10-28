@@ -5,6 +5,7 @@
   if (!root || !data || !ui) return;
 
   const esc = ui.escapeHTML;
+  const FAV_KEY = "crece-en-casa:ideas-favoritas";
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const desktopMq = window.matchMedia("(min-width: 64em)");
   let desktopOpen = desktopMq.matches;
@@ -41,6 +42,60 @@
         <h4 class="idea-item__label">Relacionado</h4>
         <div class="idea-item__chips">${chips.join("")}</div>
       </div>`;
+  }
+
+  function readFavorites() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(FAV_KEY) || "[]");
+      return Array.isArray(raw) ? raw.map(String) : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function writeFavorites(ids) {
+    try {
+      localStorage.setItem(FAV_KEY, JSON.stringify(ids));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function favoritesAvailable() {
+    try {
+      localStorage.getItem(FAV_KEY);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function isSaved(id) {
+    return readFavorites().includes(String(id));
+  }
+
+  function toggleFavorite(id) {
+    const key = String(id);
+    const ids = readFavorites();
+    const index = ids.indexOf(key);
+    if (index > -1) ids.splice(index, 1);
+    else ids.push(key);
+    return writeFavorites(ids) ? ids.includes(key) : null;
+  }
+
+  function saveButton(strategy) {
+    if (!favoritesAvailable()) {
+      return `<button class="btn btn--outline" type="button" disabled>Guardar no disponible</button>`;
+    }
+    const saved = isSaved(strategy.id);
+    return `
+      <button
+        class="btn ${saved ? "btn--sage idea-item__save is-saved" : "btn--outline idea-item__save"}"
+        type="button"
+        data-idea-save="${esc(strategy.id)}"
+        aria-pressed="${saved ? "true" : "false"}"
+      >${saved ? "♥ Idea guardada" : "♡ Guardar idea"}</button>`;
   }
 
   function renderItem(strategy) {
@@ -85,6 +140,7 @@
                 data-idea-more-toggle="${esc(strategy.id)}"
                 aria-expanded="false"
               >Ver más</button>
+              ${saveButton(strategy)}
             </div>
             <div class="idea-item__more" data-idea-more inert>
               <div class="idea-item__more-inner">
@@ -265,6 +321,20 @@
       moreId = moreId === id ? "" : id;
       if (moreId && !desktopOpen) openId = id;
       syncUi();
+      return;
+    }
+
+    const saveBtn = event.target.closest("[data-idea-save]");
+    if (saveBtn) {
+      const id = saveBtn.getAttribute("data-idea-save");
+      if (!id || !favoritesAvailable()) return;
+      const nextSaved = toggleFavorite(id);
+      if (nextSaved === null) return;
+      saveBtn.classList.toggle("btn--sage", nextSaved);
+      saveBtn.classList.toggle("btn--outline", !nextSaved);
+      saveBtn.classList.toggle("is-saved", nextSaved);
+      saveBtn.setAttribute("aria-pressed", nextSaved ? "true" : "false");
+      saveBtn.textContent = nextSaved ? "♥ Idea guardada" : "♡ Guardar idea";
     }
   });
 

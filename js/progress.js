@@ -62,6 +62,14 @@ window.CEC.progress = (function () {
     return write(data);
   }
 
+  function remove(type, id) {
+    const data = read();
+    const key = entryKey(type, id);
+    if (!data[key]) return true;
+    delete data[key];
+    return write(data);
+  }
+
   function list() {
     const data = read();
     return Object.entries(data)
@@ -99,5 +107,5 @@ window.CEC.progress = (function () {
     return { count: Math.min(tried.length, limit), total: limit, items: tried.slice(0, limit) };
   }
 
-  return { STATES, isAvailable, get, set, list, weeklyTriedCount };
+  return { STATES, isAvailable, get, set, remove, list, weeklyTriedCount };
 })();

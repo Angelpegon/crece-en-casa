@@ -98,6 +98,9 @@
         <header class="page-hero page-hero--${heroTone(strategy.tone)}" aria-labelledby="page-title">
           <div class="container">
             ${breadcrumb(strategy.title)}
+            <p class="detail-back">
+              <a class="btn btn--outline detail-back__btn" href="ideas-que-acompanan.html">← Volver a Ideas que acompañan</a>
+            </p>
             <p class="activity-hero__ages">Idea ${strategy.number} de ${TOTAL}</p>
             <h1 id="page-title">${esc(strategy.title)}</h1>
           </div>
@@ -126,6 +129,9 @@
               ${relatedActivities(strategy)}
             </section>
             ${progressBlock(strategy)}
+            <p class="detail-back detail-back--footer">
+              <a class="btn btn--outline detail-back__btn" href="ideas-que-acompanan.html">← Volver a Ideas que acompañan</a>
+            </p>
           </div>
         </div>
       </article>`;

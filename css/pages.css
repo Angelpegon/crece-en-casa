@@ -466,7 +466,7 @@
 }
 
 .idea-item__actions .btn {
-    transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+    transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
 }
 
 .idea-item__actions .btn:hover,
@@ -476,6 +476,26 @@
 
 .idea-item__actions .btn:active {
     transform: translateY(0) scale(0.98);
+}
+
+.idea-item__save.is-saved {
+    border-color: transparent;
+}
+
+.detail-back {
+    margin: 0 0 var(--space-3);
+}
+
+.detail-back--footer {
+    margin: var(--space-5) 0 0;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--c-line);
+}
+
+.detail-back__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
 }
 
 .idea-item__more-inner {

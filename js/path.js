@@ -290,8 +290,8 @@
               <p class="camino-card__muted">Huellas guardadas en este navegador.</p>
               ${recentList}
               <p class="camino-bottom__cta">
-                <a class="btn btn--sage" href="experiencias.html">Crear otra experiencia ${ui.icon("i-arrow")}</a>
-                <a class="btn btn--outline" href="guia-cuidadores.html">Guía para cuidadores</a>
+                <a class="btn btn--outline" href="experiencias.html">Crear otra experiencia</a>
+                <a class="btn btn--sage" href="guia-cuidadores.html">Siguiente ${ui.icon("i-arrow")}</a>
               </p>`
             }
           </article>
