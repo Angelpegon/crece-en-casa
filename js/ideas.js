@@ -1,4 +1,4 @@
-/* Lista de Ideas que acompañan: acordeón con altura animada y revelación progresiva. */
+/* Lista de Ideas que acompañan: acordeón en móvil; todas abiertas en desktop. */
 (function () {
   const { data, ui } = window.CEC;
   const root = document.querySelector("[data-strategies]");
@@ -6,6 +6,8 @@
 
   const esc = ui.escapeHTML;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const desktopMq = window.matchMedia("(min-width: 64em)");
+  let desktopOpen = desktopMq.matches;
   let openId = "";
   let moreId = "";
 
@@ -53,7 +55,7 @@
           aria-controls="idea-panel-${esc(strategy.id)}"
           id="idea-head-${esc(strategy.id)}"
         >
-          <span class="idea-item__badge" aria-hidden="true">${strategy.number}</span>
+          <span class="idea-item__badge" aria-hidden="true">${strategy.emoji || strategy.number}</span>
           <span class="idea-item__head-copy">
             <span class="idea-item__eyebrow">Idea ${strategy.number} de ${data.strategies.length} · Estrategia para el día a día</span>
             <span class="idea-item__title">${esc(strategy.title)}</span>
@@ -125,7 +127,6 @@
       panel.style.height = "auto";
       const to = panel.scrollHeight;
       panel.style.height = `${from}px`;
-      // Force layout before expanding so the browser interpolates.
       void panel.offsetHeight;
       requestAnimationFrame(() => {
         panel.style.height = `${to}px`;
@@ -151,10 +152,16 @@
     };
   }
 
+  function isItemOpen(id) {
+    return desktopOpen || openId === id;
+  }
+
   function syncUi({ animate = true } = {}) {
+    root.classList.toggle("idea-list--desktop", desktopOpen);
+
     root.querySelectorAll(".idea-item").forEach((item) => {
       const id = item.getAttribute("data-idea-id");
-      const open = openId === id;
+      const open = isItemOpen(id);
       const moreOpen = moreId === id;
       const wasOpen = item.classList.contains("is-open");
       const wasMore = item.classList.contains("is-more");
@@ -166,7 +173,16 @@
       item.classList.toggle("is-open", open);
       item.classList.toggle("is-more", moreOpen);
 
-      if (head) head.setAttribute("aria-expanded", open ? "true" : "false");
+      if (head) {
+        head.setAttribute("aria-expanded", open ? "true" : "false");
+        if (desktopOpen) {
+          head.setAttribute("aria-disabled", "true");
+          head.tabIndex = -1;
+        } else {
+          head.removeAttribute("aria-disabled");
+          head.removeAttribute("tabindex");
+        }
+      }
 
       if (body) {
         if (open) body.removeAttribute("inert");
@@ -189,13 +205,11 @@
       }
 
       if (open !== wasOpen && body) {
-        // Closing the card also collapses "Ver más" without a separate tween.
         if (!open && more && wasMore) more.style.height = "0px";
         animateHeight(body, open);
       }
 
       if (moreOpen !== wasMore && more) {
-        // If the parent is mid-tween, unlock it so nested expand can grow the card.
         if (moreOpen && body && body.style.height !== "auto" && open) {
           body.style.height = "auto";
           body.classList.remove("is-animating");
@@ -206,6 +220,19 @@
     });
   }
 
+  function applyViewportMode({ animate = false } = {}) {
+    const nextDesktop = desktopMq.matches;
+    if (nextDesktop === desktopOpen) return;
+    desktopOpen = nextDesktop;
+    if (desktopOpen) {
+      openId = "";
+    } else {
+      openId = "";
+      moreId = "";
+    }
+    syncUi({ animate });
+  }
+
   function mount() {
     root.innerHTML = data.strategies.map(renderItem).join("");
     syncUi({ animate: false });
@@ -214,6 +241,7 @@
   root.addEventListener("click", (event) => {
     const toggle = event.target.closest("[data-idea-toggle]");
     if (toggle) {
+      if (desktopOpen) return;
       const id = toggle.getAttribute("data-idea-toggle");
       const closing = openId === id;
       if (closing) {
@@ -235,10 +263,16 @@
     if (moreToggle) {
       const id = moreToggle.getAttribute("data-idea-more-toggle");
       moreId = moreId === id ? "" : id;
-      if (moreId) openId = id;
+      if (moreId && !desktopOpen) openId = id;
       syncUi();
     }
   });
+
+  if (typeof desktopMq.addEventListener === "function") {
+    desktopMq.addEventListener("change", () => applyViewportMode({ animate: false }));
+  } else if (typeof desktopMq.addListener === "function") {
+    desktopMq.addListener(() => applyViewportMode({ animate: false }));
+  }
 
   root.classList.add("idea-list");
   root.classList.remove("tip-grid", "tip-grid--three");

@@ -42,7 +42,7 @@ window.CEC.ui = (function () {
   }
 
   function challengeUrl(challenge) {
-    return `reto.html?id=${encodeURIComponent(challenge.id)}`;
+    return `cada-dia-una-oportunidad.html?id=${encodeURIComponent(challenge.id)}`;
   }
 
   function activityImage(activity) {

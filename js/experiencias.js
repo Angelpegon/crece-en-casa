@@ -238,6 +238,13 @@
         if (feedback) feedback.textContent = fieldMessage("interest");
     }
 
+    function progressFill(count, total) {
+        if (!total || count <= 0) return 0;
+        if (count >= total) return 100;
+        if (total === 1) return 100;
+        return ((count - 1) / (total - 1)) * 100;
+    }
+
     function activityProgress(total, { livedSteps = [] } = {}) {
         const lived = livedSteps.filter((index) => index >= 0 && index < total);
         const livedCount = lived.length;
@@ -248,13 +255,15 @@
         return `
       <div class="exp-activity-progress" role="progressbar" aria-label="${label}" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${position}">
         <span class="exp-activity-progress__label">${label}</span>
-        <span class="exp-activity-progress__track"><span style="width:${total ? (livedCount / total) * 100 : 0}%"></span></span>
-        <span class="exp-activity-progress__steps" aria-hidden="true">${Array.from({ length: total }, (_, index) => {
+        <div class="exp-activity-progress__meter">
+          <span class="exp-activity-progress__track"><span style="width:${progressFill(livedCount, total)}%"></span></span>
+          <span class="exp-activity-progress__steps" aria-hidden="true">${Array.from({ length: total }, (_, index) => {
             const isLived = lived.includes(index);
             const className = isLived ? "is-done" : "";
             const content = isLived ? "✓" : index + 1;
             return `<span class="${className}">${content}</span>`;
         }).join("")}</span>
+        </div>
       </div>`;
     }
 
