@@ -499,17 +499,9 @@
       </article>`;
     }
 
-    function shortTip(text) {
-        const raw = String(text || "").trim();
-        if (!raw) return "";
-        const cut = raw.search(/[.!?…](?:\s|$)/);
-        if (cut === -1 || cut > 120) return raw.length > 120 ? `${raw.slice(0, 117).trim()}…` : raw;
-        return raw.slice(0, cut + 1).trim();
-    }
-
     function renderPrepCard(activity) {
         const materials = activity.materials && activity.materials.length ? activity.materials : [];
-        const tip = shortTip(activity.accompany);
+        const tip = String(activity.accompany || "").trim();
         if (!materials.length && !tip) return "";
         const materialsLine = materials.length
             ? materials.join(" · ")

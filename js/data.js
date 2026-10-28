@@ -75,6 +75,8 @@ window.CEC.data = (function () {
       what: "Deja a la vista juguetes, cuentos o alimentos que le gusten, pero un poco fuera de su alcance, para que tenga motivos para comunicarse contigo. Sin llegar a frustrarlo.",
       example: "Pones la pelota en una repisa que ve pero no alcanza. Si la mira o señala, respondes: «La pelota. ¿Te la doy?».",
       tip: "Si te mira, señala o hace un sonido para pedirla, el ambiente funcionó.",
+      remember:
+        "No es necesario retirar objetos que el niño necesita ni provocar frustración. La idea es crear oportunidades naturales para pedir, elegir o compartir atención.",
       challengeIds: [],
       activityIds: ["elegimos-la-merienda"],
       tone: "pink",
@@ -108,6 +110,8 @@ window.CEC.data = (function () {
       what: "Después de comentar, haz una pausa para que pueda responder con gestos, sonidos o palabras.",
       example: "Rueda una pelota, detente un momento y observa si pide continuar.",
       tip: "Cuenta mentalmente hasta cinco antes de volver a hablar.",
+      remember:
+        "No se debe interpretar la ausencia de respuesta inmediata como falta de comprensión o interés.",
       challengeIds: ["no-responde"],
       activityIds: ["el-cuento-con-pausa"],
       tone: "lavender",
@@ -314,7 +318,7 @@ window.CEC.data = (function () {
         "Continúa la historia siguiendo su interés y alternando comentarios con pausas. Avancen al ritmo que les nazca.",
       ],
       accompany:
-        "Si señala un perro, puedes decir: «¡Sí, un perro! Está corriendo». En lugar de hacer muchas preguntas seguidas, alterna comentarios y pausas para darle espacio a participar.",
+        "Si señala un perro, puedes decir: «¡Sí, un perro! Está corriendo». Aprovecha su interés y convierte la lectura en una oportunidad para comunicarse.",
       adapt:
         "Si todavía no usa palabras, acepta miradas, gestos y sonidos; elige imágenes grandes y pocas páginas. Si quiere continuar y muestra interés, invítalo a anticipar qué podría pasar o a contar la historia a su manera.",
       closing: "¿Qué imagen llamó más su atención?",
@@ -358,7 +362,7 @@ window.CEC.data = (function () {
         "Si sigue interesado, compara dos objetos o descubre otro uso para uno de ellos. Sigan solo mientras haya ganas.",
       ],
       accompany:
-        "Si saca una cuchara, puedes decir: «¡Una cuchara! La usamos para comer». Si hace un sonido, la mira o la señala, responde a ese intento de comunicación sin exigir que repita la palabra.",
+        "Si saca una cuchara, puedes decir: «¡Una cuchara! Con ella podemos comer». Aprovecha su interés y convierte el juego en una oportunidad para comunicarse.",
       adapt:
         "Para niños más pequeños, ofrece dos objetos familiares y nómbralos. Para quienes usan más palabras, describe el tamaño, la textura, la función o las acciones posibles. Mantén supervisión adulta durante toda la actividad.",
       closing: "¿Qué objeto quiso explorar más?",
@@ -401,7 +405,7 @@ window.CEC.data = (function () {
         "Reconoce su participación y repitan el juego si quiere. Celebren el intento, no solo el hallazgo.",
       ],
       accompany:
-        "Usa frases cortas y dale tiempo. Si no encuentra el juguete, señala el lugar o acércaselo. Evita repetir la misma instrucción muchas veces seguidas.",
+        "Si busca el oso, puedes decir: «¡Ahí está el oso! Lo encontramos juntos». Dale tiempo y acompaña con un gesto si lo necesita; convierte la búsqueda en una oportunidad para comunicarse.",
       adapt:
         "Empieza con un objeto visible y una sola indicación. Después, si el niño está preparado, puedes ofrecer dos objetos o decir «Pon el oso dentro». La actividad es un juego compartido, no un examen.",
       closing: "¿Qué apoyo le ayudó más: la palabra, el gesto o ver el objeto?",
@@ -446,7 +450,7 @@ window.CEC.data = (function () {
         "Continúen según el interés del niño, sin exigir que construya de una forma determinada. El disfrute importa más que el resultado.",
       ],
       accompany:
-        "Puedes decir: «Mi turno… tu turno», «arriba», «se cayó» o «¡qué alta!». Los gestos, las miradas y las acciones del niño también forman parte de la interacción.",
+        "Si coloca una pieza, puedes decir: «¡Tu turno! La torre está más alta». Sigue su ritmo y convierte el juego compartido en una oportunidad para comunicarse.",
       adapt:
         "Si todavía no apila piezas, pueden meter y sacar objetos grandes de un recipiente. Si desea dirigir el juego, síguelo y comenta sus ideas. Evita piezas pequeñas y mantén supervisión adulta.",
       closing: "¿Cómo se comunicaron para continuar el juego?",
@@ -488,7 +492,7 @@ window.CEC.data = (function () {
         "Comenta una característica del alimento mientras continúan la rutina. Un detalle sencillo mantiene la conversación.",
       ],
       accompany:
-        "Puedes decir: «¿Banano o pan?». Si señala uno, responde: «Elegiste pan». No exijas que nombre el alimento para recibirlo.",
+        "Si señala el pan, puedes decir: «¡Elegiste pan! Está rico y crujiente». Respeta su forma de elegir y convierte la merienda en una oportunidad para comunicarse.",
       adapt:
         "Si elegir entre dos opciones resulta difícil, presenta una a la vez. La actividad no debe retrasar la comida ni presionar al niño a probar o comer algo que rechaza.",
       closing: "¿Cómo expresó su elección?",
@@ -530,7 +534,7 @@ window.CEC.data = (function () {
         "Si lo necesita, vuelve a mostrar el objeto o señala la acción en lugar de repetir muchas instrucciones. El apoyo visual puede bastar.",
       ],
       accompany:
-        "Puedes decir: «Primero guardamos los bloques y después elegimos un cuento». Si necesita apoyo, muestra el objeto o señala la acción que viene a continuación.",
+        "Si van a guardar juguetes, puedes decir: «Primero los bloques y después el cuento». Muéstrale el objeto si ayuda y convierte la rutina en una oportunidad para comunicarse.",
       adapt:
         "Usa una sola indicación a la vez si la secuencia resulta difícil. Si el niño ya comprende la rutina, invítalo a contar o mostrar qué sigue, sin exigir una respuesta verbal.",
       closing: "¿Qué apoyo le permitió anticipar el siguiente paso?",

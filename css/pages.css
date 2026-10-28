@@ -232,6 +232,291 @@
     text-underline-offset: 3px;
 }
 
+/* ---------- Ideas que acompañan (acordeón) ---------- */
+.idea-list {
+    display: grid;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.idea-item {
+    border-radius: var(--radius-md);
+    background: var(--c-surface);
+    border: 1px solid #eadfce;
+    border-top: 5px solid var(--idea-accent, var(--c-sage));
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    transition:
+        box-shadow 0.35s ease,
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.28s ease;
+}
+
+.idea-item.is-open {
+    box-shadow: 0 0.75rem 1.6rem rgb(47 90 74 / 12%);
+    transform: translateY(-2px);
+}
+
+.idea-item--coral { --idea-accent: var(--c-coral); }
+.idea-item--yellow { --idea-accent: var(--c-yellow); }
+.idea-item--sage { --idea-accent: var(--c-sage); }
+.idea-item--lavender { --idea-accent: var(--c-lavender); }
+
+.idea-item__head {
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.idea-item__head:hover,
+.idea-item__head:focus-visible {
+    background: rgb(47 125 91 / 0.06);
+}
+
+.idea-item__head:active {
+    background: rgb(47 125 91 / 0.1);
+}
+
+.idea-item__head:focus-visible {
+    outline: 2px solid var(--idea-accent, var(--c-sage));
+    outline-offset: -2px;
+}
+
+.idea-item__badge {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.85rem;
+    background: color-mix(in srgb, var(--idea-accent, var(--c-sage)) 18%, #fff);
+    color: var(--c-ink);
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 800;
+    transition:
+        transform 0.4s cubic-bezier(0.22, 1.4, 0.36, 1),
+        background 0.28s ease;
+}
+
+.idea-item.is-open .idea-item__badge {
+    transform: scale(1.08);
+    background: color-mix(in srgb, var(--idea-accent, var(--c-sage)) 28%, #fff);
+}
+
+.idea-item__head:active .idea-item__badge {
+    transform: scale(0.94);
+}
+
+.idea-item__head-copy {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+    flex: 1;
+}
+
+.idea-item__eyebrow {
+    color: var(--c-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.idea-item__title {
+    color: var(--c-ink);
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.idea-item__chevron {
+    flex-shrink: 0;
+    width: 0.65rem;
+    height: 0.65rem;
+    margin-right: 0.15rem;
+    border-right: 2px solid #7a7064;
+    border-bottom: 2px solid #7a7064;
+    transform: rotate(45deg);
+    transition: transform 0.4s cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+.idea-item.is-open .idea-item__chevron {
+    transform: rotate(225deg);
+}
+
+.idea-item__body,
+.idea-item__more {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.idea-item__body.is-animating,
+.idea-item__more.is-animating {
+    will-change: height;
+}
+
+.idea-item__body-inner {
+    display: grid;
+    gap: 0.85rem;
+    padding: 0.15rem 1rem 1.15rem;
+}
+
+.idea-item__block {
+    display: grid;
+    gap: 0.3rem;
+}
+
+.idea-item__label {
+    margin: 0;
+    color: var(--c-muted);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.idea-item__block p {
+    margin: 0;
+    color: var(--c-text);
+    line-height: 1.5;
+}
+
+.idea-item__example {
+    margin: 0;
+    padding: 0.75rem 0.95rem;
+    border-radius: 1rem 1rem 1rem 0.35rem;
+    background: #f7efe4;
+    color: #5a5047;
+    font-style: italic;
+}
+
+.idea-item__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.idea-item__actions .btn {
+    transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.idea-item__actions .btn:hover,
+.idea-item__actions .btn:focus-visible {
+    transform: translateY(-1px);
+}
+
+.idea-item__actions .btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.idea-item__more-inner {
+    display: grid;
+    gap: 0.85rem;
+    padding-top: 0.15rem;
+}
+
+.idea-item__reveal {
+    opacity: 0;
+    transform: translateY(0.55rem);
+    transition:
+        opacity 0.36s ease,
+        transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: 0s;
+}
+
+.idea-item.is-open > .idea-item__body .idea-item__body-inner > .idea-item__reveal,
+.idea-item.is-more .idea-item__more .idea-item__reveal {
+    opacity: 1;
+    transform: none;
+    transition-delay: var(--idea-delay, 0.08s);
+}
+
+.idea-item__note {
+    margin: 0;
+    padding: 0.75rem 0.9rem;
+    border-radius: var(--radius-md);
+    background: #fdf1dc;
+    color: var(--c-ink);
+    font-size: 0.92rem;
+    line-height: 1.45;
+}
+
+.idea-item__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.idea-item__chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-pill);
+    background: #e8f3ec;
+    color: #1f5a40;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.idea-item__chip:hover,
+.idea-item__chip:focus-visible {
+    transform: translateY(-1px);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.idea-item__chip:active {
+    transform: scale(0.98);
+}
+
+.idea-item__ficha {
+    margin: 0.15rem 0 0;
+}
+
+.idea-item__ficha .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .idea-item,
+    .idea-item__head,
+    .idea-item__badge,
+    .idea-item__chevron,
+    .idea-item__body,
+    .idea-item__more,
+    .idea-item__reveal,
+    .idea-item__actions .btn,
+    .idea-item__chip {
+        transition: none;
+        animation: none;
+        transform: none;
+    }
+
+    .idea-item__reveal {
+        opacity: 1;
+    }
+}
+
 /* ---------- Detalle estrategia / reto ---------- */
 .detail-body__main {
     display: grid;
