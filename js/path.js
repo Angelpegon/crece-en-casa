@@ -291,7 +291,7 @@
               ${recentList}
               <p class="camino-bottom__cta">
                 <a class="btn btn--outline" href="experiencias.html">Crear otra experiencia</a>
-                <a class="btn btn--sage" href="guia-cuidadores.html">Siguiente ${ui.icon("i-arrow")}</a>
+                <a class="btn btn--sage" href="ver-la-guia.html">Siguiente ${ui.icon("i-arrow")}</a>
               </p>`
             }
           </article>
