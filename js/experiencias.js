@@ -689,7 +689,7 @@
           <div class="exp-nav">
             <button class="btn btn--outline" type="button" data-exp-go="3">Volver a la experiencia</button>
           </div>
-          <div class="exp-actions exp-actions--stack">
+          <div class="exp-actions exp-actions--stack exp-actions--closing">
             <a class="btn btn--sage" href="mi-camino.html">Ir a mi historia ${icon("i-arrow")}</a>
             <button class="btn btn--outline" type="button" data-exp-action="share-open">Compartir en la comunidad</button>
             <button class="btn btn--outline" type="button" data-exp-action="restart">Crear otra experiencia</button>

@@ -22,14 +22,14 @@
     },
     {
       id: "actividades",
-      href: "actividades.html",
+      href: "experiencias.html",
       label: "Actividades",
       icon: "i-juego",
-      pages: ["actividades.html", "experiencias.html", "explorar-actividades.html", "actividad.html"],
+      pages: ["experiencias.html", "explorar-actividades.html", "actividad.html"],
       blurb: "Momentos cotidianos convertidos en experiencias de comunicación.",
       children: [
         { href: "experiencias.html", label: "Experiencias" },
-        { href: "explorar-actividades.html", label: "Actividades" },
+        { href: "explorar-actividades.html", label: "Explorar actividades" },
       ],
     },
     {
@@ -227,7 +227,8 @@
           <nav aria-labelledby="footer-nav-title">
             <h2 id="footer-nav-title">Explora</h2>
             <ul class="site-footer__links">
-              <li><a href="actividades.html">Actividades</a></li>
+              <li><a href="experiencias.html">Experiencias</a></li>
+              <li><a href="explorar-actividades.html">Explorar actividades</a></li>
               <li><a href="ver-la-guia.html">Guía para cuidadores</a></li>
               <li><a href="mi-camino.html">Nuestro rincón</a></li>
               <li><a href="nuestra-comunidad.html">Nuestra comunidad</a></li>

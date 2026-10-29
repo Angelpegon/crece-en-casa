@@ -9,14 +9,32 @@
         content="Actividades sencillas basadas en la vida cotidiana para acompañar la comunicación y el lenguaje de niños de 2 a 5 años.">
     <meta name="theme-color" content="#fef9f3">
     <script>document.documentElement.classList.add("js");</script>
+    <script>
+        (function () {
+            if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+            var seen = false;
+            try {
+                seen = sessionStorage.getItem("crece-en-casa:home-welcome-seen") === "1";
+            } catch (error) {
+                seen = true;
+            }
+            document.documentElement.classList.add("home-motion");
+            document.documentElement.classList.add(seen ? "is-home-arrival" : "home-hold");
+            window.addEventListener("pagereveal", function (event) {
+                if (!event.viewTransition) return;
+                document.documentElement.classList.remove("is-home-arrival");
+                document.documentElement.classList.remove("home-hold");
+            });
+        })();
+    </script>
     <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
-    <link rel="stylesheet" href="css/styles.css?v=clean3">
-    <link rel="stylesheet" href="css/home.css?v=clean3">
+    <link rel="stylesheet" href="css/styles.css?v=wave1">
+    <link rel="stylesheet" href="css/home.css?v=wave1">
 </head>
 
 <body>
@@ -57,43 +75,45 @@
                 </header>
 
                 <div class="explore__layout">
-                    <ul class="moment-grid moment-grid--five">
-                        <li>
-                            <a class="moment-tile moment-tile--coral" href="explorar-actividades.html?momento=comida">
-                                <img class="moment-tile__img" src="assets/img/temporal/momento-comida.png" width="237" height="237" alt="" loading="lazy">
-                                <span class="moment-tile__title">Preparando o comiendo</span>
-                                <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="moment-tile moment-tile--lavender" href="explorar-actividades.html?momento=rutinas">
-                                <img class="moment-tile__img" src="assets/img/temporal/momento-vestirse.png" width="230" height="230" alt="" loading="lazy">
-                                <span class="moment-tile__title">Vistiéndose</span>
-                                <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="moment-tile moment-tile--sage" href="explorar-actividades.html?momento=juego">
-                                <img class="moment-tile__img" src="assets/img/temporal/momento-juego.png" width="224" height="224" alt="" loading="lazy">
-                                <span class="moment-tile__title">Jugando en casa</span>
-                                <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="moment-tile moment-tile--sky" href="explorar-actividades.html?momento=afuera">
-                                <img class="moment-tile__img" src="assets/img/temporal/momento-afuera.png" width="227" height="227" alt="" loading="lazy">
-                                <span class="moment-tile__title">Caminando o explorando afuera</span>
-                                <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="moment-tile moment-tile--pink" href="explorar-actividades.html?momento=lectura">
-                                <img class="moment-tile__img" src="assets/img/temporal/momento-cuento.png" width="226" height="226" alt="" loading="lazy">
-                                <span class="moment-tile__title">Leyendo un cuento</span>
-                                <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="explore__moments-frame">
+                        <ul class="moment-grid moment-grid--five">
+                            <li>
+                                <a class="moment-tile moment-tile--coral" href="explorar-actividades.html?momento=comida">
+                                    <img class="moment-tile__img" src="assets/img/temporal/momento-comida.png" width="237" height="237" alt="" loading="lazy">
+                                    <span class="moment-tile__title">Preparando o comiendo</span>
+                                    <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="moment-tile moment-tile--lavender" href="explorar-actividades.html?momento=rutinas">
+                                    <img class="moment-tile__img" src="assets/img/temporal/momento-vestirse.png" width="230" height="230" alt="" loading="lazy">
+                                    <span class="moment-tile__title">Vistiéndose</span>
+                                    <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="moment-tile moment-tile--sage" href="explorar-actividades.html?momento=juego">
+                                    <img class="moment-tile__img" src="assets/img/temporal/momento-juego.png" width="224" height="224" alt="" loading="lazy">
+                                    <span class="moment-tile__title">Jugando en casa</span>
+                                    <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="moment-tile moment-tile--sky" href="explorar-actividades.html?momento=afuera">
+                                    <img class="moment-tile__img" src="assets/img/temporal/momento-afuera.png" width="227" height="227" alt="" loading="lazy">
+                                    <span class="moment-tile__title">Caminando o explorando afuera</span>
+                                    <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="moment-tile moment-tile--pink" href="explorar-actividades.html?momento=lectura">
+                                    <img class="moment-tile__img" src="assets/img/temporal/momento-cuento.png" width="226" height="226" alt="" loading="lazy">
+                                    <span class="moment-tile__title">Leyendo un cuento</span>
+                                    <span class="moment-tile__arrow" aria-hidden="true"><svg class="icon"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
 
                     <aside class="how-panel" aria-labelledby="how-title">
                         <h2 id="how-title">¿Cómo funciona?</h2>
@@ -232,8 +252,8 @@
         </div>
     </dialog>
 
-    <script src="js/chrome.js?v=clean3" defer></script>
-    <script src="js/main.js?v=clean3" defer></script>
+    <script src="js/chrome.js?v=wave1" defer></script>
+    <script src="js/main.js?v=wave1" defer></script>
 </body>
 
 </html>

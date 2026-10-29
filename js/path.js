@@ -48,24 +48,25 @@
       </div>`;
   }
 
+  const STICKER = "assets/img/stickers/";
   const STAGES = [
     {
-      emoji: "🌱",
+      icon: STICKER + "brote.png",
       title: "Primeros momentos",
       text: "Las experiencias que compartan en casa empiezan a formar su camino.",
     },
     {
-      emoji: "🧸",
+      icon: STICKER + "zorro.png",
       title: "Nuevos descubrimientos",
       text: "Se suman momentos de juego, palabras, gestos y conexión.",
     },
     {
-      emoji: "🌼",
+      icon: STICKER + "sol.png",
       title: "La comunicación en lo cotidiano",
       text: "Reconoces oportunidades para comunicarse durante el día.",
     },
     {
-      emoji: "🌳",
+      icon: STICKER + "hoja.png",
       title: "Seguir creciendo juntos",
       text: "Tu recorrido refleja las experiencias que han explorado como familia.",
     },
@@ -199,7 +200,7 @@
                 <h2>Áreas que podrán explorar</h2>
                 <p class="camino-card__muted">Cada experiencia tiene una intención comunicativa.</p>
               </div>
-              <span class="camino-card__emoji" aria-hidden="true">🌱</span>
+              <img class="camino-card__sticker" src="assets/img/stickers/brote.png" alt="" width="40" height="40" decoding="async" aria-hidden="true">
             </div>
             <div class="camino-chips" aria-label="Áreas comunicativas">
               <span class="camino-chip">Vocabulario</span>
@@ -215,7 +216,7 @@
                 <h2>A tu propio ritmo</h2>
                 <p class="camino-card__muted">No es una competencia ni una prueba del desarrollo.</p>
               </div>
-              <span class="camino-card__emoji" aria-hidden="true">🧭</span>
+              <img class="camino-card__sticker" src="assets/img/stickers/diana.png" alt="" width="40" height="40" decoding="async" aria-hidden="true">
             </div>
             <p class="camino-card__support">Cada familia avanza a su propio ritmo. <span aria-hidden="true">💚</span></p>
           </article>
@@ -255,7 +256,7 @@
               ${STAGES.map(
                 (stage, index) => `
                 <li class="camino-stage">
-                  <span class="camino-stage__icon" aria-hidden="true">${stage.emoji}</span>
+                  <span class="camino-stage__icon" aria-hidden="true"><img class="camino-stage__sticker" src="${esc(stage.icon)}" alt="" width="36" height="36" decoding="async"></span>
                   <div>
                     <h3 class="camino-stage__title">${esc(stage.title)}</h3>
                     <p>${esc(stage.text)}</p>

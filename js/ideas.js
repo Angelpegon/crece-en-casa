@@ -110,7 +110,11 @@
           aria-controls="idea-panel-${esc(strategy.id)}"
           id="idea-head-${esc(strategy.id)}"
         >
-          <span class="idea-item__badge" aria-hidden="true">${strategy.emoji || strategy.number}</span>
+          <span class="idea-item__badge" aria-hidden="true">${
+            strategy.icon
+              ? `<img class="idea-item__badge-img" src="${esc(strategy.icon)}" alt="" width="44" height="44" decoding="async">`
+              : strategy.emoji || strategy.number
+          }</span>
           <span class="idea-item__head-copy">
             <span class="idea-item__eyebrow">Idea ${strategy.number} de ${data.strategies.length} · Estrategia para el día a día</span>
             <span class="idea-item__title">${esc(strategy.title)}</span>

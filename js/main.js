@@ -76,15 +76,60 @@
     });
   }
 
+  function setupHomeMotion() {
+    const root = document.documentElement;
+    if (!root.classList.contains("home-motion")) return;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const targets = [".how-panel", ".product-card--path"]
+      .map((selector) => document.querySelector(selector))
+      .filter(Boolean);
+
+    if (reduce || !("IntersectionObserver" in window) || !targets.length) {
+      root.classList.remove("home-motion");
+      releaseHomeArrival();
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-here");
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.28 });
+
+    function start() {
+      targets.forEach((node) => observer.observe(node));
+    }
+
+    const dialog = document.querySelector("[data-home-welcome]");
+    if (dialog?.open) {
+      dialog.addEventListener("close", start, { once: true });
+    } else {
+      start();
+    }
+  }
+
   function setupFooterYear() {
     document.querySelectorAll("[data-current-year]").forEach((node) => {
       node.textContent = String(new Date().getFullYear());
     });
   }
 
+  function releaseHomeArrival() {
+    const root = document.documentElement;
+    if (!root.classList.contains("home-hold")) return;
+    root.classList.remove("home-hold");
+    root.classList.add("is-home-arrival");
+  }
+
   function setupHomeWelcome() {
     const dialog = document.querySelector("[data-home-welcome]");
-    if (!dialog || typeof dialog.showModal !== "function") return;
+    if (!dialog || typeof dialog.showModal !== "function") {
+      releaseHomeArrival();
+      return;
+    }
 
     const STORAGE_KEY = "crece-en-casa:home-welcome-seen";
     const closeBtn = dialog.querySelector("[data-home-welcome-close]");
@@ -100,6 +145,7 @@
 
     function closeWelcome() {
       markSeen();
+      releaseHomeArrival();
       if (dialog.open) dialog.close();
     }
 
@@ -134,4 +180,5 @@
   setupSidebarDropdowns();
   setupFooterYear();
   setupHomeWelcome();
+  setupHomeMotion();
 })();

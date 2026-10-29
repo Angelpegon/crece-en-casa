@@ -77,7 +77,7 @@
     if (!all.length) {
       list.className = "comunidad-empty";
       list.innerHTML = `
-        <div class="comunidad-empty__emoji" aria-hidden="true">🌿</div>
+        <img class="comunidad-empty__sticker" src="assets/img/stickers/hoja.png" alt="" width="56" height="56" decoding="async" aria-hidden="true">
         <h3>Este espacio está listo para escucharte</h3>
         <p>Aquí aparecerán las publicaciones que tú y otras familias decidan compartir. Puedes iniciar la conversación cuando quieras.</p>
         <button class="btn btn--sage" type="button" data-com-open>Subir una publicación</button>`;

@@ -6,10 +6,26 @@
 
   const esc = ui.escapeHTML;
 
+  const STICKER = "assets/img/stickers/";
+
+  function stickerImg(file, className) {
+    return `<img class="${className}" src="${STICKER}${file}" alt="" width="96" height="96" decoding="async" aria-hidden="true">`;
+  }
+
+  /* Pegatinas decorativas por bloque (patrón del mockup de ficha). */
+  const BLOCK_STICKERS = {
+    materiales: "pila-libros.png",
+    antes: "libro-abierto.png",
+    areas: "checklist.png",
+    acompanar: "burbuja-corazon.png",
+    adapta: "engranaje.png",
+    recuerda: "bombilla.png",
+  };
+
   const REFLECTION = [
     {
       id: "enjoyed",
-      icon: "i-spark",
+      sticker: "hoja.png",
       label: "Lo disfrutamos",
       detail: "Hubo sonrisas, juego o un momento agradable juntos.",
       title: "¡Qué lindo momento!",
@@ -17,7 +33,7 @@
     },
     {
       id: "hard",
-      icon: "i-brote",
+      sticker: "corazon.png",
       label: "Fue difícil",
       detail: "Hubo frustración, cansancio o no fluyó como esperaban.",
       title: "También es avanzar",
@@ -25,7 +41,7 @@
     },
     {
       id: "another-day",
-      icon: "i-clock",
+      sticker: "calendario.png",
       label: "Otro día",
       detail: "Hoy no era el momento y está bien dejarlo para después.",
       title: "¡Queda guardado para ustedes!",
@@ -42,7 +58,6 @@
       <nav class="breadcrumb" aria-label="Ruta de navegación">
         <ol>
           <li><a href="index.html">Inicio</a></li>
-          <li><a href="actividades.html">Actividades</a></li>
           <li><a href="explorar-actividades.html">Explorar actividades</a></li>
           <li aria-current="page">${esc(current)}</li>
         </ol>
@@ -97,6 +112,9 @@
     const classes = ["ficha-block", `ficha-block--${tone}`];
     if (wide) classes.push("ficha-block--wide");
     if (slot) classes.push(`ficha-block--${slot}`);
+    const decor = BLOCK_STICKERS[slot]
+      ? stickerImg(BLOCK_STICKERS[slot], "ficha-block__sticker")
+      : "";
     return `
       <section class="${classes.join(" ")}" aria-labelledby="${titleId}">
         <h2 class="ficha-block__title" id="${titleId}">
@@ -104,6 +122,7 @@
           <span>${esc(title)}</span>
         </h2>
         <div class="ficha-block__body">${body}</div>
+        ${decor}
       </section>`;
   }
 
@@ -259,7 +278,7 @@
                   <label class="ficha-close__choice">
                     <input type="radio" name="reflection" value="${esc(option.id)}">
                     <span class="ficha-close__card">
-                      <span class="ficha-close__glyph" aria-hidden="true">${ui.icon(option.icon)}</span>
+                      <span class="ficha-close__glyph" aria-hidden="true">${stickerImg(option.sticker, "ficha-close__sticker")}</span>
                       <span class="ficha-close__copy">
                         <strong>${esc(option.label)}</strong>
                         <span>${esc(option.detail)}</span>
@@ -326,7 +345,7 @@
     cheer.innerHTML = `
       <div class="ficha-close__feedback${animate ? " ficha-close__feedback--pop" : ""}" role="status">
         <span class="ficha-close__spark" aria-hidden="true">✦</span>
-        <img class="ficha-close__mascot" src="assets/img/temporal/home-zorro-cutout.png" width="120" height="120" alt="" loading="lazy" decoding="async">
+        <img class="ficha-close__mascot" src="${STICKER}zorro.png" width="120" height="120" alt="" loading="lazy" decoding="async">
         <span class="ficha-close__feedback-copy">
           <strong>${esc(option.title)}</strong>
           <span>${esc(option.message)}</span>

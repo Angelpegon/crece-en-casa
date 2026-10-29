@@ -803,6 +803,10 @@ select {
     box-shadow: 0 18px 34px -20px rgb(28 53 50 / 0.45);
 }
 
+.activity-card:has(.activity-card__link:active) {
+    transform: translateY(1px) scale(0.98);
+}
+
 .activity-card:has(.activity-card__link:focus-visible) {
     outline: 3px solid var(--c-sky-strong);
     outline-offset: 3px;
@@ -1166,7 +1170,11 @@ select {
     font-weight: 700;
     text-align: left;
     text-decoration: none;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.side-nav__link:active {
+    transform: scale(0.98);
 }
 
 .side-nav__toggle {
@@ -1243,6 +1251,11 @@ select {
     font-size: 0.9rem;
     font-weight: 700;
     text-decoration: none;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.side-nav__children a:active {
+    transform: scale(0.98);
 }
 
 .side-nav__children a:hover,
@@ -1317,7 +1330,30 @@ select {
     }
 }
 
-/* ---------- 13. Movimiento reducido ---------- */
+/* ---------- 13. Paso entre páginas ---------- */
+@media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+        navigation: auto;
+    }
+
+    .site-header {
+        view-transition-name: site-header;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: 0.22s;
+        animation-timing-function: ease;
+    }
+}
+
+@media (min-width: 64em) and (prefers-reduced-motion: no-preference) {
+    .page-sidebar {
+        view-transition-name: site-sidebar;
+    }
+}
+
+/* ---------- 14. Movimiento reducido ---------- */
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;

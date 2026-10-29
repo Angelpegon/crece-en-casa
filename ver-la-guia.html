@@ -11,54 +11,77 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
-  <link rel="stylesheet" href="css/styles.css?v=clean3">
-  <link rel="stylesheet" href="css/pages.css?v=clean3">
+  <link rel="stylesheet" href="css/styles.css?v=wave1">
+  <link rel="stylesheet" href="css/pages.css?v=wave1">
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header" data-site-header></header>
 
   <main id="contenido">
-    <section class="page-hero page-hero--sage" aria-labelledby="page-title">
-      <div class="container">
-        <nav class="breadcrumb" aria-label="Ruta de navegación">
-          <ol>
-            <li><a href="index.html">Inicio</a></li>
-            <li aria-current="page">Ver la guía</li>
-          </ol>
-        </nav>
-        <h1 id="page-title">Aprende a acompañar la comunicación de tu niño</h1>
-        <p class="page-hero__lead">
-          Aquí encontrarás una brújula sencilla: ideas para acompañar en la vida diaria
-          y oportunidades cortas para practicar cómo responder en situaciones reales.
-        </p>
-      </div>
-    </section>
+    <section class="guia-page" aria-labelledby="page-title">
+      <div class="container guia-page__stack">
+        <header class="guia-hero">
+          <img
+            class="guia-hero__art"
+            src="assets/img/temporal/Crece_en_Casa_Encabezado_Guia.png"
+            width="1246"
+            height="338"
+            alt=""
+            decoding="async"
+            fetchpriority="high">
+          <div class="visually-hidden">
+            <nav aria-label="Ruta de navegación">
+              <ol>
+                <li><a href="index.html">Inicio</a></li>
+                <li>Ver la guía</li>
+              </ol>
+            </nav>
+            <h1 id="page-title">Aprende a acompañar la comunicación de tu niño</h1>
+            <p>
+              Aquí encontrarás una brújula sencilla: ideas para acompañar en la vida diaria
+              y oportunidades cortas para practicar cómo responder en situaciones reales.
+            </p>
+          </div>
+        </header>
 
-    <section class="section" aria-labelledby="como-title">
-      <div class="container prose">
-        <h2 id="como-title">Cómo usar esta guía</h2>
-        <p>
-          No necesitas seguir un orden rígido. Puedes empezar por una idea que te resuene,
-          probarla unos días y volver cuando quieras. El objetivo no es “hacerlo perfecto”,
-          sino encontrar pequeños gestos que abran más conversación en casa.
-        </p>
-        <ul>
-          <li><strong>Ideas que acompañan:</strong> gestos concretos para el día a día.</li>
-          <li><strong>Cada día, una oportunidad:</strong> situaciones reales para decidir y practicar.</li>
-          <li><strong>Actividades:</strong> propuestas cortas ligadas a momentos cotidianos.</li>
-        </ul>
-        <p class="page-cta-row">
-          <a class="btn btn--outline" href="ideas-que-acompanan.html">Ver ideas que acompañan</a>
-          <a class="btn btn--outline" href="cada-dia-una-oportunidad.html">Ver oportunidades</a>
-          <a class="btn btn--sage" href="mi-album.html">Siguiente <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></a>
-        </p>
+        <section class="guia-how" aria-labelledby="como-title">
+          <div class="guia-how__head">
+            <h2 id="como-title">Cómo usar esta guía</h2>
+            <img class="guia-how__spark" src="assets/img/stickers/estrella-amarilla.png" width="48" height="48" alt="" decoding="async" aria-hidden="true">
+            <img class="guia-how__spark guia-how__spark--sm" src="assets/img/stickers/estrella-lila.png" width="36" height="36" alt="" decoding="async" aria-hidden="true">
+          </div>
+          <p class="guia-how__lead">
+            No necesitas seguir un orden rígido. Puedes empezar por una idea que te resuene,
+            probarla unos días y volver cuando quieras. El objetivo no es “hacerlo perfecto”,
+            sino encontrar pequeños gestos que abran más conversación en casa.
+          </p>
+          <ul class="guia-how__list">
+            <li class="guia-how__item guia-how__item--idea">
+              <img class="guia-how__icon" src="assets/img/stickers/bombilla.png" width="64" height="64" alt="" decoding="async" aria-hidden="true">
+              <p><strong>Ideas que acompañan:</strong> gestos concretos para el día a día.</p>
+            </li>
+            <li class="guia-how__item guia-how__item--opp">
+              <img class="guia-how__icon" src="assets/img/stickers/brote.png" width="64" height="64" alt="" decoding="async" aria-hidden="true">
+              <p><strong>Cada día, una oportunidad:</strong> situaciones reales para decidir y practicar.</p>
+            </li>
+            <li class="guia-how__item guia-how__item--act">
+              <img class="guia-how__icon" src="assets/img/stickers/estrella-amarilla.png" width="64" height="64" alt="" decoding="async" aria-hidden="true">
+              <p><strong>Actividades:</strong> propuestas cortas ligadas a momentos cotidianos.</p>
+            </li>
+          </ul>
+          <p class="guia-how__actions">
+            <a class="btn btn--outline" href="ideas-que-acompanan.html">Ver ideas que acompañan</a>
+            <a class="btn btn--outline" href="cada-dia-una-oportunidad.html">Ver oportunidades</a>
+            <a class="btn btn--sage" href="ideas-que-acompanan.html">Siguiente <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-arrow"></use></svg></a>
+          </p>
+        </section>
       </div>
     </section>
   </main>
 
   <footer class="site-footer" data-site-footer></footer>
-  <script src="js/chrome.js?v=clean3" defer></script>
-  <script src="js/main.js?v=clean3" defer></script>
+  <script src="js/chrome.js?v=wave1" defer></script>
+  <script src="js/main.js?v=wave1" defer></script>
 </body>
 </html>

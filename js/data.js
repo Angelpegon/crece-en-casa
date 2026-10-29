@@ -6,9 +6,14 @@ window.CEC = window.CEC || {};
 
 window.CEC.data = (function () {
   const IMG = "assets/img/temporal/";
+  const STICKER = "assets/img/stickers/";
 
   function image(file, width, height) {
     return { src: IMG + file, width, height };
+  }
+
+  function sticker(file) {
+    return STICKER + file;
   }
 
   const ages = [
@@ -72,6 +77,7 @@ window.CEC.data = (function () {
       id: "organiza-el-ambiente",
       number: 1,
       emoji: "🧸📚🍎",
+      icon: sticker("pila-libros.png"),
       title: "Organiza el ambiente",
       what: "Deja a la vista juguetes, cuentos o alimentos que le gusten, pero un poco fuera de su alcance, para que tenga motivos para comunicarse contigo. Sin llegar a frustrarlo.",
       example: "Pones la pelota en una repisa que ve pero no alcanza. Si la mira o señala, respondes: «La pelota. ¿Te la doy?».",
@@ -86,6 +92,7 @@ window.CEC.data = (function () {
       id: "sigue-su-interes",
       number: 2,
       emoji: "🚗👀",
+      icon: sticker("diana.png"),
       title: "Sigue su interés",
       what: "Observa qué mira, señala o intenta alcanzar. Únete a ese interés y comenta lo que ocurre.",
       example: "«¡Un carro rojo! Va rápido».",
@@ -98,6 +105,7 @@ window.CEC.data = (function () {
       id: "responde-e-imita",
       number: 3,
       emoji: "👏🥄",
+      icon: sticker("burbuja-chat.png"),
       title: "Responde e imita",
       what: "Responde a sus gestos, sonidos y palabras como si fueran mensajes. Puedes imitar lo que hace o dice para animarlo a continuar.",
       example: "Si golpea la mesa con la cuchara, golpea tú también y di «Pum, pum».",
@@ -110,6 +118,7 @@ window.CEC.data = (function () {
       id: "espera-y-dale-espacio",
       number: 4,
       emoji: "⏳🙂",
+      icon: sticker("sol.png"),
       title: "Espera y dale espacio",
       what: "Después de comentar, haz una pausa para que pueda responder con gestos, sonidos o palabras.",
       example: "Rueda una pelota, detente un momento y observa si pide continuar.",
@@ -124,6 +133,7 @@ window.CEC.data = (function () {
       id: "apoya-la-comprension",
       number: 5,
       emoji: "🧦👟",
+      icon: sticker("pregunta.png"),
       title: "Apoya la comprensión",
       what: "Usa mensajes claros y, cuando sea útil, acompáñalos de gestos u objetos visibles.",
       example: "«Busca los zapatos», señalando dónde están.",
@@ -136,6 +146,7 @@ window.CEC.data = (function () {
       id: "modela-el-lenguaje",
       number: 6,
       emoji: "💬🍼",
+      icon: sticker("libro-abierto.png"),
       title: "Modela el lenguaje",
       what: "Ofrece palabras o frases sencillas relacionadas con lo que está mirando o haciendo, sin exigir repetición.",
       example: "Si señala agua, di «Quieres agua».",
@@ -148,6 +159,7 @@ window.CEC.data = (function () {
       id: "amplia-su-mensaje",
       number: 7,
       emoji: "🐶➕",
+      icon: sticker("burbuja-corazon.png"),
       title: "Amplía su mensaje",
       what: "Retoma lo que comunica y añade una palabra o idea sin cambiar el sentido.",
       example: "Dice «perro»; respondes «Sí, un perro grande».",
@@ -160,6 +172,7 @@ window.CEC.data = (function () {
       id: "comparte-los-turnos",
       number: 8,
       emoji: "🧱🤝",
+      icon: sticker("bloques.png"),
       title: "Comparte los turnos",
       what: "Responde a sus iniciativas y deja espacio para que ambos participen.",
       example: "Cada uno añade un bloque y comenta lo que construyen.",
@@ -359,7 +372,7 @@ window.CEC.data = (function () {
       duration: "5–10 minutos",
       materialsId: "casa",
       strategyIds: ["sigue-su-interes", "espera-y-dale-espacio"],
-      image: image("actividad-cuento-con-pausa.webp", 1041, 774),
+      image: image("actividad-cuento-con-pausa.png", 1536, 1024),
       imageAlt: "Una mamá lee un cuento ilustrado junto a su hijo, ambos sonríen.",
       objective:
         "Favorecer la interacción comunicativa durante la lectura compartida, ofreciendo oportunidades para que el niño exprese intereses e ideas mediante miradas, gestos, sonidos o palabras.",
@@ -403,6 +416,8 @@ window.CEC.data = (function () {
       duration: "5–10 minutos",
       materialsId: "casa",
       strategyIds: ["responde-e-imita", "amplia-su-mensaje"],
+      image: image("actividad-bolsa-sorpresa.png", 1536, 1024),
+      imageAlt: "Una mamá y su hijo exploran juntos objetos sacados de una bolsa sorpresa.",
       objective:
         "Promover el reconocimiento y el uso de vocabulario cotidiano mediante la exploración compartida de objetos familiares, sus características y sus funciones.",
       materials: [
@@ -447,6 +462,8 @@ window.CEC.data = (function () {
       duration: "5 minutos",
       materialsId: "casa",
       strategyIds: ["apoya-la-comprension"],
+      image: image("actividad-donde-esta.png", 1536, 1024),
+      imageAlt: "Un niño con lupa busca un juguete escondido durante el juego.",
       objective:
         "Acompañar la comprensión de palabras e indicaciones sencillas mediante el juego de buscar un objeto, utilizando apoyos visuales y gestuales cuando sean útiles.",
       materials: ["Un juguete familiar y una tela o recipiente grande."],
@@ -490,6 +507,8 @@ window.CEC.data = (function () {
       duration: "5–10 minutos",
       materialsId: "casa",
       strategyIds: ["comparte-los-turnos"],
+      image: image("actividad-construimos-juntos.png", 1536, 1024),
+      imageAlt: "Una mamá y su hijo construyen juntos con bloques de colores.",
       objective:
         "Favorecer los turnos comunicativos y el intercambio durante una construcción compartida, comentando acciones, cambios y resultados del juego.",
       materials: [
@@ -535,6 +554,8 @@ window.CEC.data = (function () {
       duration: "2–5 minutos",
       materialsId: "casa",
       strategyIds: ["organiza-el-ambiente", "espera-y-dale-espacio"],
+      image: image("actividad-elegimos-la-merienda.png", 1536, 1024),
+      imageAlt: "Una mamá y su hijo eligen frutas juntos en la mesa de merienda.",
       objective:
         "Ofrecer oportunidades cotidianas para expresar elecciones, preferencias o necesidades mediante miradas, gestos, sonidos o palabras durante una merienda habitual.",
       materials: ["Dos opciones de alimentos habituales y seguros para el niño, presentadas por el adulto."],
@@ -577,6 +598,8 @@ window.CEC.data = (function () {
       duration: "5 minutos",
       materialsId: "casa",
       strategyIds: ["modela-el-lenguaje", "apoya-la-comprension"],
+      image: image("actividad-que-hacemos-despues.png", 1536, 1024),
+      imageAlt: "Una mamá y su hijo eligen juntos la próxima aventura con tarjetas ilustradas.",
       objective:
         "Apoyar la comprensión y anticipación de los pasos de una rutina conocida, usando lenguaje sencillo, objetos o imágenes como apoyos.",
       materials: ["Dos o tres imágenes de una rutina conocida o los propios objetos de la rutina."],

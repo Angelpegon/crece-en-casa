@@ -1,4 +1,4 @@
-/* Cada día, una oportunidad: lista con flujo inline Mirarlo / Hacerlo / Otro momento. */
+/* Cada día, una oportunidad: lista con flujo inline Ver / Explorar / Dejar para otro momento. */
 (function () {
   const { data, ui, progress } = window.CEC;
   const root = document.querySelector("[data-challenges]");
@@ -267,7 +267,7 @@
           ${rememberBlock(challenge)}
           ${relatedBlock(challenge)}
           <div class="opp-item__actions opp-reveal" style="--opp-delay:0.24s">
-            <button class="btn" type="button" data-opp-hacer="${esc(challenge.id)}"><span aria-hidden="true">▶</span> Hacerlo ahora</button>
+            <button class="btn" type="button" data-opp-hacer="${esc(challenge.id)}"><span aria-hidden="true">▶</span> Explorar qué harías</button>
             <button class="btn btn--outline" type="button" data-opp-close-panel>Cerrar</button>
           </div>
         </div>`;
@@ -317,9 +317,9 @@
           <p class="opp-item__intro">${esc(challenge.intro || challenge.situation)}</p>
           <div class="opp-item__tags">${previewChips(challenge)}</div>
           <div class="opp-item__ctas">
-            <button class="btn btn--outline" type="button" data-opp-ver="${esc(challenge.id)}"><span aria-hidden="true">👀</span> Mirarlo</button>
-            <button class="btn" type="button" data-opp-hacer="${esc(challenge.id)}"><span aria-hidden="true">▶</span> Hacerlo ahora</button>
-            <button class="btn btn--outline" type="button" data-opp-later="${esc(challenge.id)}"><span aria-hidden="true">🔖</span> Otro momento</button>
+            <button class="btn btn--outline" type="button" data-opp-ver="${esc(challenge.id)}"><span aria-hidden="true">👀</span> Ver cómo acompañar</button>
+            <button class="btn" type="button" data-opp-hacer="${esc(challenge.id)}"><span aria-hidden="true">▶</span> Explorar qué harías</button>
+            <button class="btn btn--outline" type="button" data-opp-later="${esc(challenge.id)}"><span aria-hidden="true">🔖</span> Dejar para otro momento</button>
           </div>
         </div>
         <div class="opp-item__body" ${open ? "" : "inert"}>
