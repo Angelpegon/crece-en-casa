@@ -1,152 +1,127 @@
-/* Lista de Ideas que acompañan: acordeón en móvil; todas abiertas en desktop. */
-(function () {
-  const { data, ui } = window.CEC;
+(() => {
+  const { data, ui, progress } = window.CEC;
   const root = document.querySelector("[data-strategies]");
-  if (!root || !data || !ui) return;
+  if (!root || !data?.strategies?.length) return;
 
-  const esc = ui.escapeHTML;
-  const FAV_KEY = "crece-en-casa:ideas-favoritas";
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const desktopMq = window.matchMedia("(min-width: 64em)");
-  let desktopOpen = desktopMq.matches;
-  let openId = "";
   let moreId = "";
+
+  function esc(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
 
   function tipTone(tone) {
     if (tone === "pink" || tone === "coral") return "coral";
-    if (tone === "green" || tone === "sage") return "sage";
-    if (tone === "yellow") return "yellow";
-    if (tone === "lavender") return "lavender";
+    if (tone === "yellow" || tone === "gold") return "yellow";
+    if (tone === "green" || tone === "sage" || tone === "mint") return "sage";
+    if (tone === "lavender" || tone === "sky") return "lavender";
     return "sage";
   }
 
-  function relatedChips(strategy) {
-    const chips = [];
-    (strategy.activityIds || []).forEach((id) => {
-      const activity = data.getActivity(id);
-      if (!activity) return;
-      chips.push(
-        `<a class="idea-item__chip" href="${ui.activityUrl(activity)}">Actividad: ${esc(activity.title)}</a>`
-      );
-    });
-    (strategy.challengeIds || []).forEach((id) => {
-      const challenge = data.getChallenge(id);
-      if (!challenge) return;
-      chips.push(
-        `<a class="idea-item__chip" href="${ui.challengeUrl(challenge)}">Oportunidad: ${esc(challenge.title)}</a>`
-      );
-    });
-    if (!chips.length) return "";
-    return `
-      <div class="idea-item__block idea-item__reveal" style="--idea-delay:0.14s">
-        <h4 class="idea-item__label">Relacionado</h4>
-        <div class="idea-item__chips">${chips.join("")}</div>
-      </div>`;
-  }
-
-  function readFavorites() {
-    try {
-      const raw = JSON.parse(localStorage.getItem(FAV_KEY) || "[]");
-      return Array.isArray(raw) ? raw.map(String) : [];
-    } catch (error) {
-      return [];
-    }
-  }
-
-  function writeFavorites(ids) {
-    try {
-      localStorage.setItem(FAV_KEY, JSON.stringify(ids));
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  function favoritesAvailable() {
-    try {
-      localStorage.getItem(FAV_KEY);
-      return true;
-    } catch (error) {
-      return false;
-    }
+  function canSave() {
+    return !!(progress && typeof progress.isAvailable === "function" && progress.isAvailable());
   }
 
   function isSaved(id) {
-    return readFavorites().includes(String(id));
+    if (!canSave()) return false;
+    const entry = progress.get("strategy", id);
+    return !!(entry && entry.state);
   }
 
-  function toggleFavorite(id) {
-    const key = String(id);
-    const ids = readFavorites();
-    const index = ids.indexOf(key);
-    if (index > -1) ids.splice(index, 1);
-    else ids.push(key);
-    return writeFavorites(ids) ? ids.includes(key) : null;
+  function toggleSaved(id) {
+    if (!canSave()) return null;
+    if (isSaved(id)) {
+      const ok = progress.remove("strategy", id);
+      return ok ? false : null;
+    }
+    const ok = progress.set("strategy", id, { state: "explored" });
+    return ok ? true : null;
   }
 
   function saveButton(strategy) {
-    if (!favoritesAvailable()) {
-      return `<button class="btn btn--outline" type="button" disabled>Guardar no disponible</button>`;
-    }
+    if (!canSave()) return "";
     const saved = isSaved(strategy.id);
-    return `
-      <button
-        class="btn ${saved ? "btn--sage idea-item__save is-saved" : "btn--outline idea-item__save"}"
-        type="button"
-        data-idea-save="${esc(strategy.id)}"
-        aria-pressed="${saved ? "true" : "false"}"
-      >${saved ? "♥ Idea guardada" : "♡ Guardar idea"}</button>`;
+    return `<button
+      class="btn ${saved ? "btn--sage is-saved" : "btn--outline"}"
+      type="button"
+      data-idea-save="${esc(strategy.id)}"
+      aria-pressed="${saved ? "true" : "false"}"
+    >${saved ? "♥ Idea guardada" : "♡ Guardar idea"}</button>`;
+  }
+
+  function relatedChips(strategy) {
+    const related = (strategy.activityIds || strategy.relatedActivityIds || [])
+      .map((id) => data.activities.find((activity) => activity.id === id))
+      .filter(Boolean)
+      .slice(0, 3);
+    if (!related.length) return "";
+    return `<div class="idea-item__related idea-item__reveal" style="--idea-delay:0.14s">
+      <h4 class="idea-item__label">Actividades relacionadas</h4>
+      <div class="idea-item__chips">
+        ${related
+          .map(
+            (activity) =>
+              `<a class="idea-item__chip" href="${ui.activityUrl(activity)}">${esc(activity.title)}</a>`
+          )
+          .join("")}
+      </div>
+    </div>`;
   }
 
   function renderItem(strategy) {
     const tone = tipTone(strategy.tone);
+    const media = strategy.cardImage
+      ? `<div class="idea-item__media" aria-hidden="true">
+           <img class="idea-item__art" src="${esc(strategy.cardImage)}" alt="" width="520" height="360" loading="lazy" decoding="async">
+         </div>`
+      : "";
+    const badge = strategy.icon
+      ? `<img class="idea-item__badge-img" src="${esc(strategy.icon)}" alt="" width="44" height="44" decoding="async">`
+      : strategy.emoji || strategy.number;
+
     return `
       <li class="idea-item idea-item--${tone}" data-idea-id="${esc(strategy.id)}">
-        <button
-          class="idea-item__head"
-          type="button"
-          data-idea-toggle="${esc(strategy.id)}"
-          aria-expanded="false"
-          aria-controls="idea-panel-${esc(strategy.id)}"
-          id="idea-head-${esc(strategy.id)}"
-        >
-          <span class="idea-item__badge" aria-hidden="true">${
-            strategy.icon
-              ? `<img class="idea-item__badge-img" src="${esc(strategy.icon)}" alt="" width="44" height="44" decoding="async">`
-              : strategy.emoji || strategy.number
-          }</span>
-          <span class="idea-item__head-copy">
-            <span class="idea-item__eyebrow">Idea ${strategy.number} de ${data.strategies.length} · Estrategia para el día a día</span>
-            <span class="idea-item__title">${esc(strategy.title)}</span>
-          </span>
-          <span class="idea-item__chevron" aria-hidden="true"></span>
-        </button>
-        <div
-          class="idea-item__body"
-          id="idea-panel-${esc(strategy.id)}"
-          role="region"
-          aria-labelledby="idea-head-${esc(strategy.id)}"
-          inert
-        >
-          <div class="idea-item__body-inner">
-            <div class="idea-item__block idea-item__reveal" style="--idea-delay:0.06s">
-              <h4 class="idea-item__label">Qué hacer</h4>
-              <p>${esc(strategy.what)}</p>
+        <div class="idea-item__layout">
+          <div class="idea-item__main">
+            <div class="idea-item__head" id="idea-head-${esc(strategy.id)}">
+              <span class="idea-item__badge" aria-hidden="true">${badge}</span>
+              <span class="idea-item__head-copy">
+                <span class="idea-item__eyebrow">Idea ${strategy.number} de ${data.strategies.length} · Estrategia para el día a día</span>
+                <h3 class="idea-item__title">${esc(strategy.title)}</h3>
+              </span>
             </div>
-            <div class="idea-item__block idea-item__reveal" style="--idea-delay:0.12s">
-              <h4 class="idea-item__label">Ejemplo</h4>
-              <p class="idea-item__example">${esc(strategy.example)}</p>
+            <div class="idea-item__preview">
+              <div class="idea-item__block">
+                <h4 class="idea-item__label">Qué hacer</h4>
+                <p>${esc(strategy.what)}</p>
+              </div>
+              <div class="idea-item__block">
+                <h4 class="idea-item__label">Ejemplo</h4>
+                <p class="idea-item__example">${esc(strategy.example)}</p>
+              </div>
+              <div class="idea-item__actions">
+                <button
+                  class="btn btn--sage"
+                  type="button"
+                  data-idea-more-toggle="${esc(strategy.id)}"
+                  aria-expanded="false"
+                  aria-controls="idea-more-${esc(strategy.id)}"
+                >Ver más ${ui.icon("i-arrow")}</button>
+                ${saveButton(strategy)}
+              </div>
             </div>
-            <div class="idea-item__actions idea-item__reveal" style="--idea-delay:0.18s">
-              <button
-                class="btn btn--outline"
-                type="button"
-                data-idea-more-toggle="${esc(strategy.id)}"
-                aria-expanded="false"
-              >Ver más</button>
-              ${saveButton(strategy)}
-            </div>
-            <div class="idea-item__more" data-idea-more inert>
+            <div
+              class="idea-item__more"
+              id="idea-more-${esc(strategy.id)}"
+              data-idea-more
+              role="region"
+              aria-labelledby="idea-head-${esc(strategy.id)}"
+              inert
+            >
               <div class="idea-item__more-inner">
                 <div class="idea-item__block idea-item__reveal" style="--idea-delay:0.06s">
                   <h4 class="idea-item__label">Pista rápida</h4>
@@ -164,33 +139,26 @@
               </div>
             </div>
           </div>
+          ${media}
         </div>
       </li>`;
   }
 
   function animateHeight(panel, open) {
     if (!panel) return;
-
     if (reduceMotion) {
-      panel.classList.remove("is-animating");
-      panel.ontransitionend = null;
       panel.style.height = open ? "auto" : "0px";
+      panel.classList.remove("is-animating");
       return;
     }
 
-    const from = panel.getBoundingClientRect().height;
     panel.ontransitionend = null;
-    panel.style.height = `${from}px`;
     panel.classList.add("is-animating");
 
     if (open) {
-      panel.style.height = "auto";
-      const to = panel.scrollHeight;
-      panel.style.height = `${from}px`;
+      panel.style.height = "0px";
       void panel.offsetHeight;
-      requestAnimationFrame(() => {
-        panel.style.height = `${to}px`;
-      });
+      panel.style.height = `${panel.scrollHeight}px`;
       panel.ontransitionend = (event) => {
         if (event.target !== panel || event.propertyName !== "height") return;
         panel.classList.remove("is-animating");
@@ -200,10 +168,9 @@
       return;
     }
 
+    panel.style.height = `${panel.scrollHeight}px`;
     void panel.offsetHeight;
-    requestAnimationFrame(() => {
-      panel.style.height = "0px";
-    });
+    panel.style.height = "0px";
     panel.ontransitionend = (event) => {
       if (event.target !== panel || event.propertyName !== "height") return;
       panel.classList.remove("is-animating");
@@ -212,42 +179,16 @@
     };
   }
 
-  function isItemOpen(id) {
-    return desktopOpen || openId === id;
-  }
-
   function syncUi({ animate = true } = {}) {
-    root.classList.toggle("idea-list--desktop", desktopOpen);
-
     root.querySelectorAll(".idea-item").forEach((item) => {
       const id = item.getAttribute("data-idea-id");
-      const open = isItemOpen(id);
       const moreOpen = moreId === id;
-      const wasOpen = item.classList.contains("is-open");
       const wasMore = item.classList.contains("is-more");
-      const head = item.querySelector("[data-idea-toggle]");
-      const body = item.querySelector(".idea-item__body");
       const more = item.querySelector("[data-idea-more]");
       const moreBtn = item.querySelector("[data-idea-more-toggle]");
 
-      item.classList.toggle("is-open", open);
       item.classList.toggle("is-more", moreOpen);
 
-      if (head) {
-        head.setAttribute("aria-expanded", open ? "true" : "false");
-        if (desktopOpen) {
-          head.setAttribute("aria-disabled", "true");
-          head.tabIndex = -1;
-        } else {
-          head.removeAttribute("aria-disabled");
-          head.removeAttribute("tabindex");
-        }
-      }
-
-      if (body) {
-        if (open) body.removeAttribute("inert");
-        else body.setAttribute("inert", "");
-      }
       if (more) {
         if (moreOpen) more.removeAttribute("inert");
         else more.setAttribute("inert", "");
@@ -255,42 +196,20 @@
 
       if (moreBtn) {
         moreBtn.setAttribute("aria-expanded", moreOpen ? "true" : "false");
-        moreBtn.textContent = moreOpen ? "Ver menos" : "Ver más";
+        moreBtn.innerHTML = moreOpen
+          ? `Ver menos ${ui.icon("i-arrow")}`
+          : `Ver más ${ui.icon("i-arrow")}`;
       }
 
       if (!animate) {
-        if (body) body.style.height = open ? "auto" : "0px";
         if (more) more.style.height = moreOpen ? "auto" : "0px";
         return;
       }
 
-      if (open !== wasOpen && body) {
-        if (!open && more && wasMore) more.style.height = "0px";
-        animateHeight(body, open);
-      }
-
       if (moreOpen !== wasMore && more) {
-        if (moreOpen && body && body.style.height !== "auto" && open) {
-          body.style.height = "auto";
-          body.classList.remove("is-animating");
-          body.ontransitionend = null;
-        }
         animateHeight(more, moreOpen);
       }
     });
-  }
-
-  function applyViewportMode({ animate = false } = {}) {
-    const nextDesktop = desktopMq.matches;
-    if (nextDesktop === desktopOpen) return;
-    desktopOpen = nextDesktop;
-    if (desktopOpen) {
-      openId = "";
-    } else {
-      openId = "";
-      moreId = "";
-    }
-    syncUi({ animate });
   }
 
   function mount() {
@@ -299,31 +218,10 @@
   }
 
   root.addEventListener("click", (event) => {
-    const toggle = event.target.closest("[data-idea-toggle]");
-    if (toggle) {
-      if (desktopOpen) return;
-      const id = toggle.getAttribute("data-idea-toggle");
-      const closing = openId === id;
-      if (closing) {
-        openId = "";
-        moreId = "";
-      } else {
-        openId = id;
-        moreId = "";
-      }
-      syncUi();
-      if (!closing && !reduceMotion) {
-        const item = root.querySelector(`[data-idea-id="${CSS.escape(id)}"]`);
-        item?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      }
-      return;
-    }
-
     const moreToggle = event.target.closest("[data-idea-more-toggle]");
     if (moreToggle) {
       const id = moreToggle.getAttribute("data-idea-more-toggle");
       moreId = moreId === id ? "" : id;
-      if (moreId && !desktopOpen) openId = id;
       syncUi();
       return;
     }
@@ -331,8 +229,8 @@
     const saveBtn = event.target.closest("[data-idea-save]");
     if (saveBtn) {
       const id = saveBtn.getAttribute("data-idea-save");
-      if (!id || !favoritesAvailable()) return;
-      const nextSaved = toggleFavorite(id);
+      if (!id || !canSave()) return;
+      const nextSaved = toggleSaved(id);
       if (nextSaved === null) return;
       saveBtn.classList.toggle("btn--sage", nextSaved);
       saveBtn.classList.toggle("btn--outline", !nextSaved);
@@ -341,12 +239,6 @@
       saveBtn.textContent = nextSaved ? "♥ Idea guardada" : "♡ Guardar idea";
     }
   });
-
-  if (typeof desktopMq.addEventListener === "function") {
-    desktopMq.addEventListener("change", () => applyViewportMode({ animate: false }));
-  } else if (typeof desktopMq.addListener === "function") {
-    desktopMq.addListener(() => applyViewportMode({ animate: false }));
-  }
 
   root.classList.add("idea-list");
   root.classList.remove("tip-grid", "tip-grid--three");

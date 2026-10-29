@@ -12,46 +12,53 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
   <link rel="stylesheet" href="css/styles.css?v=wave1">
-  <link rel="stylesheet" href="css/pages.css?v=wave1">
+  <link rel="stylesheet" href="css/pages.css?v=ideas5">
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <header class="site-header" data-site-header></header>
 
   <main id="contenido">
-    <section class="page-hero page-hero--coral" aria-labelledby="page-title">
-      <div class="container">
-        <nav class="breadcrumb" aria-label="Ruta de navegación">
-          <ol>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="ver-la-guia.html">Guía para cuidadores</a></li>
-            <li aria-current="page">Ideas que acompañan</li>
-          </ol>
-        </nav>
-        <h1 id="page-title">Ideas que acompañan</h1>
-        <p class="page-hero__lead">
-          Ocho ideas para acompañar la comunicación en la vida diaria.
-          Abre una, mira el ejemplo y pruébala cuando les venga bien.
-        </p>
-      </div>
-    </section>
+    <section class="ideas-page" aria-labelledby="page-title">
+      <div class="container ideas-page__stack">
+        <header class="ideas-hero">
+          <nav class="breadcrumb" aria-label="Ruta de navegación">
+            <ol>
+              <li><a href="index.html">Inicio</a></li>
+              <li><a href="ver-la-guia.html">Guía para cuidadores</a></li>
+              <li aria-current="page">Ideas que acompañan</li>
+            </ol>
+          </nav>
+          <h1 id="page-title" class="visually-hidden">Ideas que acompañan</h1>
+          <div class="ideas-hero__banner">
+            <img
+              class="ideas-hero__art"
+              src="assets/img/temporal/ideas-banner.png?v=ideas6"
+              width="2058"
+              height="764"
+              alt="Ideas que acompañan: ocho ideas para acompañar la comunicación en la vida diaria. Abre una, mira el ejemplo y pruébala cuando les venga bien."
+              decoding="async"
+              fetchpriority="high">
+          </div>
+        </header>
 
-    <section class="section" aria-labelledby="lista-title">
-      <div class="container">
-        <h2 class="visually-hidden" id="lista-title">Lista de ideas</h2>
-        <ul class="idea-list" data-strategies></ul>
-        <noscript>
-          <p class="notice notice--warm">Para ver las ideas necesitas activar JavaScript en tu navegador.</p>
-        </noscript>
+        <section class="ideas-list-section" aria-labelledby="lista-title">
+          <h2 class="visually-hidden" id="lista-title">Lista de ideas</h2>
+          <ul class="idea-list" data-strategies></ul>
+          <noscript>
+            <p class="notice notice--warm">Para ver las ideas necesitas activar JavaScript en tu navegador.</p>
+          </noscript>
+        </section>
       </div>
     </section>
   </main>
 
   <footer class="site-footer" data-site-footer></footer>
-  <script src="js/data.js?v=wave1" defer></script>
+  <script src="js/data.js?v=ideas4" defer></script>
+  <script src="js/progress.js?v=wave1" defer></script>
   <script src="js/ui.js?v=wave1" defer></script>
   <script src="js/chrome.js?v=wave1" defer></script>
   <script src="js/main.js?v=wave1" defer></script>
-  <script src="js/ideas.js?v=wave1" defer></script>
+  <script src="js/ideas.js?v=ideas4" defer></script>
 </body>
 </html>

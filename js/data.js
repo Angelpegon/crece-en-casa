@@ -16,6 +16,10 @@ window.CEC.data = (function () {
     return STICKER + file;
   }
 
+  function ideaArt(file) {
+    return "assets/img/ideas/" + file + "?v=ideas4";
+  }
+
   const ages = [
     { value: 2, label: "2 años", tagline: "Descubrir y expresar", tone: "pink", image: image("edad-2.jpeg", 220, 180) },
     { value: 3, label: "3 años", tagline: "Nombrar y comprender", tone: "yellow", image: image("edad-3.jpeg", 220, 180) },
@@ -78,6 +82,7 @@ window.CEC.data = (function () {
       number: 1,
       emoji: "🧸📚🍎",
       icon: sticker("pila-libros.png"),
+      cardImage: ideaArt("organiza-el-ambiente.png"),
       title: "Organiza el ambiente",
       what: "Deja a la vista juguetes, cuentos o alimentos que le gusten, pero un poco fuera de su alcance, para que tenga motivos para comunicarse contigo. Sin llegar a frustrarlo.",
       example: "Pones la pelota en una repisa que ve pero no alcanza. Si la mira o señala, respondes: «La pelota. ¿Te la doy?».",
@@ -93,6 +98,7 @@ window.CEC.data = (function () {
       number: 2,
       emoji: "🚗👀",
       icon: sticker("diana.png"),
+      cardImage: ideaArt("sigue-su-interes.png"),
       title: "Sigue su interés",
       what: "Observa qué mira, señala o intenta alcanzar. Únete a ese interés y comenta lo que ocurre.",
       example: "«¡Un carro rojo! Va rápido».",
@@ -106,6 +112,7 @@ window.CEC.data = (function () {
       number: 3,
       emoji: "👏🥄",
       icon: sticker("burbuja-chat.png"),
+      cardImage: ideaArt("responde-e-imita.png"),
       title: "Responde e imita",
       what: "Responde a sus gestos, sonidos y palabras como si fueran mensajes. Puedes imitar lo que hace o dice para animarlo a continuar.",
       example: "Si golpea la mesa con la cuchara, golpea tú también y di «Pum, pum».",
@@ -119,6 +126,7 @@ window.CEC.data = (function () {
       number: 4,
       emoji: "⏳🙂",
       icon: sticker("sol.png"),
+      cardImage: ideaArt("espera-y-dale-espacio.png"),
       title: "Espera y dale espacio",
       what: "Después de comentar, haz una pausa para que pueda responder con gestos, sonidos o palabras.",
       example: "Rueda una pelota, detente un momento y observa si pide continuar.",
@@ -134,6 +142,7 @@ window.CEC.data = (function () {
       number: 5,
       emoji: "🧦👟",
       icon: sticker("pregunta.png"),
+      cardImage: ideaArt("apoya-la-comprension.png"),
       title: "Apoya la comprensión",
       what: "Usa mensajes claros y, cuando sea útil, acompáñalos de gestos u objetos visibles.",
       example: "«Busca los zapatos», señalando dónde están.",
@@ -147,6 +156,7 @@ window.CEC.data = (function () {
       number: 6,
       emoji: "💬🍼",
       icon: sticker("libro-abierto.png"),
+      cardImage: ideaArt("modela-el-lenguaje.png"),
       title: "Modela el lenguaje",
       what: "Ofrece palabras o frases sencillas relacionadas con lo que está mirando o haciendo, sin exigir repetición.",
       example: "Si señala agua, di «Quieres agua».",
@@ -160,6 +170,7 @@ window.CEC.data = (function () {
       number: 7,
       emoji: "🐶➕",
       icon: sticker("burbuja-corazon.png"),
+      cardImage: ideaArt("amplia-su-mensaje.png"),
       title: "Amplía su mensaje",
       what: "Retoma lo que comunica y añade una palabra o idea sin cambiar el sentido.",
       example: "Dice «perro»; respondes «Sí, un perro grande».",
@@ -173,6 +184,7 @@ window.CEC.data = (function () {
       number: 8,
       emoji: "🧱🤝",
       icon: sticker("bloques.png"),
+      cardImage: ideaArt("comparte-los-turnos.png"),
       title: "Comparte los turnos",
       what: "Responde a sus iniciativas y deja espacio para que ambos participen.",
       example: "Cada uno añade un bloque y comenta lo que construyen.",
