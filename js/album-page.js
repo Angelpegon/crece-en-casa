@@ -135,21 +135,22 @@
                 <li aria-current="page">Mi álbum</li>
               </ol>
             </nav>
-            <h1 id="page-title" class="visually-hidden">Mi álbum de momentos</h1>
-            <div class="album-banner__frame">
-              <img
-                class="album-banner__art"
-                src="assets/img/album-banner.jpg"
-                width="1536"
-                height="1024"
-                alt="Mi álbum de momentos. Lo pequeño también florece. Un gesto, una palabra, una mirada compartida. Guarda esos instantes que cuentan la historia de cómo se comunican y crecen juntos."
-                decoding="async"
-                fetchpriority="high"
-              >
-              <div class="album-banner__tags">
-                <span>♡ Recuerdos reales</span>
-                <span>✳ A tu ritmo</span>
-                <span>↗ Sin tareas</span>
+            <div class="banner banner--plate banner--album">
+              <div class="banner__body">
+                <h1 class="banner__title" id="page-title">Mi álbum <span class="banner__accent">de momentos</span></h1>
+                <p class="banner__kicker">Lo pequeño también florece</p>
+                <p class="banner__lead">
+                  Un gesto, una palabra, una mirada compartida. Guarda esos instantes que cuentan la historia
+                  de cómo se comunican y crecen juntos.
+                </p>
+                <ul class="banner__tags">
+                  <li>♡ Recuerdos reales</li>
+                  <li>✳ A tu ritmo</li>
+                  <li>↗ Sin tareas</li>
+                </ul>
+              </div>
+              <div class="banner__media">
+                <img class="banner__art" src="assets/img/banners/album-plate.webp" width="1536" height="780" alt="" decoding="async" fetchpriority="high">
               </div>
             </div>
           </section>

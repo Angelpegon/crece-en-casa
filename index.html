@@ -33,8 +33,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
-    <link rel="stylesheet" href="css/styles.css?v=wave1">
-    <link rel="stylesheet" href="css/home.css?v=wave4">
+    <link rel="stylesheet" href="css/styles.css?v=banner13">
+    <link rel="stylesheet" href="css/home.css?v=banner16">
 </head>
 
 <body>
@@ -43,28 +43,78 @@
 
     <main id="contenido">
         <section class="hero hero--inicio" aria-labelledby="hero-title">
-            <div class="container hero__banner">
-                <img class="hero__banner-img"
-                    src="assets/img/temporal/momentos-que-construyen-lenguaje.png"
-                    width="2164" height="727"
-                    alt="Una mamá y su hija juegan con bloques. El lenguaje sucede en cada momento compartido en casa."
-                    fetchpriority="high">
-
-                <div class="hero__content">
-                    <h1 class="hero__title" id="hero-title">
-                        Pequeñas<br>
-                        acciones,<br>
-                        grandes<br>
-                        <span class="rainbow-text">conversaciones</span>
-                    </h1>
+            <div class="container">
+                <div class="banner banner--plate banner--inicio">
+                    <div class="banner__body">
+                        <h1 class="banner__title hero__title" id="hero-title">
+                            Pequeñas<br class="hero-br"> acciones,<br class="hero-br"> grandes<br class="hero-br"> <span class="rainbow-text">conversaciones</span>
+                        </h1>
+                        <p class="banner__lead">
+                            Transforma los momentos cotidianos en<br class="hero-br"> oportunidades para comunicarte, jugar<br class="hero-br"> y crecer junto a tu pequeño.
+                        </p>
+                        <a class="btn btn--sage banner__cta hero__cta" href="experiencias.html">
+                            ¿Qué podemos descubrir hoy?
+                            <svg class="icon" aria-hidden="true" focusable="false">
+                                <use href="assets/icons/sprite.svg#i-arrow"></use>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="banner__media">
+                        <img class="banner__art banner__art--wide" src="assets/img/banners/inicio-plate.webp" width="2164" height="727" alt="" fetchpriority="high">
+                        <img class="banner__art banner__art--narrow" src="assets/img/banners/inicio.webp" width="715" height="727"
+                            alt="Una mamá y su hija juegan con bloques de colores." fetchpriority="high">
+                    </div>
+                    <ul class="hero-trust">
+                        <li>
+                            <svg class="hero-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <circle cx="12" cy="9" r="6" />
+                                <path d="m12 6 .9 1.9 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2-1.5-1.4 2-.3z" />
+                                <path d="m8.5 14 -1.5 7 5-2.5 5 2.5-1.5-7" />
+                            </svg>
+                            Técnicas comprobadas
+                        </li>
+                        <li>
+                            <svg class="hero-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <rect x="5" y="10.5" width="14" height="10" rx="2.5" />
+                                <path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" />
+                                <path d="M12 14.5v2" />
+                            </svg>
+                            Contenido seguro y guiado
+                        </li>
+                        <li>
+                            <svg class="hero-trust__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.4 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z" />
+                                <path d="m9 12.5 2.2 2 4-4.5" />
+                            </svg>
+                            Un espacio pensado para tu familia
+                        </li>
+                    </ul>
+                    <div class="hero-aside">
+                        <div class="hero-aside__bubble">
+                            <p class="hero-aside__title">El lenguaje sucede</p>
+                            <p class="hero-aside__text">en cada mirada, en cada juego y en cada momento compartido en casa.</p>
+                            <img class="hero-aside__fox" src="assets/img/banners/inicio-zorro.webp" width="262" height="250" alt="" decoding="async">
+                        </div>
+                        <ul class="hero-aside__list">
+                            <li><img src="assets/img/stickers/brote.png" width="22" height="22" alt="" decoding="async">Actividades que estimulan</li>
+                            <li><img src="assets/img/stickers/estrella-amarilla.png" width="22" height="22" alt="" decoding="async">Estrategias didácticas</li>
+                            <li>
+                                <svg class="hero-aside__icon hero-aside__icon--video" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <rect x="2.5" y="4.5" width="19" height="15" rx="3.5" />
+                                    <path d="m10 9 5 3-5 3z" fill="#fff" />
+                                </svg>
+                                Recursos en video
+                            </li>
+                            <li>
+                                <svg class="hero-aside__icon hero-aside__icon--community" aria-hidden="true" focusable="false">
+                                    <use href="assets/icons/sprite.svg#i-community"></use>
+                                </svg>
+                                Comunidad de familias
+                            </li>
+                            <li><img src="assets/img/stickers/corazon.png" width="22" height="22" alt="" decoding="async">Mi Camino: agenda personalizada</li>
+                        </ul>
+                    </div>
                 </div>
-
-                <a class="btn btn--sage hero__cta" href="experiencias.html">
-                    ¿Qué podemos descubrir hoy?
-                    <svg class="icon" aria-hidden="true" focusable="false">
-                        <use href="assets/icons/sprite.svg#i-arrow"></use>
-                    </svg>
-                </a>
             </div>
         </section>
 

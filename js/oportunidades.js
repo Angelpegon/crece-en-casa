@@ -126,8 +126,12 @@
   function sceneBlock(challenge) {
     if (!challenge.scene) return "";
     return `
-      <div class="opp-scene" aria-hidden="true">
-        <div class="opp-scene__emoji">${challenge.scene}</div>
+      <div class="opp-scene${challenge.sceneImage ? " opp-scene--image" : ""}" aria-hidden="true">
+        ${
+          challenge.sceneImage
+            ? `<img class="opp-scene__img" src="${esc(challenge.sceneImage.src)}" width="${challenge.sceneImage.width}" height="${challenge.sceneImage.height}" alt="">`
+            : `<div class="opp-scene__emoji">${challenge.scene}</div>`
+        }
         ${
           challenge.sceneCaption
             ? `<div class="opp-scene__caption">${esc(challenge.sceneCaption)}</div>`
@@ -259,7 +263,6 @@
     if (mode === "ver") {
       return `
         <div class="opp-item__flow">
-          ${sceneBlock(challenge)}
           <p class="opp-item__situation opp-reveal" style="--opp-delay:0.02s">${esc(challenge.situation)}</p>
           ${optionsReadOnly(challenge)}
           ${ideaBlock(challenge)}
@@ -276,7 +279,6 @@
     const chosen = challenge.options.find((option) => option.id === choiceId);
     return `
       <div class="opp-item__flow">
-        ${sceneBlock(challenge)}
         <p class="opp-item__situation opp-reveal" style="--opp-delay:0.02s">${esc(challenge.situation)}</p>
         ${optionsInteractive(challenge)}
         ${
@@ -313,7 +315,7 @@
           </div>
           <h3 class="opp-item__title">${esc(challenge.title)}</h3>
           <p class="opp-item__hook"><span class="opp-item__hook-ico" aria-hidden="true">💭</span> ${esc(challenge.hook || challenge.question)}</p>
-          ${!open ? sceneBlock(challenge) : ""}
+          ${sceneBlock(challenge)}
           <p class="opp-item__intro">${esc(challenge.intro || challenge.situation)}</p>
           <div class="opp-item__tags">${previewChips(challenge)}</div>
           <div class="opp-item__ctas">

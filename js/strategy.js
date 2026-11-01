@@ -90,32 +90,50 @@
     return "lavender";
   }
 
+  /* Cabecera ilustrada: el arte de la idea (o su imagen de tarjeta) va abajo a la derecha
+     y el texto encima a la izquierda. */
+  function ideaHero(strategy) {
+    const art = strategy.bannerArt;
+    const media = art
+      ? `<img class="idea-hero__art" src="${esc(art.src)}" width="${art.width}" height="${art.height}" alt="" decoding="async" fetchpriority="high">`
+      : `<img class="idea-hero__art idea-hero__art--card" src="${esc(strategy.cardImage)}" alt="" decoding="async">`;
+    return `
+      <header class="idea-hero idea-hero--${heroTone(strategy.tone)}${art ? " idea-hero--banner" : ""}">
+        <div class="idea-hero__body">
+          <p class="idea-hero__eyebrow">Idea ${strategy.number} de ${TOTAL}</p>
+          <h1 id="page-title">${esc(strategy.title)}</h1>
+          ${strategy.lead ? `<p class="idea-hero__lead">${esc(strategy.lead)}</p>` : ""}
+        </div>
+        ${media}
+      </header>`;
+  }
+
   function render(strategy) {
     document.title = `${strategy.title} | Crece en Casa`;
 
     root.innerHTML = `
-      <article class="detail" aria-labelledby="page-title">
-        <header class="page-hero page-hero--${heroTone(strategy.tone)}" aria-labelledby="page-title">
-          <div class="container">
-            ${breadcrumb(strategy.title)}
-            <p class="detail-back">
-              <a class="btn btn--outline detail-back__btn" href="ideas-que-acompanan.html">← Volver a Ideas que acompañan</a>
-            </p>
-            <p class="activity-hero__ages">Idea ${strategy.number} de ${TOTAL}</p>
-            <h1 id="page-title">${esc(strategy.title)}</h1>
-          </div>
-        </header>
+      <article class="detail idea-detail" aria-labelledby="page-title">
+        <div class="container idea-detail__top">
+          <p class="detail-back">
+            <a class="btn btn--outline detail-back__btn" href="ideas-que-acompanan.html">← Volver a Ideas que acompañan</a>
+          </p>
+          ${ideaHero(strategy)}
+        </div>
 
         <div class="container section detail-body">
           <div class="detail-body__main">
-            <section aria-labelledby="que-hacer-title">
-              <h2 id="que-hacer-title">Qué hacer</h2>
-              <p>${esc(strategy.what)}</p>
-            </section>
-            <section aria-labelledby="ejemplo-title">
-              <h2 id="ejemplo-title">Ejemplo</h2>
-              <p>${esc(strategy.example)}</p>
-            </section>
+            <div class="idea-cards">
+              <section class="idea-card idea-card--what" aria-labelledby="que-hacer-title">
+                <span class="idea-card__icon"><img src="assets/img/stickers/bombilla.png" width="40" height="40" alt="" decoding="async"></span>
+                <h2 id="que-hacer-title">Qué hacer</h2>
+                <p>${esc(strategy.what)}</p>
+              </section>
+              <section class="idea-card idea-card--example" aria-labelledby="ejemplo-title">
+                <span class="idea-card__icon"><img src="assets/img/stickers/diana.png" width="40" height="40" alt="" decoding="async"></span>
+                <h2 id="ejemplo-title">Ejemplo</h2>
+                <p>${esc(strategy.example)}</p>
+              </section>
+            </div>
             <section class="note note--static" aria-labelledby="pista-title">
               <h2 class="note__title hand" id="pista-title">Pista rápida</h2>
               <p>${esc(strategy.tip)}</p>
