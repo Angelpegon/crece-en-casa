@@ -17,7 +17,7 @@
     --c-surface: #ffffff;
     --c-ink: #1c3532;
     --c-text: #4b5957;
-    --c-muted: #66726f;
+    --c-muted: #5a6663; /* ≥ 4.5:1 también sobre las tarjetas de color */
     --c-line: #efe6db;
     --c-navy: #23277a;
 
@@ -270,13 +270,14 @@ select {
 }
 
 .btn--coral {
-    background: var(--c-coral-strong);
+    /* Más oscuro que --c-coral-strong para que el texto blanco tenga contraste 4.6:1 */
+    background: #c94a33;
     color: #fff;
     box-shadow: 0 10px 22px -12px rgb(224 94 69 / 0.8);
 }
 
 .btn--coral:hover {
-    background: #cf4f37;
+    background: #b5402b;
 }
 
 .btn--lavender {
@@ -396,11 +397,11 @@ select {
     white-space: normal;
 }
 
+/* Logo con fondo transparente: se muestra completo, sin recorte ni esquinas */
 .brand__mark {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 0.7rem;
-    object-fit: cover;
+    width: 2.75rem;
+    height: 2.75rem;
+    object-fit: contain;
     flex: none;
 }
 
@@ -442,13 +443,13 @@ select {
 }
 
 .btn--sky {
-    background: #5b7fb0;
+    background: #4d6e9a;
     color: #fff;
     box-shadow: 0 10px 22px -12px rgb(91 127 176 / 0.7);
 }
 
 .btn--sky:hover {
-    background: #4d6e9a;
+    background: #415f86;
 }
 
 .header-actions__access {
@@ -1248,7 +1249,7 @@ select {
     .banner--album .banner__accent {
         display: block;
         margin-top: 1.37cqi;
-        color: #ef7c66;
+        color: #e0644c;
         font-size: 0.795em;
         line-height: 1;
         text-indent: 0;
@@ -1385,68 +1386,62 @@ select {
 }
 
 @container (min-width: 46rem) {
+    /* Las 4 tarjetas van como HTML debajo del arte (en el diseño medían ~7px de letra).
+       El cuerpo cubre solo el arte; las tarjetas ocupan la franja inferior del banner. */
+    .banner--experiencias {
+        --exp-cards-h: 5.6rem;
+        padding-bottom: var(--exp-cards-h);
+        background: #fdebd7;
+    }
+
+    .banner--experiencias .banner__body {
+        bottom: var(--exp-cards-h);
+    }
+
     .banner--experiencias .banner__title {
-        top: 12.7%;
+        top: 14%;
         left: 6.98%;
         color: #15384a;
-        font-size: 2.737cqi;
+        font-size: max(1.5rem, 2.9cqi);
         line-height: 1.1;
         white-space: nowrap;
     }
 
     .banner--experiencias .banner__lead {
-        top: 37.2%;
+        top: 48%;
         left: 6.98%;
-        width: 40.5%;
+        width: 40%;
         max-width: none;
         color: #15384a;
-        font-size: 1.2cqi;
+        font-size: max(0.82rem, 1.3cqi);
         font-weight: 500;
-        line-height: 1.115;
+        line-height: 1.3;
     }
 
-    /* Las tarjetas (caja + ícono) ya están en el fondo: aquí solo el texto. */
     .banner--experiencias .exp-features {
-        inset: 0;
-        display: block;
+        top: calc(100% + 0.2rem);
+        left: 1.1rem;
+        right: 1.1rem;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.7rem;
+        margin: 0;
     }
 
     .banner--experiencias .exp-features li {
-        position: absolute;
-        display: block;
-        padding: 0;
-        border-radius: 0;
-        background: none;
-        box-shadow: none;
-    }
-
-    .banner--experiencias .exp-features img {
-        display: none;
-    }
-
-    .banner--experiencias .exp-features strong,
-    .banner--experiencias .exp-features span {
-        position: absolute;
-        left: 0;
-        white-space: nowrap;
+        min-height: 4.4rem;
+        background: rgb(255 255 255 / 0.85);
     }
 
     .banner--experiencias .exp-features strong {
-        top: 0;
-        font-size: 0.81cqi;
+        font-size: 0.92rem;
     }
 
     .banner--experiencias .exp-features span {
-        top: 1.22cqi;
-        font-size: 0.74cqi;
+        font-size: 0.8rem;
     }
 
-    .banner--experiencias .exp-features li:nth-child(1) { left: 6.09%; top: 70.3%; }
-    .banner--experiencias .exp-features li:nth-child(2) { left: 16.87%; top: 70.3%; }
-    .banner--experiencias .exp-features li:nth-child(3) { left: 28.79%; top: 70.3%; }
-    .banner--experiencias .exp-features li:nth-child(4) { left: 40.29%; top: 70.3%; }
-
-    /* La nota (caja, corazón y hoja) también está en el fondo. */
+    /* La nota (caja, corazón y hoja) está dibujada en el fondo: solo el texto encima. */
     .banner--experiencias .exp-note {
         inset: 0;
         padding: 0;
@@ -1469,15 +1464,15 @@ select {
 
     .banner--experiencias .exp-note__title {
         top: 30.7%;
-        font-size: 1.62cqi;
+        font-size: max(0.8rem, 1.62cqi);
         white-space: nowrap;
     }
 
     .banner--experiencias .exp-note__text {
         top: 50%;
-        width: 14%;
-        font-size: 1.14cqi;
-        line-height: 1.16;
+        width: 14.2%;
+        font-size: max(0.68rem, 1.14cqi);
+        line-height: 1.2;
     }
 }
 
@@ -1859,5 +1854,67 @@ select {
         transition-duration: 0.01ms !important;
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
+    }
+}
+
+/* Botón de la tienda en el encabezado, junto a Mi espacio */
+.header-cart {
+    position: relative;
+}
+
+.header-cart[aria-current="page"] {
+    background: var(--c-sage-soft);
+    color: #2f5a4a;
+}
+
+.header-cart__count {
+    position: absolute;
+    top: -0.3rem;
+    right: -0.3rem;
+    display: grid;
+    place-items: center;
+    min-width: 1.2rem;
+    height: 1.2rem;
+    padding: 0 0.25rem;
+    border: 2px solid var(--c-bg);
+    border-radius: var(--radius-pill);
+    background: #c94a33;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.header-cart__count[hidden] {
+    display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .header-cart__count.is-bumped {
+        animation: cart-bump 0.4s cubic-bezier(0.2, 0.85, 0.3, 1);
+    }
+}
+
+@keyframes cart-bump {
+    0% { transform: scale(0.5); }
+    70% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Con el carrito el encabezado móvil tiene un botón más: el nombre no debe partirse en 3 líneas */
+@media (max-width: 63.99em) {
+    .brand__name,
+    .brand__tag {
+        white-space: nowrap;
+    }
+
+    .header-actions {
+        gap: 0.3rem;
+    }
+}
+
+@media (max-width: 24.99em) {
+    .brand__tag {
+        display: none;
     }
 }

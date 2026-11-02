@@ -171,8 +171,10 @@
           </div>
           <aside class="camino-hero__note" aria-label="Pequeñas acciones, grandes conversaciones">
             <span class="camino-hero__note-ico" aria-hidden="true">💛</span>
-            <strong>Pequeñas acciones, grandes conversaciones</strong>
-            <p>Tú también formas parte de la experiencia que vive tu hijo.</p>
+            <div class="camino-hero__note-copy">
+              <strong>Pequeñas acciones, grandes conversaciones</strong>
+              <p>Tú también formas parte de la experiencia que vive tu hijo.</p>
+            </div>
             <a class="camino-hero__note-link" href="ver-la-guia.html" aria-label="Ver la guía para cuidadores">${ui.icon("i-arrow")}</a>
           </aside>
         </section>

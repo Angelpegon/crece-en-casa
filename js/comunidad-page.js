@@ -2,6 +2,7 @@
   const root = document.querySelector("[data-comunidad-root]");
   if (!root) return;
 
+  const ART = "assets/img/comunidad/";
   let posts = [];
   let activeCat = "Todas";
 
@@ -77,10 +78,12 @@
     if (!all.length) {
       list.className = "comunidad-empty";
       list.innerHTML = `
-        <img class="comunidad-empty__sticker" src="assets/img/stickers/hoja.png" alt="" width="56" height="56" decoding="async" aria-hidden="true">
-        <h3>Este espacio está listo para escucharte</h3>
-        <p>Aquí aparecerán las publicaciones que tú y otras familias decidan compartir. Puedes iniciar la conversación cuando quieras.</p>
-        <button class="btn btn--sage" type="button" data-com-open>Subir una publicación</button>`;
+        <img class="comunidad-empty__art" src="${ART}vacio.webp" width="1976" height="396" alt="" decoding="async">
+        <div class="comunidad-empty__body">
+          <h3>${q || activeCat !== "Todas" ? "No encontramos publicaciones" : "Este espacio está listo para escucharte"}</h3>
+          <p>Aquí aparecerán las publicaciones que tú y otras familias decidan compartir. Puedes iniciar la conversación cuando quieras.</p>
+          <button class="btn btn--sage" type="button" data-com-open>Subir una publicación</button>
+        </div>`;
       return;
     }
 
@@ -141,8 +144,9 @@
   }
 
   root.innerHTML = `
-    <section class="page-hero page-hero--sage comunidad-hero" aria-labelledby="page-title">
-      <div class="container">
+    <div class="container comunidad-top">
+    <section class="comunidad-hero" aria-labelledby="page-title">
+      <div class="comunidad-hero__body">
         <nav class="breadcrumb" aria-label="Ruta de navegación">
           <ol>
             <li><a href="index.html">Inicio</a></li>
@@ -151,13 +155,23 @@
         </nav>
         <p class="comunidad-hero__eyebrow">Comunidad Crece en Casa</p>
         <h1 id="page-title">¿Qué te gustaría conversar?</h1>
-        <p class="page-hero__lead">Un espacio para que las familias compartan publicaciones, hagan preguntas y se acompañen en el camino de la comunicación y el lenguaje.</p>
+        <p class="comunidad-hero__lead">Un espacio para que las familias compartan publicaciones, hagan preguntas y se acompañen en el camino de la comunicación y el lenguaje.</p>
       </div>
+      <img class="comunidad-hero__art" src="${ART}hero.webp" width="1968" height="575"
+        alt="Una familia conversa y ríe junta entre plantas y globos de diálogo." fetchpriority="high">
     </section>
+    </div>
 
     <div class="container comunidad-layout">
       <aside class="comunidad-warning" role="note">
-        <span class="comunidad-warning__ico" aria-hidden="true">🛡️</span>
+        <span class="comunidad-warning__badge">
+        <svg class="comunidad-warning__shield" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 2.5 4.5 5.5v6c0 4.6 3.1 8.6 7.5 10 4.4-1.4 7.5-5.4 7.5-10v-6Z" fill="#f2847a"/>
+          <path d="M12 7v6.2" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="12" cy="16.6" r="1.4" fill="#fff"/>
+        </svg>
+        <svg class="com-spark com-spark--warn" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 3v6M6 6l4 5M3 15h6"/></svg>
+        </span>
         <div>
           <strong>Antes de participar, cuidemos a nuestras familias</strong>
           <p>Evita publicar nombres completos, datos de contacto, direcciones, colegio o imágenes que permitan identificar a niños. Comparte con respeto: este espacio acompaña, pero no reemplaza una valoración profesional ni ofrece diagnósticos.</p>
@@ -166,14 +180,19 @@
 
       <section class="comunidad-panel" aria-labelledby="com-compose-title">
         <div class="comunidad-panel__head">
+          <span class="comunidad-panel__badge">
+            <svg class="com-spark com-spark--coral" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 3v6M6 6l4 5M3 15h6"/></svg>
+            <img class="comunidad-panel__ico" src="${ART}icono-conversacion.webp" width="195" height="260" alt="" decoding="async">
+          </span>
           <div class="comunidad-panel__copy">
             <h2 id="com-compose-title">Conversemos en comunidad</h2>
             <p>Puedes compartir una experiencia, hacer una pregunta o abrir una conversación.</p>
           </div>
-          <button class="btn btn--sage" type="button" data-com-open>＋ Subir una publicación</button>
+          <button class="btn btn--sage comunidad-panel__cta" type="button" data-com-open><span aria-hidden="true">＋</span> Subir una publicación</button>
         </div>
         <div class="comunidad-search">
           <label class="visually-hidden" for="com-search">Buscar publicaciones</label>
+          <svg class="comunidad-search__icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-search"></use></svg>
           <input id="com-search" class="comunidad-search__input" data-com-search type="search" placeholder="Buscar por palabra o tema…">
           <button class="btn btn--outline" type="button" data-com-search-btn>Buscar</button>
         </div>
@@ -192,16 +211,21 @@
           <p>Cuando las familias participen, sus publicaciones aparecerán aquí.</p>
         </div>
         <label class="visually-hidden" for="com-sort">Ordenar</label>
-        <select id="com-sort" class="comunidad-sort" data-com-sort>
-          <option value="recent">Más recientes</option>
-          <option value="likes">Más apoyadas</option>
-        </select>
+        <span class="comunidad-sort-wrap">
+          <select id="com-sort" class="comunidad-sort" data-com-sort>
+            <option value="recent">Más recientes</option>
+            <option value="likes">Más apoyadas</option>
+          </select>
+          <svg class="com-spark com-spark--sort" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 3v6M6 6l4 5M3 15h6"/></svg>
+        </span>
       </div>
 
       <div data-com-list></div>
 
       <aside class="comunidad-tips" aria-label="Orientaciones de la comunidad">
-        <div class="comunidad-tips__block">
+        <div class="comunidad-tips__block comunidad-tips__block--util">
+          <img class="comunidad-tips__ico" src="${ART}icono-familia.webp" width="259" height="260" alt="" loading="lazy" decoding="async">
+          <div class="comunidad-tips__content">
           <h3>¿Cómo hacemos que esta comunidad sea útil?</h3>
           <p>Queremos que las conversaciones ayuden a reconocer oportunidades para acompañar la comunicación cotidiana.</p>
           <ul class="comunidad-tips__list">
@@ -209,12 +233,15 @@
             <li><strong>Orientación pertinente</strong> — vincular, cuando corresponda, con un recurso de Crece en Casa.</li>
             <li><strong>Aprender de lo cotidiano</strong> — ideas que quepan en las rutinas reales.</li>
           </ul>
+          </div>
         </div>
-        <div class="comunidad-tips__block">
+        <div class="comunidad-tips__block comunidad-tips__block--acuerdos">
+          <img class="comunidad-tips__ico" src="${ART}icono-manos-corazon.webp" width="199" height="260" alt="" loading="lazy" decoding="async">
           <h3>Acuerdos de convivencia</h3>
           <p>Trata a las demás familias con empatía. No ridiculices, no difundas información ajena y evita presentar experiencias personales como soluciones para todos los niños.</p>
         </div>
-        <div class="comunidad-tips__block">
+        <div class="comunidad-tips__block comunidad-tips__block--recordatorio">
+          <img class="comunidad-tips__ico" src="${ART}icono-bombilla.webp" width="183" height="260" alt="" loading="lazy" decoding="async">
           <h3>Un recordatorio importante</h3>
           <p>Si te preocupa de forma persistente el desarrollo del lenguaje, la comprensión o la audición de tu hijo/a, busca orientación profesional. La comunidad no diagnostica.</p>
         </div>

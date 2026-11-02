@@ -183,22 +183,7 @@
               : isEmpty
                 ? `<section class="album-empty" aria-live="polite">
                     <div class="album-empty__art" aria-hidden="true">
-                      <span class="album-empty__spark album-empty__spark--one">✦</span>
-                      <span class="album-empty__heart">♥</span>
-                      <div class="album-empty__book">
-                        <div class="album-empty__page">
-                          <span class="album-empty__sun">☼</span>
-                          <span class="album-empty__house">⌂</span>
-                          <span class="album-empty__flower">✿</span>
-                          <i></i><i class="is-short"></i>
-                        </div>
-                        <div class="album-empty__page album-empty__page--right">
-                          <span class="album-empty__speech">“ ”</span>
-                          <span class="album-empty__flower album-empty__flower--two">✿</span>
-                          <i></i><i class="is-short"></i>
-                        </div>
-                      </div>
-                      <span class="album-empty__spark album-empty__spark--two">✧</span>
+                      <img class="album-empty__illustration" src="assets/img/album-libro.webp" width="900" height="527" alt="" decoding="async">
                     </div>
                     <div class="album-empty__copy">
                       <span class="album-empty__eyebrow">UN ESPACIO SOLO DE USTEDES</span>

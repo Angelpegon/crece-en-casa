@@ -8,13 +8,16 @@
     <meta name="description" content="Crece en Casa: acompañando la comunicación desde lo cotidiano.">
     <meta name="theme-color" content="#fef9f3">
     <script>document.documentElement.classList.add("js");</script>
-    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="assets/brand/favicon.ico" sizes="any">
+    <link rel="icon" href="assets/brand/favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
-    <link rel="stylesheet" href="css/styles.css?v=banner13">
-    <link rel="stylesheet" href="css/pages.css?v=banner18">
+    <link rel="stylesheet" href="css/styles.css?v=tienda2">
+    <link rel="stylesheet" href="css/pages.css?v=tienda2">
 </head>
 
 <body>
@@ -23,52 +26,55 @@
     <header class="site-header" data-site-header></header>
 
     <main id="contenido">
-        <section class="page-hero page-hero--lavender" aria-labelledby="page-title">
-            <div class="container">
-                <nav class="breadcrumb" aria-label="Ruta de navegación">
-                    <ol>
-                        <li><a href="index.html">Inicio</a></li>
-                        <li aria-current="page">Sobre Crece en Casa</li>
-                    </ol>
-                </nav>
-                <h1 id="page-title">Pequeños momentos que hacen crecer la comunicación</h1>
-                <p class="page-hero__lead">Una idea que nació de escuchar y creció con el deseo de acompañar.</p>
-            </div>
-        </section>
+        <div class="container sobre-page">
+            <section class="sobre-hero" aria-labelledby="page-title">
+                <div class="sobre-hero__body">
+                    <nav class="breadcrumb" aria-label="Ruta de navegación">
+                        <ol>
+                            <li><a href="index.html">Inicio</a></li>
+                            <li aria-current="page">Sobre Crece en Casa</li>
+                        </ol>
+                    </nav>
+                    <h1 id="page-title">Pequeños momentos que hacen crecer la comunicación</h1>
+                    <p class="sobre-hero__lead">Una idea que nació de escuchar y creció con el deseo de acompañar.</p>
+                </div>
+                <img class="sobre-hero__art" src="assets/img/sobre/hero.webp" width="689" height="280"
+                    alt="Una mamá y su hijo leen un libro juntos y sonríen." fetchpriority="high">
+            </section>
 
-        <section class="section" aria-labelledby="historia-title">
-            <div class="container prose">
-                <h2 id="historia-title">Sobre Crece en Casa</h2>
-                <p>
-                    ¡Hola! Soy Marielys Daniela Sierra, estudiante de Fonoaudiología y creadora de Crece en Casa,
-                    una propuesta que nació de una pregunta que me ha acompañado durante mi formación: ¿cómo podemos
-                    ayudar a las familias a seguir construyendo oportunidades de comunicación con sus pequeños,
-                    incluso cuando no están en terapia?
-                </p>
-                <p>
-                    Durante mi formación, distintas experiencias despertaron en mí el interés por encontrar nuevas
-                    formas de acercar a las familias al desarrollo comunicativo de sus pequeños. Comprendí que,
-                    más allá de las sesiones terapéuticas, existen oportunidades cotidianas para acompañar este
-                    proceso y que contar con orientaciones prácticas puede marcar una diferencia en la manera en
-                    que las familias participan en él.
-                </p>
-                <p>
-                    Esa inquietud se quedó conmigo. Más adelante, mi experiencia de práctica me permitió retomar
-                    esa necesidad y pensar en una manera de responder a ella: una propuesta que acercara la
-                    orientación fonoaudiológica a la vida cotidiana de las familias.
-                </p>
-                <p>
-                    Así nació Crece en Casa, una plataforma con estrategias de comunicación y lenguaje,
-                    actividades lúdicas y recursos prácticos para acompañar a niños de 2 a 5 años desde el hogar.
-                </p>
-                <p>
-                    Hoy, Crece en Casa representa mucho más que una idea: es mi manera de transformar una realidad
-                    que conocí durante mi formación en una propuesta que busca acompañar a otras familias. Porque
-                    detrás de cada actividad hay una oportunidad para compartir, detrás de cada juego puede surgir
-                    una palabra y detrás de cada pequeño momento puede crecer una forma de comunicarnos.
-                </p>
-            </div>
-        </section>
+            <section class="sobre-story" aria-labelledby="historia-title">
+                <figure class="sobre-story__art">
+                    <img src="assets/img/sobre/historia.webp" width="900" height="1031" loading="lazy" decoding="async"
+                        alt="Ilustración de la creadora de Crece en Casa en su escritorio, pensando entre libros de lenguaje, comunicación, desarrollo infantil y familias. Mensaje: «Una idea que nació de escuchar, aprender y preguntar, hoy se convierte en una propuesta para acompañar a las familias.»">
+                </figure>
+                <div class="sobre-story__body">
+                    <p class="sobre-story__kicker">Nuestra historia</p>
+                    <h2 id="historia-title">Sobre Crece en Casa</h2>
+                    <ol class="sobre-steps">
+                        <li class="sobre-step sobre-step--person">
+                            <span class="sobre-step__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.6-4 3.6-6.5 7.5-6.5s6.9 2.5 7.5 6.5Z"/></svg></span>
+                            <p class="sobre-step__text">¡Hola! Soy Marielys Daniela Sierra, estudiante de Fonoaudiología y creadora de Crece en Casa, una propuesta que nació de una pregunta que me ha acompañado durante mi formación: ¿cómo podemos ayudar a las familias a seguir construyendo oportunidades de comunicación con sus pequeños, incluso cuando no están en terapia?</p>
+                        </li>
+                        <li class="sobre-step sobre-step--book">
+                            <span class="sobre-step__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 5.5c3-1 6-.8 9 1.2v13c-3-2-6-2.2-9-1.2Z"/><path d="M21 5.5c-3-1-6-.8-9 1.2v13c3-2 6-2.2 9-1.2Z"/><path d="M5.5 9.5c1.6-.3 3.1 0 4.5.7M5.5 12.8c1.6-.3 3.1 0 4.5.7M18.5 9.5c-1.6-.3-3.1 0-4.5.7M18.5 12.8c-1.6-.3-3.1 0-4.5.7"/></svg></span>
+                            <p class="sobre-step__text">Durante mi formación, distintas experiencias despertaron en mí el interés por encontrar nuevas formas de acercar a las familias al desarrollo comunicativo de sus pequeños. Comprendí que, más allá de las sesiones terapéuticas, existen oportunidades cotidianas para acompañar este proceso y que contar con orientaciones prácticas puede marcar una diferencia en la manera en que las familias participan en él.</p>
+                        </li>
+                        <li class="sobre-step sobre-step--heart">
+                            <span class="sobre-step__icon"><img src="assets/img/stickers/corazon.png" alt="" width="40" height="40" decoding="async"></span>
+                            <p class="sobre-step__text">Esa inquietud se quedó conmigo. Más adelante, mi experiencia de práctica me permitió retomar esa necesidad y pensar en una manera de responder a ella: una propuesta que acercara la orientación fonoaudiológica a la vida cotidiana de las familias.</p>
+                        </li>
+                        <li class="sobre-step sobre-step--puzzle">
+                            <span class="sobre-step__icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 3.5a2 2 0 0 1 4 0V5h4a1.5 1.5 0 0 1 1.5 1.5v4h-1.5a2 2 0 0 0 0 4H19v4a1.5 1.5 0 0 1-1.5 1.5h-4V18.5a2 2 0 0 0-4 0V20h-4A1.5 1.5 0 0 1 4 18.5v-4h1.5a2 2 0 0 0 0-4H4v-4A1.5 1.5 0 0 1 5.5 5h4Z"/></svg></span>
+                            <p class="sobre-step__text">Así nació Crece en Casa, una plataforma con estrategias de comunicación y lenguaje, actividades lúdicas y recursos prácticos para acompañar a niños de 2 a 5 años desde el hogar.</p>
+                        </li>
+                        <li class="sobre-step sobre-step--sprout">
+                            <span class="sobre-step__icon"><img src="assets/img/stickers/brote.png" alt="" width="40" height="40" decoding="async"></span>
+                            <p class="sobre-step__text">Hoy, Crece en Casa representa mucho más que una idea: es mi manera de transformar una realidad que conocí durante mi formación en una propuesta que busca acompañar a otras familias. Porque detrás de cada actividad hay una oportunidad para compartir, detrás de cada juego puede surgir una palabra y detrás de cada pequeño momento puede crecer una forma de comunicarnos.</p>
+                        </li>
+                    </ol>
+                </div>
+            </section>
+        </div>
 
         <!-- <section class="section section--tint" aria-labelledby="basamos-title">
       <div class="container prose">
@@ -102,7 +108,7 @@
 
     <footer class="site-footer" data-site-footer></footer>
 
-    <script src="js/chrome.js?v=wave1" defer></script>
+    <script src="js/chrome.js?v=tienda2" defer></script>
   <script src="js/main.js?v=wave1" defer></script>
 </body>
 

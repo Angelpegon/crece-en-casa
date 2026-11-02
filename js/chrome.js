@@ -4,6 +4,16 @@
  * En pantallas estrechas la barra se abre desde una franja con la marca.
  */
 (function () {
+  /* Transiciones entre páginas: si el navegador omite una (navegación rápida, pestaña oculta),
+     sus promesas se rechazan con AbortError. Se silencian para no ensuciar la consola. */
+  ["pageswap", "pagereveal"].forEach((type) => {
+    window.addEventListener(type, (event) => {
+      const vt = event.viewTransition;
+      if (!vt) return;
+      [vt.ready, vt.finished, vt.updateCallbackDone].forEach((promise) => promise?.catch(() => {}));
+    });
+  });
+
   const header = document.querySelector("[data-site-header]");
   const footer = document.querySelector("[data-site-footer]");
   if (!header && !footer) return;
@@ -154,7 +164,7 @@
     header.innerHTML = `
       <div class="container site-header__bar">
         <a class="brand brand--mark" href="index.html" aria-label="Crece en Casa, ir al inicio">
-          <img class="brand__mark" src="assets/brand/icon-mark.jpg" width="40" height="40" alt="">
+          <img class="brand__mark" src="assets/brand/logo-mark.webp" width="40" height="40" alt="">
           <span class="brand__copy">
             <span class="brand__name">Crece en Casa</span>
             <span class="brand__tag">El lenguaje sucede</span>
@@ -169,6 +179,11 @@
             <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-user"></use></svg>
             Mi espacio
           </a>
+          <a class="icon-button header-cart" href="tienda.html" data-header-cart${page === "tienda.html" ? ' aria-current="page"' : ""}>
+            <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg?v=cart1#i-cart"></use></svg>
+            <span class="header-cart__count" data-header-cart-count hidden></span>
+            <span class="visually-hidden" data-header-cart-label>Tienda</span>
+          </a>
           <button class="nav-toggle icon-button" type="button" aria-expanded="false" aria-controls="menu-principal" data-nav-toggle>
             <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-menu"></use></svg>
             <span class="visually-hidden" data-nav-label>Abrir menú</span>
@@ -176,6 +191,36 @@
         </div>
       </div>`;
   }
+
+  /* Contador del carrito (lo escribe la tienda en este navegador) */
+  function updateCartBadge(qty) {
+    const link = document.querySelector("[data-header-cart]");
+    if (!link) return;
+    let n = qty;
+    if (n === undefined) {
+      try {
+        n = parseInt(localStorage.getItem("crece-en-casa:carrito") || "0", 10) || 0;
+      } catch (error) {
+        n = 0;
+      }
+    }
+    const count = link.querySelector("[data-header-cart-count]");
+    const label = link.querySelector("[data-header-cart-label]");
+    count.hidden = n <= 0;
+    count.textContent = n > 9 ? "9+" : String(n);
+    label.textContent = n > 0 ? `Tienda, ${n} ${n === 1 ? "producto" : "productos"} en el carrito` : "Tienda";
+    if (n > 0) {
+      count.classList.remove("is-bumped");
+      void count.offsetWidth;
+      count.classList.add("is-bumped");
+    }
+  }
+
+  updateCartBadge();
+  document.addEventListener("cec:cart", (event) => updateCartBadge(event.detail?.qty));
+  window.addEventListener("storage", (event) => {
+    if (event.key === "crece-en-casa:carrito") updateCartBadge();
+  });
 
   const main = document.querySelector("main");
   if (main && !document.querySelector(".page-shell")) {
@@ -216,7 +261,7 @@
         <div class="site-footer__grid">
           <div class="site-footer__brand">
             <a class="brand brand--mark" href="index.html" aria-label="Crece en Casa, ir al inicio">
-              <img class="brand__mark" src="assets/brand/icon-mark.jpg" width="36" height="36" alt="">
+              <img class="brand__mark" src="assets/brand/logo-mark.webp" width="36" height="36" alt="">
               <span class="brand__copy">
                 <span class="brand__name">Crece en Casa</span>
                 <span class="brand__tag">El lenguaje sucede</span>

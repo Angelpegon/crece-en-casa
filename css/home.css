@@ -213,8 +213,8 @@
         top: 63.5%;
         left: 4.6%;
         min-height: 0;
-        padding: 0.75cqi 1.5cqi;
-        font-size: 1.1cqi;
+        padding: max(0.45rem, 0.75cqi) max(0.8rem, 1.5cqi);
+        font-size: max(0.74rem, 1.1cqi);
         white-space: nowrap;
     }
 
@@ -233,14 +233,15 @@
         display: block;
         max-width: none;
         color: #23403d;
-        font-size: 1.07cqi;
+        /* mínimo legible (~11.6px) aunque el banner sea angosto */
+        font-size: max(0.66rem, 1.07cqi);
         font-weight: 600;
         line-height: 1.25;
     }
 
-    .banner--inicio .hero-trust li:nth-child(1) { left: 7.39%; width: 7.4%; }
-    .banner--inicio .hero-trust li:nth-child(2) { left: 20.6%; width: 9%; }
-    .banner--inicio .hero-trust li:nth-child(3) { top: 81.3%; left: 33.6%; width: 9.8%; }
+    .banner--inicio .hero-trust li:nth-child(1) { left: 7.39%; width: 8.6%; }
+    .banner--inicio .hero-trust li:nth-child(2) { left: 20.6%; width: 9.4%; }
+    .banner--inicio .hero-trust li:nth-child(3) { top: 81.3%; left: 33.6%; width: 10.6%; }
 
     .banner--inicio .hero-trust__icon {
         display: none;
@@ -584,7 +585,7 @@
 
 .how-list li:nth-child(4) .how-list__num {
     background: #f8dde3;
-    color: #b44f6a;
+    color: #9e3f59;
 }
 
 @media (min-width: 40em) {

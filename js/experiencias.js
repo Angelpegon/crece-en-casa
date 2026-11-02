@@ -684,7 +684,10 @@
           ${stepper()}
           <h2 class="exp-title exp-title--center" tabindex="-1">Gracias por compartir cómo les fue</h2>
           <p class="exp-lead exp-lead--center">${esc(state.saveMessage || "La experiencia quedó guardada anteriormente en este navegador.")}</p>
-          ${positiveFeedback("No hay una única forma correcta de vivir este momento. Puedes volver a esta experiencia cuando quieras.", true, { title: "¡Un recuerdo para celebrar!" })}
+          <figure class="exp-mirada">
+            <img src="assets/img/banners/mirada-fonoaudiologica.webp" width="1400" height="725" loading="lazy" decoding="async"
+              alt="La mirada fonoaudiológica. Antes: observa lo que te comunica y descubre sus señales; reconoce su intención comunicativa, aunque aún no use palabras. Durante: acompaña su iniciativa; conecta y acompaña, modela, amplía y responde a su interés para crear oportunidades de comunicación. Después: fortalece su comunicación; cada intento cuenta, valora y celebra sus intentos, fortaleciendo su confianza para seguir comunicándose.">
+          </figure>
           ${state.saveError ? `<p class="notice notice--warm" role="status">${esc(state.saveError)}</p>` : ""}
           <div class="exp-nav">
             <button class="btn btn--outline" type="button" data-exp-go="3">Volver a la experiencia</button>
