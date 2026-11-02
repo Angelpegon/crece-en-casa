@@ -66,5 +66,13 @@ window.CEC.session = (function () {
     return clear();
   }
 
-  return { isAvailable, get, isSignedIn, signIn, signOut };
+  /* Mi espacio guarda aquí también el perfil ampliado (contacto, familia, preferencias, huellas). */
+  function update(patch = {}) {
+    const current = read() || {};
+    const next = { ...current, ...patch, updatedAt: new Date().toISOString() };
+    if (next.name !== undefined) next.name = String(next.name).trim().slice(0, 60);
+    return write(next);
+  }
+
+  return { isAvailable, get, isSignedIn, signIn, signOut, update };
 })();

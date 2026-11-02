@@ -50,20 +50,104 @@
         cheerStep: null,
     };
 
+    /*
+     * Continuidad del flujo:
+     * - El avance se guarda en esta pestaña (sessionStorage): recargar no borra lo elegido.
+     * - Cada paso tiene su dirección (?paso=N): los botones Atrás/Adelante del navegador
+     *   se mueven entre pasos en vez de salir de la página.
+     * - Nunca se muestra un paso al que aún no se puede llegar (p. ej. resultados sin datos).
+     */
+    const STORE_KEY = "crece-en-casa:experiencia-flujo";
+    const TRANSIENT = { momentAlert: false, shareOpen: false, error: "", cheerMsg: "", cheerAll: false, cheerStep: null };
+    let resumed = false;
     let state = loadState();
     let cheerTimer = 0;
 
-    function loadState() {
+    function readStored() {
         try {
-            sessionStorage.removeItem("crece-en-casa:experiencia-flujo");
+            const raw = JSON.parse(sessionStorage.getItem(STORE_KEY) || "null");
+            return raw && typeof raw === "object" ? raw : null;
         } catch (error) {
-            // El estado inicial también se restablece en memoria si el almacenamiento no está disponible.
+            return null;
         }
-        return { ...emptyState, doneSteps: [] };
+    }
+
+    function persist() {
+        try {
+            const { momentAlert, shareOpen, error, cheerMsg, cheerAll, cheerStep, ...rest } = state;
+            sessionStorage.setItem(STORE_KEY, JSON.stringify(rest));
+        } catch (error) {
+            // Sin almacenamiento el flujo sigue funcionando en memoria.
+        }
+    }
+
+    function clearStored() {
+        try {
+            sessionStorage.removeItem(STORE_KEY);
+        } catch (error) {
+            // Nada que limpiar.
+        }
+    }
+
+    /* Paso más avanzado al que se puede llegar con lo elegido hasta ahora */
+    function maxReachableStep(candidate) {
+        if (!candidate.moment) return 1;
+        const interestOk = candidate.interest && (candidate.interest !== "otro" || String(candidate.interestOther || "").trim());
+        if (!candidate.age || !candidate.skill || !interestOk) return 2;
+        if (!candidate.activityId || !data.getActivity(candidate.activityId)) return 2;
+        return 5;
+    }
+
+    function clampStep(candidate, step) {
+        const n = Number(step) || 1;
+        return Math.min(Math.max(1, Math.round(n)), maxReachableStep(candidate));
+    }
+
+    function stepFromUrl() {
+        const n = Number(new URLSearchParams(window.location.search).get("paso"));
+        return Number.isFinite(n) && n >= 1 && n <= 5 ? n : null;
+    }
+
+    function navigationType() {
+        const entry = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+        return entry ? entry.type : "navigate";
+    }
+
+    function loadState() {
+        const stored = readStored();
+        const base = { ...emptyState, doneSteps: [] };
+        if (!stored) return base;
+        const type = navigationType();
+        const urlStep = stepFromUrl();
+        /* Si llegó desde el menú (no recarga ni atrás) y ya había terminado, empieza de cero. */
+        if (type === "navigate" && !urlStep && stored.saved) {
+            clearStored();
+            return base;
+        }
+        const restored = { ...base, ...stored, ...TRANSIENT, doneSteps: Array.isArray(stored.doneSteps) ? stored.doneSteps : [] };
+        restored.step = clampStep(restored, urlStep || restored.step);
+        resumed = type === "navigate" && !urlStep && restored.step > 1;
+        return restored;
+    }
+
+    function syncUrl(mode) {
+        const url = new URL(window.location.href);
+        if (state.step > 1) url.searchParams.set("paso", String(state.step));
+        else url.searchParams.delete("paso");
+        if (url.href === window.location.href && mode === "push") return;
+        const stateObj = { expStep: state.step };
+        if (mode === "push") history.pushState(stateObj, "", url);
+        else history.replaceState(stateObj, "", url);
     }
 
     function setState(patch) {
+        const previousStep = state.step;
         state = { ...state, ...patch };
+        if (state.step !== previousStep) {
+            state.step = clampStep(state, state.step);
+            if (state.step !== previousStep) syncUrl("push");
+        }
+        persist();
         render();
     }
 
@@ -108,6 +192,7 @@
     }
 
     function goTo(step) {
+        resumed = false;
         setState({
             step,
             error: "",
@@ -294,9 +379,13 @@
             const isCurrent = step.n === state.step;
             const done = step.n < state.step;
             const status = isCurrent ? "current" : done ? "done" : "todo";
+            const canJump = done && !(step.n === 4 && !currentActivity());
+            const num = canJump
+                ? `<button class="exp-stepper__num exp-stepper__jump" type="button" data-exp-go="${step.n}" aria-label="Volver al paso ${step.n}: ${esc(step.name)}">${step.n}</button>`
+                : `<span class="exp-stepper__num">${step.n}</span>`;
             return `
             <li class="exp-stepper__item exp-stepper__item--${status}"${isCurrent ? ' aria-current="step"' : ""}>
-              <span class="exp-stepper__num">${step.n}</span>
+              ${num}
               <span class="exp-stepper__name">${esc(step.name)}</span>
             </li>`;
         }).join("")}
@@ -729,6 +818,18 @@
       </div>`;
     }
 
+    function resumeNotice() {
+        return `
+      <div class="exp-resume" role="status">
+        <span class="exp-resume__icon" aria-hidden="true">${icon("i-clock")}</span>
+        <p><strong>Retomamos tu experiencia donde la dejaste.</strong> Estás en el paso ${state.step}: ${esc(STEPS[state.step - 1].name)}.</p>
+        <div class="exp-resume__actions">
+          <button class="btn btn--outline btn--small" type="button" data-exp-action="resume-dismiss">Seguir aquí</button>
+          <button class="btn btn--small exp-resume__restart" type="button" data-exp-action="restart">Empezar de nuevo</button>
+        </div>
+      </div>`;
+    }
+
     function announce(message) {
         const live = root.querySelector("[data-exp-live]");
         if (live) live.textContent = message;
@@ -743,7 +844,7 @@
             5: renderStep5,
         };
         const view = views[state.step] || renderStep1;
-        root.innerHTML = liveRegion() + view();
+        root.innerHTML = liveRegion() + (resumed ? resumeNotice() : "") + view();
     }
 
     function closeMomentAlert({ advance = false } = {}) {
@@ -752,6 +853,7 @@
             return;
         }
         state = { ...state, momentAlert: false };
+        persist();
         render();
         focusControl("[data-exp-moment]", "data-exp-moment", state.moment);
     }
@@ -774,21 +876,34 @@
         };
     }
 
+    /* Lleva la vista y el foco al primer dato que falta, para que el aviso no pase desapercibido */
+    function focusMissing(field) {
+        requestAnimationFrame(() => {
+            const fieldset = root.querySelector(`[data-field="${field}"]`);
+            if (!fieldset) return;
+            fieldset.scrollIntoView({ block: "center", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+            fieldset.querySelector("input")?.focus({ preventScroll: true });
+        });
+    }
+
     function validateStep2(form) {
         const next = readDetailsForm(form);
         if (!next.age) {
             setState({ ...next, error: "age" });
             announce("Elige la edad del niño.");
+            focusMissing("age");
             return null;
         }
         if (!next.skill) {
             setState({ ...next, error: "skill" });
             announce("Elige qué quieres favorecer.");
+            focusMissing("skill");
             return null;
         }
         if (!next.interest || (next.interest === "otro" && !next.interestOther)) {
             setState({ ...next, error: "interest" });
             announce("Elige un interés o escribe otro.");
+            focusMissing("interest");
             return null;
         }
         return next;
@@ -896,7 +1011,11 @@
     }
 
     function restart() {
+        resumed = false;
+        clearStored();
+        const previousStep = state.step;
         state = { ...emptyState, doneSteps: [] };
+        if (previousStep !== 1) syncUrl("push");
         render();
         announce("Puedes crear otra experiencia.");
         root.scrollIntoView({ block: "start", behavior: "smooth" });
@@ -995,6 +1114,12 @@
             }
             if (action === "restart") {
                 restart();
+                return;
+            }
+            if (action === "resume-dismiss") {
+                resumed = false;
+                render();
+                root.querySelector(".exp-title")?.focus({ preventScroll: true });
             }
             return;
         }
@@ -1028,6 +1153,7 @@
         const changedControl = event.target;
         if (changedControl.name === "interestOther") {
             state = { ...state, ...next, error: "" };
+            persist();
             updateDetailsProgress();
             return;
         }
@@ -1043,6 +1169,7 @@
     root.addEventListener("input", (event) => {
         if (event.target.name !== "interestOther") return;
         state = { ...state, interestOther: event.target.value.trim() };
+        persist();
         updateDetailsProgress();
         updateInterestFeedback();
     });
@@ -1073,5 +1200,18 @@
         tiles[next].focus();
     });
 
+    window.addEventListener("popstate", () => {
+        const target = clampStep(state, stepFromUrl() || 1);
+        resumed = false;
+        state = { ...state, ...TRANSIENT, step: target, openAdapt: target === 4 ? state.openAdapt : "" };
+        /* Si la URL pedía un paso aún no disponible, se corrige sin crear otra entrada */
+        if (target !== (stepFromUrl() || 1)) syncUrl("replace");
+        persist();
+        render();
+        root.querySelector(".exp-title")?.focus({ preventScroll: true });
+    });
+
+    syncUrl("replace");
+    persist();
     render();
 })();
