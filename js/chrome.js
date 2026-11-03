@@ -132,7 +132,7 @@
   }
 
   function sidebarItems() {
-    return SECTIONS.filter((section) => section.id !== "espacio").map((section) => {
+    return SECTIONS.map((section) => {
       const active = isActive(section);
       const currentPage = section.href === page;
       const hasChildren = section.children.length > 0;
@@ -152,8 +152,10 @@
             ${icon(section.icon)}
             <span>${section.label}</span>
           </a>`;
+      /* Mi espacio vive en el encabezado; se oculta del menú lateral en todos los anchos. */
+      const spaceClass = section.id === "espacio" ? " nav-item--space" : "";
       return `
-        <li class="side-nav__item${active ? " is-active" : ""}">
+        <li class="side-nav__item${spaceClass}${active ? " is-active" : ""}">
           ${link}
           ${panel}
         </li>`;
@@ -177,7 +179,7 @@
           </a>
           <a class="btn btn--outline btn--small header-actions__access" href="mi-espacio.html"${isActive(SECTIONS.find((s) => s.id === "espacio")) ? ' aria-current="page"' : ""}>
             <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-user"></use></svg>
-            Mi espacio
+            <span>Mi espacio</span>
           </a>
           <a class="icon-button header-cart" href="tienda.html" data-header-cart${page === "tienda.html" ? ' aria-current="page"' : ""}>
             <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg?v=cart1#i-cart"></use></svg>

@@ -453,7 +453,7 @@ select {
 }
 
 .header-actions__access {
-    display: none;
+    display: inline-flex;
     align-items: center;
     gap: 0.35rem;
 }
@@ -465,21 +465,56 @@ select {
     font-weight: 700;
 }
 
+/* Mi espacio vive en el encabezado en todos los anchos; no se repite en el menú lateral. */
 .nav-item--space {
-    display: list-item;
+    display: none;
 }
 
 @media (min-width: 64em) {
     .header-actions {
         flex-wrap: nowrap;
     }
+}
 
+/* En móvil: solo icono (como buscar/carrito) para no aplastar la marca. */
+@media (max-width: 63.99em) {
     .header-actions__access {
-        display: inline-flex;
+        width: 2.75rem;
+        min-height: 2.75rem;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        gap: 0;
+        justify-content: center;
+        background: transparent;
+        box-shadow: none;
     }
 
-    .nav-item--space {
-        display: none;
+    .header-actions__access:hover {
+        background: rgb(28 53 50 / 0.07);
+    }
+
+    .header-actions__access[aria-current="page"] {
+        background: var(--c-sage-soft);
+        border-color: transparent;
+    }
+
+    .header-actions__access .icon {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    .header-actions__access:hover .icon {
+        transform: none;
+    }
+
+    .header-actions__access span {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
     }
 }
 

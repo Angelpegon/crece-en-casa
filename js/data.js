@@ -726,30 +726,65 @@ window.CEC.data = (function () {
     const hasAge = Number.isFinite(age) && age > 0;
     const interest = filters.interest && filters.interest !== "otro" ? filters.interest : "";
 
-    const ranked = validActivities
-      .map((activity) => {
-        let score = 0;
-        const activityAge = activity.ages[0];
-        if (hasAge && activity.ages.includes(age)) score += 10;
-        else if (hasAge && Number.isFinite(activityAge) && Math.abs(activityAge - age) === 1) score += 4;
-        if (filters.moment && (activity.momentos || []).includes(filters.moment)) score += 10;
-        if (skill && activity.primaryArea === skill.areaId) score += 6;
-        else if (skill && activity.areas.includes(skill.areaId)) score += 3;
-        /* Duración es orientativa: suma puntos, no determina sola la elección. */
-        if (duration && activity.durationId) {
-          if (activity.durationId === duration.durationId) score += 3;
-          else if (wantedRank && Math.abs((durationRank[activity.durationId] || 0) - wantedRank) === 1) score += 1;
-        }
-        if (interest && (activity.interests || []).includes(interest)) score += 4;
-        return { activity, score };
-      })
+    function ageDistance(activity) {
+      if (!hasAge) return 0;
+      const activityAges = activity.ages || [];
+      if (activityAges.includes(age)) return 0;
+      const diffs = activityAges.filter((value) => Number.isFinite(value)).map((value) => Math.abs(value - age));
+      return diffs.length ? Math.min(...diffs) : Infinity;
+    }
+
+    function baseScore(activity) {
+      let score = 0;
+      if (filters.moment && (activity.momentos || []).includes(filters.moment)) score += 10;
+      if (skill && activity.primaryArea === skill.areaId) score += 6;
+      else if (skill && activity.areas.includes(skill.areaId)) score += 3;
+      /* Duración es orientativa: suma puntos, no determina sola la elección. */
+      if (duration && activity.durationId) {
+        if (activity.durationId === duration.durationId) score += 3;
+        else if (wantedRank && Math.abs((durationRank[activity.durationId] || 0) - wantedRank) === 1) score += 1;
+      }
+      if (interest && (activity.interests || []).includes(interest)) score += 4;
+      return score;
+    }
+
+    const scored = validActivities.map((activity) => ({
+      activity,
+      score: baseScore(activity),
+      ageDist: ageDistance(activity),
+    }));
+
+    /*
+      La edad manda sobre el momento. Antes ambos sumaban +10 y, con pocas fichas,
+      ganaba otra edad con el momento correcto (p. ej. 5 años → ficha de 2).
+      Orden: edad exacta con señal → ±1 con señal → edad exacta → ±1 → resto.
+    */
+    let pool = scored.filter((item) => item.score > 0);
+    if (hasAge) {
+      const exactHit = scored.filter((item) => item.ageDist === 0 && item.score > 0);
+      const nearHit = scored.filter((item) => item.ageDist === 1 && item.score > 0);
+      const exactAny = scored.filter((item) => item.ageDist === 0);
+      const nearAny = scored.filter((item) => item.ageDist === 1);
+      if (exactHit.length) pool = exactHit;
+      else if (nearHit.length) pool = nearHit;
+      else if (exactAny.length) pool = exactAny;
+      else if (nearAny.length) pool = nearAny;
+    }
+
+    const ranked = pool
+      .map((item) => ({
+        activity: item.activity,
+        score: item.score + (item.ageDist === 0 ? 10 : item.ageDist === 1 ? 4 : 0),
+        ageDist: item.ageDist,
+      }))
       .sort((a, b) => b.score - a.score || a.activity.title.localeCompare(b.activity.title, "es"));
 
-    const matches = ranked.filter((item) => item.score > 0);
-    const main = matches[0] ? matches[0].activity : null;
-    const alternatives = matches.slice(1, 3).map((item) => item.activity);
+    const main = ranked[0] ? ranked[0].activity : null;
+    const alternatives = ranked.slice(1, 3).map((item) => item.activity);
     const extended =
-      ranked
+      scored
+        .slice()
+        .sort((a, b) => b.score - a.score || a.activity.title.localeCompare(b.activity.title, "es"))
         .map((item) => item.activity)
         .find((activity) => {
           if (!main || activity.id === main.id || !activity.durationId || !main.durationId) return false;
@@ -758,7 +793,7 @@ window.CEC.data = (function () {
       alternatives[0] ||
       null;
 
-    return { main, alternatives, extended, ranked: matches };
+    return { main, alternatives, extended, ranked };
   }
 
   return {
