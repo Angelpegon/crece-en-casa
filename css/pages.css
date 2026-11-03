@@ -3033,6 +3033,14 @@ html:not(.js) .filters {
     mask-image: linear-gradient(to bottom, #000 78%, transparent);
 }
 
+/* En tablet el recorte vertical ocuparía media pantalla: se hace más panorámico. */
+@container (min-width: 32rem) {
+    .camino-hero__art--narrow {
+        aspect-ratio: 2.5 / 1;
+        object-position: center 28%;
+    }
+}
+
 .camino-hero__body {
     padding: 0.25rem 1.15rem 1.2rem;
 }
@@ -4489,6 +4497,11 @@ body.album-modal-open {
     margin-bottom: var(--space-2);
 }
 
+/* El texto sobre el arte depende del ancho real del banner (con barra lateral es menor) */
+.act-hero .container {
+    container: act-hero / inline-size;
+}
+
 .section.catalog {
     padding-block: var(--space-3) var(--space-8);
 }
@@ -4567,8 +4580,8 @@ body.album-modal-open {
     line-height: 1.28;
 }
 
-@media (max-width: 39.99em) {
-    /* Título sigue EN el banner; lead debajo en flujo para empujar filtros. */
+@container act-hero (max-width: 48rem) {
+    /* Título sigue EN el banner; lead debajo en flujo para que se lea bien. */
     .act-hero__banner--catalog {
         display: grid;
         grid-template-columns: minmax(0, 1fr);
@@ -4613,7 +4626,9 @@ body.album-modal-open {
         line-height: 1.4;
         pointer-events: auto;
     }
+}
 
+@media (max-width: 39.99em) {
     .act-hero {
         padding-block-end: var(--space-3);
     }
@@ -4632,6 +4647,12 @@ body.album-modal-open {
         padding-block: var(--space-3) var(--space-2);
     }
 
+    .section.catalog {
+        padding-block-start: var(--space-2);
+    }
+}
+
+@container act-hero (min-width: 48.01rem) {
     .act-hero__content {
         left: 13%;
         width: min(42%, 28rem);
@@ -4640,10 +4661,6 @@ body.album-modal-open {
     .act-hero__banner--catalog .act-hero__content {
         left: 13%;
         width: min(42%, 30rem);
-    }
-
-    .section.catalog {
-        padding-block-start: var(--space-2);
     }
 }
 
@@ -8696,6 +8713,7 @@ body.comunidad-modal-open {
     .comunidad-warning__badge::before,
     .com-spark--warn,
     .com-spark--coral,
+    .com-spark--sort,
     .comunidad-panel::after {
         display: none;
     }
@@ -9161,6 +9179,8 @@ body.comunidad-modal-open {
    tipo tarjeta, barra fija en móvil, aviso al agregar y confeti al confirmar.
    Todas las animaciones se apagan con «reducir movimiento» (regla global de styles.css). */
 .shop-page {
+    /* Las columnas dependen del ancho real del área, no del viewport (hay barra lateral). */
+    container: shop / inline-size;
     --shop-green: #2f5a4a;
     --shop-green-2: #3f6f5f;
     --shop-line: rgb(47 90 74 / 0.12);
@@ -9324,9 +9344,9 @@ body.comunidad-modal-open {
     align-items: start;
 }
 
-@media (min-width: 60em) {
+@container shop (min-width: 48rem) {
     .shop-layout {
-        grid-template-columns: minmax(0, 1.6fr) minmax(19.5rem, 0.8fr);
+        grid-template-columns: minmax(0, 1.6fr) minmax(18rem, 0.8fr);
     }
 
     .shop-layout--single {
@@ -9432,7 +9452,7 @@ body.comunidad-modal-open {
     align-items: center;
 }
 
-@container (min-width: 44rem) {
+@container (min-width: 35rem) {
     .shop-product {
         grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.1fr);
     }
@@ -10268,7 +10288,7 @@ body.comunidad-modal-open {
     display: none;
 }
 
-@media (max-width: 59.99em) {
+@container shop (max-width: 47.99rem) {
     .shop-summary {
         order: 2;
     }
@@ -10400,6 +10420,8 @@ body.comunidad-modal-open {
    Mismo lenguaje que la tienda: tarjetas blancas con sombra en capas, stickers del sitio,
    chips como opciones, anillo de progreso y entradas animadas (respetan movimiento reducido). */
 .space-page {
+    /* Las columnas dependen del ancho real del área, no del viewport (hay barra lateral). */
+    container: space / inline-size;
     --space-green: #2f5a4a;
     --space-green-2: #3f6f5f;
     --space-line: rgb(47 90 74 / 0.12);
@@ -10461,7 +10483,7 @@ body.comunidad-modal-open {
     align-items: start;
 }
 
-@media (min-width: 60em) {
+@container space (min-width: 52rem) {
     .space-welcome {
         grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
     }
@@ -10858,7 +10880,7 @@ body.comunidad-modal-open {
     align-items: start;
 }
 
-@media (min-width: 60em) {
+@container space (min-width: 48rem) {
     .space-shell {
         grid-template-columns: 15rem minmax(0, 1fr);
     }
@@ -11441,7 +11463,7 @@ body.comunidad-modal-open {
 }
 
 /* Móvil */
-@media (max-width: 59.99em) {
+@container space (max-width: 47.99rem) {
     .space-side {
         gap: 0.75rem;
     }
@@ -11487,7 +11509,7 @@ body.comunidad-modal-open {
     }
 }
 
-@media (max-width: 47.99em) {
+@container space (max-width: 34rem) {
     .space-grid {
         grid-template-columns: minmax(0, 1fr);
     }

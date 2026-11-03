@@ -1084,7 +1084,9 @@ select {
     margin-top: 1.1rem;
 }
 
-@media (min-width: 48em) {
+/* Dos columnas según el ancho real del banner, no del viewport: con la barra lateral
+   abierta el banner es más angosto que la pantalla. */
+@container (min-width: 34rem) {
     .banner {
         grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
         align-items: center;
@@ -1103,6 +1105,28 @@ select {
     .banner__body {
         padding: clamp(1.5rem, 3.2vw, 2.75rem);
         padding-right: 0.5rem;
+    }
+}
+
+/* Banners que reproducen un diseño: hasta que cabe el diseño completo (46rem) el arte
+   se mantiene arriba, panorámico y completo, en vez de recortado a un lado. */
+@container (min-width: 34rem) and (max-width: 45.99rem) {
+    .banner--plate {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 0;
+    }
+
+    .banner--plate .banner__media {
+        order: -1;
+        align-self: auto;
+        min-height: 0;
+        aspect-ratio: var(--banner-art-ratio);
+        -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent);
+        mask-image: linear-gradient(to bottom, #000 72%, transparent);
+    }
+
+    .banner--plate .banner__body {
+        padding: 0.25rem 1.4rem 1.5rem;
     }
 }
 
@@ -1606,6 +1630,28 @@ select {
 
 }
 
+/* Tablet horizontal (iPad): la barra lateral se estrecha para que al contenido
+   le quede ancho suficiente; desde pantallas grandes vuelve a su tamaño. */
+@media (min-width: 64em) and (max-width: 85.99em) {
+
+    .has-page-sidebar .site-header .container,
+    .has-page-sidebar .site-footer .container,
+    .page-shell {
+        width: min(100% - 1rem, calc(var(--container) + 13.5rem + var(--space-4)));
+    }
+
+    .page-shell {
+        grid-template-columns: 13.5rem minmax(0, 1fr);
+        column-gap: var(--space-4);
+    }
+
+    .page-sidebar {
+        padding: var(--space-3);
+        gap: var(--space-3);
+    }
+
+}
+
 @media (max-width: 63.99em) {
     .js .page-sidebar {
         position: fixed;
@@ -1916,5 +1962,55 @@ select {
 @media (max-width: 24.99em) {
     .brand__tag {
         display: none;
+    }
+}
+
+/* ---------- Banners apilados en tablet ----------
+   En vertical (apilado) el arte se recorta a 2:1, que en una tablet queda demasiado
+   ampliado. Cuando el banner tiene más ancho, se usa una proporción más panorámica,
+   más cercana al original, para que la escena se vea completa. */
+@container (min-width: 32rem) and (max-width: 45.99rem) {
+    .banner--experiencias {
+        --banner-art-ratio: 3.4 / 1;
+    }
+
+    .banner--ideas,
+    .banner--guia {
+        --banner-art-ratio: 3 / 1;
+    }
+
+    .banner--album {
+        --banner-art-ratio: 2.4 / 1;
+    }
+
+    .banner--inicio {
+        --banner-art-ratio: 2.6 / 1;
+    }
+
+    .banner--oportunidades {
+        --banner-art-ratio: 2.2 / 1;
+    }
+}
+
+/* Menú lateral compacto en tablet horizontal: va al final para ganar a las reglas base. */
+@media (min-width: 64em) and (max-width: 85.99em) {
+    .side-nav__link {
+        gap: 0.55rem;
+        min-height: 2.5rem;
+        padding: 0.45rem 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .side-nav__panel {
+        padding: 0.6rem 0.7rem;
+        font-size: 0.85rem;
+    }
+
+    .page-sidebar__foot {
+        padding: 0.6rem;
+    }
+
+    .page-sidebar__quote {
+        font-size: 0.8rem;
     }
 }

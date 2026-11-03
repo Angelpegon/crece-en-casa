@@ -158,17 +158,11 @@
     display: none;
 }
 
-/* Tablet: texto | foto arriba y la columna del zorro a lo ancho debajo. */
-@media (min-width: 48em) {
-    .banner--inicio .banner__media {
-        grid-column: 2;
-        grid-row: 1 / 3;
-    }
-
+/* Tablet: el banner sigue apilado (foto arriba) y el zorro con su lista van en dos
+   columnas debajo. Se mide el ancho del banner, no el de la pantalla. */
+@container (min-width: 34rem) and (max-width: 45.99rem) {
     .banner--inicio .hero-trust {
-        grid-column: 1;
-        grid-row: 2;
-        padding-inline: clamp(1.5rem, 3.2vw, 2.75rem) 0.5rem;
+        padding-inline: clamp(1.5rem, 3.2vw, 2.75rem);
     }
 
     .banner--inicio .banner__cta {
@@ -176,7 +170,6 @@
     }
 
     .banner--inicio .hero-aside {
-        grid-column: 1 / -1;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         align-items: stretch;
         padding: 0 clamp(1.5rem, 3.2vw, 2.75rem) clamp(1.25rem, 2.5vw, 2rem);
