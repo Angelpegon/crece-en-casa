@@ -91,6 +91,15 @@
       children: [],
     },
     {
+      id: "orientacion",
+      href: "orientacion.html",
+      label: "Orientación Fonoaudiológica",
+      icon: "i-comprension",
+      pages: ["orientacion.html"],
+      blurb: "Comprender la comunicación y acompañarla en casa.",
+      children: [],
+    },
+    {
       id: "sobre",
       href: "sobre.html",
       label: "Sobre Crece en Casa",
@@ -279,6 +288,7 @@
               <li><a href="ver-la-guia.html">Guía para cuidadores</a></li>
               <li><a href="mi-camino.html">Nuestro rincón</a></li>
               <li><a href="nuestra-comunidad.html">Nuestra comunidad</a></li>
+              <li><a href="orientacion.html">Orientación Fonoaudiológica</a></li>
               <li><a href="sobre.html">Sobre Crece en Casa</a></li>
               <li><a href="mi-espacio.html">Mi espacio</a></li>
             </ul>

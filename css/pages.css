@@ -1954,6 +1954,12 @@
     box-shadow: var(--shadow-soft);
 }
 
+/* Transparente a la rejilla de .filters: cada grupo sigue siendo una celda propia
+   y en escritorio se reparten en dos columnas en vez de apilarse en media caja. */
+.filters__groups {
+    display: contents;
+}
+
 .filters__group {
     min-width: 0;
     margin: 0;
@@ -2159,6 +2165,23 @@
     border-color: var(--c-ink);
 }
 
+/* Sin fichas detrás: el chip sigue a la vista para no mover el diseño, pero no se puede pulsar. */
+.filters .chip--unavailable>span,
+.filters .chip--unavailable input:hover+span {
+    background: var(--c-bg);
+    border-color: var(--c-line);
+    border-style: dashed;
+    color: var(--c-muted);
+}
+
+.filters .chip--unavailable .chip__glyph {
+    opacity: 0.6;
+}
+
+.filters .chip--unavailable input {
+    cursor: not-allowed;
+}
+
 .chip input:checked+span {
     background: var(--c-ink);
     border-color: var(--c-ink);
@@ -2263,6 +2286,20 @@ html:not(.js) .filters {
     display: none !important;
 }
 
+.filters-notice {
+    margin-top: var(--space-4);
+    margin-bottom: 0;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--c-yellow-soft);
+    color: var(--c-ink);
+    font-weight: 700;
+}
+
+.filters-notice[hidden] {
+    display: none !important;
+}
+
 .filters-active {
     display: flex;
     flex-wrap: wrap;
@@ -2352,6 +2389,11 @@ html:not(.js) .filters {
     .filters__actions {
         grid-column: 1 / -1;
     }
+
+    /* Grupos de etiquetas largas: ocupan la fila entera en vez de apilarse en media columna. */
+    .filters__group--wide {
+        grid-column: 1 / -1;
+    }
 }
 
 .results-count {
@@ -2373,6 +2415,16 @@ html:not(.js) .filters {
 .empty-state h2,
 .empty-state h3 {
     font-size: var(--fs-600);
+}
+
+.empty-state__body {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-3);
+}
+
+.empty-state__body p {
+    margin: 0;
 }
 
 /* ---------- Ficha de actividad ---------- */
@@ -3683,15 +3735,21 @@ html:not(.js) .filters {
     margin: auto -1.4rem 0;
 }
 
+/* Laterales difuminados. Va en el marco y no apilado en la imagen: Safari no
+   compone bien varias capas de máscara y dejaba el dibujo invisible. */
+.camino-hint__artframe {
+    display: block;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+}
+
 .camino-hint__art img {
     display: block;
     width: 100%;
     height: auto;
-    /* Borde superior y laterales difuminados: el dibujo se funde con el rosa de la tarjeta. */
-    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16%), linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
-    -webkit-mask-composite: source-in;
-    mask-image: linear-gradient(to bottom, transparent, #000 16%), linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
-    mask-composite: intersect;
+    /* Borde superior difuminado: el dibujo se funde con el rosa de la tarjeta. */
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16%);
+    mask-image: linear-gradient(to bottom, transparent, #000 16%);
 }
 
 .camino-hint__bubble {
@@ -11647,5 +11705,921 @@ body.comunidad-modal-open {
 
     .exp-resume__actions {
         grid-column: auto;
+    }
+}
+
+/* ---------- Orientación Fonoaudiológica ----------
+   Cabecera verde con la foto a la derecha y la tarjeta del paso 01 encima; biblioteca de
+   temas en tarjetas de color que abren un detalle debajo; la mirada profesional con pestañas
+   y las situaciones cotidianas con los niños ilustrados. Todo responde al ancho del
+   contenedor (con la barra lateral abierta la página es más angosta que la pantalla). */
+.orien-page {
+    container-type: inline-size;
+}
+
+.orien-page__stack {
+    display: grid;
+    gap: 1.4rem;
+    padding-block: var(--space-4) var(--space-8);
+}
+
+/* ---- Cabecera ----
+   Como el diseño: el título va sobre el fondo de la página, la foto ocupa la esquina
+   superior derecha y debajo corre una placa verde a todo el ancho con la tarjeta del paso 01. */
+.orien-hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Apilado (móvil y tablet): la foto va arriba del todo */
+.orien-hero__art {
+    order: -1;
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 0.9rem;
+    aspect-ratio: 16 / 9;
+    border-radius: 1.5rem;
+    object-fit: cover;
+    object-position: center 30%;
+}
+
+.orien-hero .breadcrumb {
+    margin-bottom: 0.7rem;
+}
+
+.orien-hero__kicker {
+    margin: 0;
+    color: #4e7a5e;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    line-height: 1.3;
+    text-transform: uppercase;
+}
+
+.orien-hero h1 {
+    margin: 0.35rem 0 0;
+    color: #163a36;
+    font-size: clamp(1.7rem, 1.1rem + 3vw, 3.1rem);
+    font-weight: 800;
+    line-height: 1.05;
+    text-wrap: balance;
+}
+
+.orien-hero__plate {
+    margin-top: 1rem;
+    padding: clamp(0.9rem, 1.8cqi, 1.3rem);
+    border-radius: 1.75rem;
+    background: linear-gradient(135deg, #e9f2e4, #f4f8ec 55%, #eef5e8);
+}
+
+.orien-hero__card {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.9rem;
+    align-items: start;
+    padding: 0.95rem 1.05rem;
+    border-radius: 1.25rem;
+    background: rgb(255 255 255 / 0.78);
+    box-shadow: 0 10px 26px -20px rgb(28 53 50 / 0.55);
+}
+
+.orien-hero__icon {
+    display: grid;
+    place-items: center;
+    width: 3.1rem;
+    height: 3.1rem;
+    border-radius: 1rem;
+    background: var(--c-sage-soft);
+    color: #1f5a41;
+}
+
+.orien-hero__icon .icon {
+    width: 1.7rem;
+    height: 1.7rem;
+}
+
+/* Línea verde que separa el ícono del texto, como en el diseño */
+.orien-hero__card-body {
+    padding-left: 0.9rem;
+    border-left: 3px solid #8bb894;
+}
+
+.orien-hero__card-title {
+    position: relative;
+    margin: 0.2rem 0 0;
+    color: var(--c-ink);
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 1rem + 1vw, 1.75rem);
+    font-weight: 800;
+    line-height: 1.1;
+    text-wrap: balance;
+}
+
+/* Destellos amarillos junto al título (solo cuando hay sitio a la derecha) */
+.orien-hero__card-title::after {
+    content: "";
+    display: none;
+    position: absolute;
+    top: -0.6rem;
+    right: 0.5rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='4 3 14 12' fill='none' stroke='%23f0b63f' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M6 4.5l2.4 5.2M14.6 5.6l-3.4 4.6M16.4 13.6H10.6'/%3E%3C/svg%3E") center / contain no-repeat;
+    pointer-events: none;
+}
+
+.orien-hero__card-text {
+    margin: 0.5rem 0 0;
+    color: var(--c-text);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Etiqueta de paso («01 · Conocer») */
+.orien-step {
+    margin: 0;
+    color: #4e7a5e;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    line-height: 1.3;
+    text-transform: uppercase;
+}
+
+@container (min-width: 46rem) {
+    /* La foto sale del flujo y ocupa la esquina superior derecha, por encima de la placa */
+    .orien-hero__art {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 47%;
+        height: 100%;
+        margin: 0;
+        aspect-ratio: auto;
+        border-radius: 1.75rem 1.75rem 1.75rem 5.5rem;
+        -webkit-mask-image: linear-gradient(to right, transparent, #000 24%);
+        mask-image: linear-gradient(to right, transparent, #000 24%);
+    }
+
+    .orien-hero__head {
+        max-width: 64%;
+    }
+
+    .orien-hero h1 {
+        /* Escala con el ancho real para que quepa en una línea, como en el diseño */
+        font-size: clamp(1.9rem, 4.1cqi, 3.1rem);
+        white-space: nowrap;
+    }
+
+    .orien-hero__plate {
+        padding: clamp(1.1rem, 2cqi, 1.5rem);
+    }
+
+    .orien-hero__card {
+        max-width: 59%;
+        padding: 1.1rem 1.25rem;
+    }
+
+    /* Hueco reservado para los destellos: el título nunca llega hasta ellos */
+    .orien-hero__card-title {
+        padding-right: 2.9rem;
+    }
+
+    .orien-hero__card-title::after {
+        display: block;
+    }
+}
+
+/* ---- 01 · Biblioteca ---- */
+.orien-library {
+    display: grid;
+    gap: 1.25rem;
+    padding: clamp(1.1rem, 2.4cqi, 1.9rem);
+    border: 1px solid var(--c-line);
+    border-radius: 1.6rem;
+    background: var(--c-surface);
+    box-shadow: var(--shadow-soft);
+}
+
+.orien-library__intro h2 {
+    margin: 0;
+    font-size: clamp(1.35rem, 1.05rem + 1.4vw, 1.95rem);
+    font-weight: 800;
+    line-height: 1.15;
+    text-wrap: balance;
+}
+
+.orien-library__intro h2::after {
+    content: "";
+    display: block;
+    width: 3.9rem;
+    height: 0.4rem;
+    margin-top: 0.85rem;
+    border-radius: var(--radius-pill);
+    background: #709461;
+}
+
+.orien-library__intro p {
+    margin: 0.85rem 0 0;
+    color: var(--c-text);
+    line-height: 1.6;
+}
+
+/* Título en píldora verde, como el diseño */
+.orien-pill {
+    display: inline-block;
+    margin: 0;
+    padding: 0.4rem 1rem;
+    border-radius: var(--radius-pill);
+    background: var(--c-sage-soft);
+    color: #1f5a41;
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 0.92rem + 0.45vw, 1.2rem);
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.orien-pill--sm {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.orien-library__lead {
+    margin: 0.7rem 0 0;
+    color: var(--c-muted);
+    line-height: 1.6;
+}
+
+.orien-topics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.orien-topic {
+    position: relative;
+    display: grid;
+    gap: 0.45rem;
+    justify-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 1.1rem 0.85rem 3.1rem;
+    border: 1px solid transparent;
+    border-radius: 1.25rem;
+    background: var(--orien-topic-bg, var(--c-sage-tint));
+    color: var(--c-ink);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.orien-topic--sage {
+    --orien-topic-bg: #eef3e6;
+    --orien-topic-ink: #1b5825;
+}
+
+.orien-topic--coral {
+    --orien-topic-bg: #fdefe4;
+    --orien-topic-ink: #7f4f12;
+}
+
+.orien-topic--lavender {
+    --orien-topic-bg: #f3ebf3;
+    --orien-topic-ink: #503f5f;
+}
+
+.orien-topic--yellow {
+    --orien-topic-bg: #fef4e0;
+    --orien-topic-ink: #61480c;
+}
+
+.orien-topic:hover,
+.orien-topic:focus-visible {
+    transform: translateY(-3px);
+    border-color: rgb(40 94 80 / 0.16);
+    box-shadow: 0 14px 26px -18px rgb(28 53 50 / 0.5);
+}
+
+.orien-topic.is-open {
+    border-color: var(--orien-topic-ink);
+}
+
+.orien-topic__icon {
+    color: var(--orien-topic-ink);
+}
+
+.orien-topic__icon .icon {
+    width: 2.6rem;
+    height: 2.6rem;
+}
+
+.orien-topic__title {
+    font-family: var(--font-display);
+    font-size: clamp(0.92rem, 0.85rem + 0.25cqi, 1rem);
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.orien-topic__text {
+    color: var(--c-muted);
+    font-size: clamp(0.76rem, 0.72rem + 0.18cqi, 0.82rem);
+    line-height: 1.45;
+}
+
+.orien-topic__go {
+    position: absolute;
+    bottom: 0.9rem;
+    left: 50%;
+    display: grid;
+    place-items: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: #6f9a5c;
+    color: #fff;
+}
+
+.orien-topic__go .icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.orien-topic.is-open .orien-topic__go {
+    transform: translateX(-50%) rotate(90deg);
+}
+
+.orien-detail {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.9rem;
+    align-items: start;
+    margin-top: 0.9rem;
+    padding: 1.05rem 1.15rem;
+    border: 1px solid #dce7dc;
+    border-radius: 1.25rem;
+    background: var(--c-sage-tint);
+}
+
+.orien-detail.is-in {
+    animation: orien-fade 0.22s ease;
+}
+
+.orien-detail__icon {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 0.9rem;
+    background: var(--c-surface);
+    color: #2f6b52;
+}
+
+.orien-detail__icon .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.orien-detail b {
+    color: var(--c-ink);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+}
+
+.orien-detail p {
+    margin: 0.35rem 0 0;
+    color: var(--c-text);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.orien-detail__close {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: 0.6rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #2f6b52;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+
+@keyframes orien-fade {
+    from {
+        opacity: 0.2;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ---- Cabecera de sección (02 y 03) ---- */
+.orien-section {
+    display: grid;
+    gap: 1rem;
+    margin-top: var(--space-4);
+    scroll-margin-top: calc(var(--header-h) + 1rem);
+}
+
+.orien-section__head h2 {
+    margin: 0.3rem 0 0;
+    font-size: clamp(1.4rem, 1.1rem + 1.4vw, 2rem);
+    font-weight: 800;
+    line-height: 1.12;
+    text-wrap: balance;
+}
+
+.orien-section__lead {
+    max-width: 44rem;
+    margin: 0.5rem 0 0;
+    color: var(--c-muted);
+    line-height: 1.6;
+}
+
+.orien-eyebrow {
+    margin: 0;
+    color: #4e7a5e;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    line-height: 1.3;
+    text-transform: uppercase;
+}
+
+.orien-eyebrow--light {
+    color: #c5d9c7;
+}
+
+.orien-note {
+    margin: 0.85rem 0 0;
+    color: var(--c-muted);
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+
+/* ---- 02 · La mirada fonoaudiológica ---- */
+.orien-look {
+    display: grid;
+    gap: 1.25rem;
+    padding: clamp(1.1rem, 2.4cqi, 1.9rem);
+    border: 1px solid var(--c-line);
+    border-radius: 1.6rem;
+    background: var(--c-surface);
+    box-shadow: var(--shadow-soft);
+}
+
+.orien-look__intro h3 {
+    margin: 0.7rem 0 0;
+    font-size: clamp(1.2rem, 1rem + 1vw, 1.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+    text-wrap: balance;
+}
+
+.orien-look__intro > p {
+    margin: 0.65rem 0 0;
+    color: var(--c-text);
+    line-height: 1.6;
+}
+
+.orien-equation {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 0.6rem;
+    align-items: center;
+    margin: 1.1rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.orien-eq {
+    display: grid;
+    justify-items: center;
+    gap: 0.25rem;
+    height: 100%;
+    padding: 0.9rem 0.7rem;
+    border-radius: 1.1rem;
+    background: var(--c-sage-tint);
+    text-align: center;
+}
+
+.orien-eq--warm {
+    background: #fdf1e6;
+}
+
+.orien-eq img {
+    width: 3.6rem;
+    height: auto;
+}
+
+.orien-eq b {
+    color: var(--c-ink);
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+}
+
+.orien-eq small {
+    color: var(--c-muted);
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+.orien-eq__plus {
+    color: #9ba99e;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.orien-look__panel {
+    padding: clamp(0.95rem, 2cqi, 1.35rem);
+    border-radius: 1.35rem;
+    background: #f7faf4;
+}
+
+.orien-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.9rem;
+}
+
+.orien-tab {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-pill);
+    background: var(--c-surface);
+    color: var(--c-muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.orien-tab.is-active {
+    border-color: #2f6b52;
+    background: #2f6b52;
+    color: #fff;
+}
+
+.orien-tabpanel {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: center;
+}
+
+.orien-tabpanel.is-in {
+    animation: orien-fade 0.22s ease;
+}
+
+.orien-tabpanel__art {
+    width: 100%;
+    height: auto;
+}
+
+.orien-tabpanel h4 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.orien-tabpanel p {
+    margin: 0.4rem 0 0;
+    color: var(--c-text);
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+/* ---- 03 · De comprender a acompañar ---- */
+.orien-practice {
+    display: grid;
+    gap: 1rem;
+    padding: clamp(1.1rem, 2.4cqi, 1.9rem);
+    border-radius: 1.6rem;
+    background: linear-gradient(130deg, #f1f6ee, #fbf4ea);
+}
+
+.orien-practice__top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.orien-practice__top h3 {
+    margin: 0;
+    font-size: clamp(1.15rem, 1rem + 0.8vw, 1.4rem);
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.orien-practice__top p {
+    margin: 0.3rem 0 0;
+    color: var(--c-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.orien-practice__sprout {
+    width: 3rem;
+    height: auto;
+}
+
+.orien-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: none;
+}
+
+.orien-steps__item {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid #e5ebe3;
+    border-radius: 1rem;
+    background: var(--c-surface);
+}
+
+.orien-steps__item i {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: var(--c-sage-soft);
+    color: #2f6b52;
+    font-size: 0.78rem;
+    font-style: normal;
+    font-weight: 800;
+}
+
+.orien-steps__item b {
+    color: var(--c-ink);
+    font-size: 0.88rem;
+    line-height: 1.35;
+}
+
+.orien-practice__body {
+    padding: clamp(0.95rem, 2cqi, 1.35rem);
+    border: 1px solid var(--c-line);
+    border-radius: 1.35rem;
+    background: var(--c-surface);
+}
+
+.orien-choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.65rem 0 0;
+}
+
+.orien-choice {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-pill);
+    background: var(--c-surface);
+    color: var(--c-muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.orien-choice.is-active {
+    border-color: #2f6b52;
+    background: #2f6b52;
+    color: #fff;
+}
+
+.orien-response {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: center;
+    margin-top: 0.9rem;
+    padding: 1rem;
+    border-radius: 1.25rem;
+    background: var(--c-sage-tint);
+}
+
+.orien-response.is-in {
+    animation: orien-fade 0.22s ease;
+}
+
+.orien-response__art {
+    width: 100%;
+    height: auto;
+}
+
+.orien-response__label {
+    margin: 0;
+    color: #2f6b52;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.orien-response__body h4 {
+    margin: 0.3rem 0 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.orien-response__body > p {
+    margin: 0.35rem 0 0;
+    color: var(--c-text);
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.orien-response__do {
+    margin-top: 0.65rem;
+    padding: 0.65rem 0.8rem;
+    border-radius: 0.8rem;
+    background: var(--c-surface);
+    color: #52624f;
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+
+/* ---- Espacio reservado para la microhistoria ---- */
+.orien-video {
+    display: grid;
+    gap: 1rem;
+    align-items: center;
+    padding: clamp(1.1rem, 2.4cqi, 1.6rem);
+    border-radius: 1.5rem;
+    background: #294036;
+    color: #e9f1e9;
+}
+
+.orien-video__screen {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 9;
+    border-radius: 1.1rem;
+    background: linear-gradient(135deg, #dbe8d9, #f4e8dc);
+}
+
+.orien-video__play {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    background: var(--c-surface);
+    color: #2f6b52;
+    box-shadow: 0 6px 16px -8px rgb(0 0 0 / 0.45);
+}
+
+.orien-video__play .icon {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
+.orien-video__screen img {
+    position: absolute;
+    right: 0.6rem;
+    bottom: 0.5rem;
+    width: 2.6rem;
+    height: auto;
+}
+
+.orien-video__body h3 {
+    margin: 0.35rem 0 0;
+    color: #fff;
+    font-size: clamp(1.1rem, 1rem + 0.7vw, 1.35rem);
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.orien-video__body > p {
+    margin: 0.45rem 0 0;
+    color: #d5e0d7;
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.orien-video__status {
+    margin: 0.6rem 0 0;
+    color: #b6cbb9;
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.orien-disclaimer {
+    margin: var(--space-4) 0 0;
+}
+
+.orien-next {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin: var(--space-2) 0 0;
+}
+
+/* ---- Dos columnas cuando el contenedor tiene espacio ---- */
+@container (min-width: 46rem) {
+    .orien-library {
+        grid-template-columns: minmax(0, 0.68fr) minmax(0, 1.32fr);
+        gap: 1.9rem;
+        align-items: start;
+    }
+
+    .orien-topics {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .orien-library__intro {
+        padding-right: 1.4rem;
+        border-right: 1px solid var(--c-line);
+    }
+
+    .orien-look {
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        gap: 1.9rem;
+        align-items: center;
+    }
+
+    .orien-tabpanel {
+        grid-template-columns: 7rem minmax(0, 1fr);
+        padding-block: 0.4rem;
+    }
+
+    .orien-video {
+        grid-template-columns: 13rem minmax(0, 1fr);
+        gap: 1.3rem;
+    }
+}
+
+@container (max-width: 33.99rem) {
+    /* En móvil el texto necesita todo el ancho: la ilustración pasa arriba */
+    .orien-tabpanel,
+    .orien-response {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.7rem;
+        justify-items: start;
+    }
+
+    .orien-tabpanel__art,
+    .orien-response__art {
+        width: 4.6rem;
+    }
+
+    .orien-equation {
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: stretch;
+    }
+
+    .orien-eq__plus {
+        justify-self: center;
+    }
+
+    .orien-topic {
+        padding: 0.9rem 0.65rem 2.9rem;
+    }
+
+    /* Las opciones caben de dos en dos en el ancho de un teléfono */
+    .orien-tab,
+    .orien-choice {
+        padding: 0.4rem 0.65rem;
+        font-size: 0.78rem;
+    }
+
+    /* En un teléfono el texto de la tarjeta 01 necesita todo el ancho */
+    .orien-hero__card {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.7rem;
+    }
+
+    .orien-hero__card-body {
+        padding-left: 0;
+        border-left: 0;
     }
 }

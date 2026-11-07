@@ -285,7 +285,9 @@
               </div>
             </div>
             <div class="camino-hint__art">
-              <img src="${CAMINO}recordatorio.webp" width="900" height="775" alt="" loading="lazy" decoding="async">
+              <span class="camino-hint__artframe">
+                <img src="${CAMINO}recordatorio.webp" width="900" height="775" alt="" loading="lazy" decoding="async">
+              </span>
               <p class="camino-hint__bubble">“Pequeñas acciones, grandes conversaciones.”</p>
             </div>
           </aside>

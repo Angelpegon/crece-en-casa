@@ -24,6 +24,8 @@ nuestro-rincon.html → mi-camino.html
 
 nuestra-comunidad.html          Comunidad (publicaciones locales de sesión)
 
+orientacion.html                Orientación Fonoaudiológica (biblioteca, mirada y situaciones)
+
 mi-espacio.html                 Espacio local
 sobre.html
 

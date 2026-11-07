@@ -3,61 +3,119 @@
   const { data, ui } = window.CEC;
 
   const form = document.querySelector("[data-filters]");
+  const groupsHost = form && form.querySelector("[data-filter-groups]");
   const results = document.querySelector("[data-results]");
   const count = document.querySelector("[data-results-count]");
   const empty = document.querySelector("[data-empty]");
-  const clearButton = document.querySelector("[data-clear-filters]");
+  const emptyBody = empty && empty.querySelector("[data-empty-body]");
+  const notice = document.querySelector("[data-filters-notice]");
   const resetButton = form && form.querySelector("[data-reset-filters]");
   const clearSearchButton = form && form.querySelector("[data-clear-search]");
   const activeFilters = document.querySelector("[data-active-filters]");
-  if (!form || !results || !count || !empty || !activeFilters) return;
+  if (!form || !groupsHost || !results || !count || !empty || !activeFilters) return;
 
   const SEARCH_LINK = 'a[href="explorar-actividades.html#buscar"]';
   const TYPING_DELAY = 300;
 
-  const validAges = data.ages.map((age) => String(age.value));
-  const validAreas = data.areas.map((area) => area.id);
-  const validMoments = data.moments.map((moment) => moment.id);
-  const validMaterials = data.materials.map((material) => material.id);
-  let activeMomento = "";
+  /*
+    Cada filtro se declara una sola vez. De aquí salen los chips, la lectura de la URL,
+    las pastillas de filtros activos, el texto del contador y el cálculo de disponibilidad,
+    así que añadir un filtro nuevo no obliga a tocar cinco sitios distintos.
+  */
+  const FILTERS = [
+    {
+      key: "edad",
+      legend: "Edad",
+      allLabel: "Todas las edades",
+      options: data.ages.map((age) => ({ value: String(age.value), label: age.label, tone: age.tone })),
+      matches: (activity, value) => activity.ages.includes(Number(value)),
+      label: (value) => (data.getAge(value) || {}).label,
+      phrase: (value) => {
+        const age = data.getAge(value);
+        return age && `para ${age.label}`;
+      },
+    },
+    {
+      key: "momento",
+      legend: "Momento del día",
+      allLabel: "Todos",
+      icons: true,
+      options: data.moments.map((moment) => ({
+        value: moment.id,
+        label: moment.shortLabel || moment.label,
+        icon: moment.icon,
+        tone: moment.tone,
+      })),
+      matches: (activity, value) => (activity.momentos || []).includes(value),
+      label: (value) => {
+        const moment = data.getMoment(value);
+        return moment && (moment.shortLabel || moment.label);
+      },
+      phrase: (value) => {
+        const moment = data.getMoment(value);
+        return moment && `para ${moment.label.toLowerCase()}`;
+      },
+    },
+    {
+      key: "area",
+      legend: "Área de comunicación",
+      allLabel: "Todas",
+      icons: true,
+      /* Etiquetas largas: con media columna cada chip caería en su propia línea. */
+      wide: true,
+      options: data.areas.map((area) => ({ value: area.id, label: area.label, icon: area.icon, tone: area.tone })),
+      matches: (activity, value) => activity.areas.includes(value),
+      label: (value) => (data.getArea(value) || {}).label,
+      phrase: (value) => {
+        const area = data.getArea(value);
+        return area && `de ${area.label.toLowerCase()}`;
+      },
+    },
+    {
+      key: "duracion",
+      legend: "Tiempo disponible",
+      allLabel: "Cualquiera",
+      options: data.durations.map((duration) => ({ value: duration.id, label: duration.label })),
+      matches: (activity, value) => activity.durationId === value,
+      label: (value) => (data.getDuration(value) || {}).label,
+      phrase: (value) => {
+        const duration = data.getDuration(value);
+        return duration && `de ${duration.label.toLowerCase()}`;
+      },
+    },
+    {
+      key: "materiales",
+      legend: "Materiales",
+      allLabel: "Todos",
+      icons: true,
+      options: data.materials.map((material) => ({ value: material.id, label: material.label, icon: "i-home" })),
+      matches: (activity, value) => activity.materialsId === value,
+      label: (value) => (data.getMaterial(value) || {}).label,
+      phrase: (value) => {
+        const material = data.getMaterial(value);
+        return material && `con ${material.label.toLowerCase()}`;
+      },
+    },
+  ];
 
-  function chip(name, value, label, { tone = "", icon = "" } = {}) {
-    const classes = ["chip"];
-    if (tone) classes.push(`chip--${tone}`);
-    if (icon) classes.push("chip--icon");
-    const glyph = icon
-      ? `<span class="chip__glyph" aria-hidden="true">${ui.icon(icon)}</span>`
-      : "";
-    return `
-      <label class="${classes.join(" ")}">
-        <input type="radio" name="${name}" value="${ui.escapeHTML(value)}"${value ? "" : " checked"}>
-        <span>${glyph}${ui.escapeHTML(label)}</span>
-      </label>`;
-  }
+  /* Al soltar un filtro se empieza por el final de esta lista: lo más fino cae primero. */
+  const RELAX_ORDER = ["materiales", "duracion", "area", "momento", "edad"];
 
-  function renderChips() {
-    const ageGroup = form.querySelector('[data-chips="edad"]');
-    const areaGroup = form.querySelector('[data-chips="area"]');
-    const materialGroup = form.querySelector('[data-chips="materiales"]');
-
-    ageGroup.innerHTML =
-      chip("edad", "", "Todas las edades") +
-      data.ages.map((age) => chip("edad", String(age.value), age.label, { tone: age.tone })).join("");
-    areaGroup.innerHTML =
-      chip("area", "", "Todas") +
-      data.areas.map((area) => chip("area", area.id, area.label, { icon: area.icon, tone: area.tone })).join("");
-    materialGroup.innerHTML =
-      chip("materiales", "", "Todos") +
-      data.materials
-        .map((material) => chip("materiales", material.id, material.label, { icon: "i-home" }))
-        .join("");
-  }
+  /*
+    Solo se ofrece lo que el contenido puede sostener: una opción sin ninguna ficha no
+    llega a los chips, y un grupo que se queda con menos de dos opciones no separa nada
+    y se oculta entero. Cuando el catálogo crezca, ambos vuelven solos.
+  */
+  const filters = FILTERS.map((filter) => ({
+    ...filter,
+    options: filter.options.filter((option) => data.activities.some((activity) => filter.matches(activity, option.value))),
+  })).filter((filter) => filter.options.length > 1);
 
   function normalize(text) {
     return String(text)
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
+      .replace(/[̀-ͯ]/g, "");
   }
 
   const searchIndex = new Map(
@@ -77,48 +135,76 @@
     })
   );
 
+  const chipNodes = new Map();
+
+  function chip(filter, option) {
+    const classes = ["chip"];
+    if (option.tone) classes.push(`chip--${option.tone}`);
+    if (option.icon) classes.push("chip--icon");
+    const glyph = option.icon
+      ? `<span class="chip__glyph" aria-hidden="true">${ui.icon(option.icon)}</span>`
+      : "";
+    return `
+      <label class="${classes.join(" ")}" data-chip="${filter.key}" data-value="${ui.escapeHTML(option.value)}">
+        <input type="radio" name="${filter.key}" value="${ui.escapeHTML(option.value)}"${option.value ? "" : " checked"}>
+        <span>${glyph}${ui.escapeHTML(option.label)}<span class="chip__note visually-hidden"></span></span>
+      </label>`;
+  }
+
+  function renderGroups() {
+    groupsHost.innerHTML = filters
+      .map((filter) => {
+        const options = [{ value: "", label: filter.allLabel }].concat(filter.options);
+        return `
+        <fieldset class="filters__group${filter.wide ? " filters__group--wide" : ""}">
+          <legend class="filters__label">${ui.escapeHTML(filter.legend)}</legend>
+          <div class="chip-group${filter.icons ? " chip-group--icons" : ""}" data-chips="${filter.key}">
+            ${options.map((option) => chip(filter, option)).join("")}
+          </div>
+        </fieldset>`;
+      })
+      .join("");
+
+    groupsHost.querySelectorAll("[data-chip]").forEach((label) => {
+      chipNodes.set(`${label.getAttribute("data-chip")}:${label.getAttribute("data-value")}`, label);
+    });
+  }
+
   function readFiltersFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    const edad = params.get("edad") || "";
-    const area = params.get("area") || "";
-    const momento = params.get("momento") || "";
-    const materiales = params.get("materiales") || "";
-    activeMomento = validMoments.includes(momento) ? momento : "";
-    return {
-      q: (params.get("q") || "").trim(),
-      edad: validAges.includes(edad) ? edad : "",
-      area: validAreas.includes(area) ? area : "",
-      momento: activeMomento,
-      materiales: validMaterials.includes(materiales) ? materiales : "",
-    };
+    const current = { q: (params.get("q") || "").trim() };
+    filters.forEach((filter) => {
+      const value = params.get(filter.key) || "";
+      current[filter.key] = filter.options.some((option) => option.value === value) ? value : "";
+    });
+    return current;
   }
 
   function readFiltersFromForm() {
     const formData = new FormData(form);
-    return {
-      q: String(formData.get("q") || "").trim(),
-      edad: String(formData.get("edad") || ""),
-      area: String(formData.get("area") || ""),
-      momento: activeMomento,
-      materiales: String(formData.get("materiales") || ""),
-    };
+    const current = { q: String(formData.get("q") || "").trim() };
+    filters.forEach((filter) => {
+      current[filter.key] = String(formData.get(filter.key) || "");
+    });
+    return current;
   }
 
-  function hasActiveFilters(filters) {
-    return Boolean(filters.q || filters.edad || filters.area || filters.momento || filters.materiales);
+  function hasActiveFilters(current) {
+    return Boolean(current.q) || filters.some((filter) => Boolean(current[filter.key]));
   }
 
   function checkRadio(name, value) {
-    const input = Array.from(form.elements[name]).find((radio) => radio.value === value);
+    const group = form.elements[name];
+    if (!group) return;
+    const inputs = typeof group.length === "number" ? Array.from(group) : [group];
+    const input = inputs.find((radio) => radio.value === value);
     if (input) input.checked = true;
   }
 
-  function applyFiltersToForm(filters) {
-    form.elements.q.value = filters.q;
-    checkRadio("edad", filters.edad);
-    checkRadio("area", filters.area);
-    checkRadio("materiales", filters.materiales);
-    syncSearchClear(filters.q);
+  function applyFiltersToForm(current) {
+    form.elements.q.value = current.q;
+    filters.forEach((filter) => checkRadio(filter.key, current[filter.key]));
+    syncSearchClear(current.q);
   }
 
   function syncSearchClear(query) {
@@ -126,46 +212,106 @@
     clearSearchButton.hidden = !String(query || "").trim();
   }
 
-  function syncResetButton(filters) {
+  function syncResetButton(current) {
     if (!resetButton) return;
-    const active = hasActiveFilters(filters);
+    const active = hasActiveFilters(current);
     resetButton.hidden = !active;
     if (resetButton.parentElement) resetButton.parentElement.hidden = !active;
   }
 
-  function updateUrl(filters) {
+  function updateUrl(current) {
     const params = new URLSearchParams();
-    Object.entries(filters).forEach(([key, value]) => {
+    Object.entries(current).forEach(([key, value]) => {
       if (value) params.set(key, value);
     });
     const query = params.toString();
     window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
   }
 
-  function filterActivities(filters) {
-    const words = normalize(filters.q).split(/\s+/).filter(Boolean);
+  /* `exceptKey` deja fuera un grupo para poder contar cuánto ofrecería cada una de sus opciones. */
+  function filterActivities(current, exceptKey) {
+    const words = normalize(current.q).split(/\s+/).filter(Boolean);
     return data.activities.filter((activity) => {
-      if (filters.edad && !activity.ages.includes(Number(filters.edad))) return false;
-      if (filters.area && !activity.areas.includes(filters.area)) return false;
-      if (filters.momento && !(activity.momentos || []).includes(filters.momento)) return false;
-      if (filters.materiales && activity.materialsId !== filters.materiales) return false;
       const text = searchIndex.get(activity.id);
-      return words.every((word) => text.includes(word));
+      if (!words.every((word) => text.includes(word))) return false;
+      return filters.every(
+        (filter) =>
+          filter.key === exceptKey || !current[filter.key] || filter.matches(activity, current[filter.key])
+      );
     });
   }
 
-  function describe(filters, total) {
+  /*
+    Un chip solo queda activo si, junto al resto de filtros, deja algo que ver. El recuento
+    ignora su propio grupo, así que moverse dentro de un grupo nunca puede vaciar la lista:
+    cualquier opción pulsable garantiza al menos una actividad.
+  */
+  function syncAvailability(current) {
+    filters.forEach((filter) => {
+      const pool = filterActivities(current, filter.key);
+      filter.options.forEach((option) => {
+        const label = chipNodes.get(`${filter.key}:${option.value}`);
+        if (!label) return;
+        const input = label.querySelector("input");
+        const note = label.querySelector(".chip__note");
+        const available = pool.some((activity) => filter.matches(activity, option.value));
+        /* La opción marcada nunca se bloquea: hay que poder salir de ella. */
+        const blocked = !available && !input.checked;
+        input.disabled = blocked;
+        label.classList.toggle("chip--unavailable", blocked);
+        if (note) note.textContent = blocked ? " (sin actividades con los filtros actuales)" : "";
+      });
+    });
+  }
+
+  /*
+    Una URL compartida puede traer una combinación sin fichas. En vez de recibir a la familia
+    con una pantalla vacía, se sueltan filtros por orden hasta que haya algo que mostrar.
+  */
+  function relax(current) {
+    const dropped = [];
+    const keys = RELAX_ORDER.filter((key) => filters.some((filter) => filter.key === key));
+    while (filterActivities(current).length === 0) {
+      const key = keys.find((candidate) => current[candidate]);
+      if (!key) break;
+      current[key] = "";
+      dropped.push(key);
+    }
+    return dropped;
+  }
+
+  function listText(items) {
+    if (items.length <= 1) return items[0] || "";
+    return `${items.slice(0, -1).join(", ")} y ${items[items.length - 1]}`;
+  }
+
+  function showNotice(dropped) {
+    if (!notice) return;
+    if (!dropped.length) {
+      notice.hidden = true;
+      notice.textContent = "";
+      return;
+    }
+    const names = dropped
+      .map((key) => (filters.find((filter) => filter.key === key) || {}).legend)
+      .filter(Boolean)
+      .map((name) => name.toLowerCase());
+    const plural = names.length > 1;
+    notice.hidden = false;
+    notice.textContent = `Esa combinación no tenía actividades, así que quitamos ${
+      plural ? "los filtros" : "el filtro"
+    } de ${listText(names)} para mostrarte propuestas.`;
+  }
+
+  function describe(current, total) {
     const singular = total === 1;
     const parts = [];
-    const age = filters.edad ? data.getAge(filters.edad) : null;
-    const area = filters.area ? data.getArea(filters.area) : null;
-    const moment = filters.momento ? data.getMoment(filters.momento) : null;
-    const material = filters.materiales ? data.getMaterial(filters.materiales) : null;
-    if (age) parts.push(`para ${age.label}`);
-    if (area) parts.push(`de ${area.label.toLowerCase()}`);
-    if (moment) parts.push(`para ${moment.label.toLowerCase()}`);
-    if (material) parts.push(`con ${material.label.toLowerCase()}`);
-    if (filters.q) parts.push(`que ${singular ? "coincide" : "coinciden"} con «${filters.q}»`);
+    filters.forEach((filter) => {
+      if (!current[filter.key]) return;
+      const phrase = filter.phrase(current[filter.key]);
+      if (phrase) parts.push(phrase);
+    });
+    if (current.q) parts.push(`que ${singular ? "coincide" : "coinciden"} con «${current.q}»`);
     const noun = singular ? "actividad" : "actividades";
     return `${total} ${noun}${parts.length ? " " + parts.join(" ") : ""}`;
   }
@@ -179,25 +325,14 @@
       </button>`;
   }
 
-  function renderActiveFilters(filters) {
+  function renderActiveFilters(current) {
     const pills = [];
-    if (filters.q) pills.push(activePill("q", `«${filters.q}»`));
-    if (filters.edad) {
-      const age = data.getAge(filters.edad);
-      if (age) pills.push(activePill("edad", age.label));
-    }
-    if (filters.area) {
-      const area = data.getArea(filters.area);
-      if (area) pills.push(activePill("area", area.label));
-    }
-    if (filters.momento) {
-      const moment = data.getMoment(filters.momento);
-      if (moment) pills.push(activePill("momento", moment.shortLabel || moment.label));
-    }
-    if (filters.materiales) {
-      const material = data.getMaterial(filters.materiales);
-      if (material) pills.push(activePill("materiales", material.label));
-    }
+    if (current.q) pills.push(activePill("q", `«${current.q}»`));
+    filters.forEach((filter) => {
+      if (!current[filter.key]) return;
+      const label = filter.label(current[filter.key]);
+      if (label) pills.push(activePill(filter.key, label));
+    });
 
     activeFilters.hidden = pills.length === 0;
     activeFilters.innerHTML = pills.length
@@ -205,50 +340,83 @@
       : "";
   }
 
-  function clearFilterKey(key) {
-    if (key === "q") {
-      form.elements.q.value = "";
-      syncSearchClear("");
-    } else if (key === "momento") {
-      activeMomento = "";
-    } else if (key === "edad" || key === "area" || key === "materiales") {
-      checkRadio(key, "");
+  /*
+    Con los chips vigilados, el vacío solo llega por texto escrito. Se ofrece la salida más
+    corta: soltar los chips si la búsqueda sola sí encuentra algo, o limpiar la búsqueda.
+  */
+  function syncEmptyState(current, total) {
+    empty.hidden = total > 0;
+    if (total > 0 || !emptyBody) return;
+    const onlySearch = filterActivities({ q: current.q });
+    const chipsApplied = filters.some((filter) => Boolean(current[filter.key]));
+    if (chipsApplied && onlySearch.length > 0) {
+      const singular = onlySearch.length === 1;
+      emptyBody.innerHTML = `
+        <p>Hay ${onlySearch.length} ${singular ? "actividad que coincide" : "actividades que coinciden"} con «${ui.escapeHTML(
+        current.q
+      )}», pero no con el resto de filtros.</p>
+        <button class="btn btn--coral" type="button" data-empty-action="chips">Quitar los demás filtros</button>`;
+      return;
     }
-    update();
+    if (current.q) {
+      emptyBody.innerHTML = `
+        <p>No hay actividades que coincidan con «${ui.escapeHTML(current.q)}». Prueba con otra palabra.</p>
+        <button class="btn btn--coral" type="button" data-empty-action="search">Limpiar la búsqueda</button>`;
+      return;
+    }
+    emptyBody.innerHTML = `
+      <p>Prueba con otra combinación.</p>
+      <button class="btn btn--coral" type="button" data-empty-action="all">Ver todas las actividades</button>`;
   }
 
-  function render(filters) {
-    const list = filterActivities(filters);
+  function render(current) {
+    const list = filterActivities(current);
     results.innerHTML = list.map((activity) => `<li>${ui.activityCard(activity, { headingLevel: 2 })}</li>`).join("");
-    count.textContent = describe(filters, list.length);
-    empty.hidden = list.length > 0;
-    renderActiveFilters(filters);
-    syncResetButton(filters);
-    syncSearchClear(filters.q);
+    count.textContent = describe(current, list.length);
+    syncEmptyState(current, list.length);
+    renderActiveFilters(current);
+    syncResetButton(current);
+    syncSearchClear(current.q);
+    syncAvailability(current);
   }
 
   let typingTimer;
 
   function update() {
     clearTimeout(typingTimer);
-    const filters = readFiltersFromForm();
-    render(filters);
-    updateUrl(filters);
+    showNotice([]);
+    const current = readFiltersFromForm();
+    render(current);
+    updateUrl(current);
   }
 
   function focusSearch() {
     form.elements.q.focus();
   }
 
+  function clearSearch() {
+    form.elements.q.value = "";
+    syncSearchClear("");
+  }
+
+  function clearChips() {
+    filters.forEach((filter) => checkRadio(filter.key, ""));
+  }
+
+  function clearFilterKey(key) {
+    if (key === "q") clearSearch();
+    else checkRadio(key, "");
+    update();
+  }
+
   function resetFilters() {
-    activeMomento = "";
     form.reset();
     syncSearchClear("");
     update();
     focusSearch();
   }
 
-  renderChips();
+  renderGroups();
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -264,7 +432,6 @@
     if (event.target.type === "radio") update();
   });
   form.addEventListener("reset", () => {
-    activeMomento = "";
     setTimeout(() => {
       syncSearchClear("");
       update();
@@ -273,8 +440,7 @@
 
   if (clearSearchButton) {
     clearSearchButton.addEventListener("click", () => {
-      form.elements.q.value = "";
-      syncSearchClear("");
+      clearSearch();
       update();
       focusSearch();
     });
@@ -286,7 +452,19 @@
     clearFilterKey(pill.getAttribute("data-clear-key"));
   });
 
-  if (clearButton) clearButton.addEventListener("click", resetFilters);
+  empty.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-empty-action]");
+    if (!button) return;
+    const action = button.getAttribute("data-empty-action");
+    if (action === "chips") clearChips();
+    else if (action === "search") clearSearch();
+    else {
+      clearChips();
+      clearSearch();
+    }
+    update();
+    focusSearch();
+  });
 
   document.querySelectorAll(SEARCH_LINK).forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -297,9 +475,11 @@
 
   const cameFromSearchLink = window.location.hash === "#buscar";
   const initial = readFiltersFromUrl();
+  const dropped = relax(initial);
   applyFiltersToForm(initial);
   render(initial);
   updateUrl(initial);
+  showNotice(dropped);
 
   if (cameFromSearchLink) {
     focusSearch();

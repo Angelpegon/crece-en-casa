@@ -39,6 +39,25 @@
   </symbol>
 
   <!-- Iconos de áreas de desarrollo -->
+  <symbol id="i-biblioteca" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 7.4C10.3 6.1 8.3 5.4 6 5.4H3.2v12.3H6c2.3 0 4.3.7 6 2z"/>
+    <path d="M12 7.4c1.7-1.3 3.7-2 6-2h2.8v12.3H18c-2.3 0-4.3.7-6 2z"/>
+    <path d="M12 7.4v12.3"/>
+  </symbol>
+  <symbol id="i-intencion" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12.5 3.5A7.5 7.5 0 0 1 20 11c0 4.1-3.4 7.5-7.5 7.5H9l-4.3 3v-4.4A7.4 7.4 0 0 1 2.5 11 7.5 7.5 0 0 1 10 3.5z"/>
+    <path d="M7.8 11h.01M11.4 11h.01M15 11h.01"/>
+  </symbol>
+  <symbol id="i-oido" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5.5 10a5.5 5.5 0 0 1 11 0c0 2.4-1.6 3.3-2.6 4.4-.9 1-.7 2.4-1.6 3.4a2.9 2.9 0 0 1-4.9-2"/>
+    <path d="M9.3 10.3a2.4 2.4 0 0 1 4.3-1.4"/>
+    <path d="M19 7.6a6.6 6.6 0 0 1 0 8.8M21.6 5a10.2 10.2 0 0 1 0 14"/>
+  </symbol>
+  <symbol id="i-habla" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13.5 20.5v-2.8h1.8a1.6 1.6 0 0 0 1.6-1.6v-2.3h1.4l-1.9-3.6a6.6 6.6 0 1 0-11 5.2v5.1z"/>
+    <path d="M9.8 10.2h.01"/>
+    <path d="M19.6 4.6 21.8 3M20.8 8.4h2.4M19.2 11.9l2 1.5"/>
+  </symbol>
   <symbol id="i-vocabulario" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
     <path d="M5 4.5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2z"/><path d="M7.5 9.5h9M7.5 12.5h5.5"/>
   </symbol>

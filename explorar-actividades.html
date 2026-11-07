@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Explorar actividades | Crece en Casa</title>
-  <meta name="description" content="Actividades para acompañar la comunicación, organizadas por edad fija, área de comunicación y materiales.">
+  <meta name="description" content="Actividades para acompañar la comunicación, organizadas por edad fija, momento del día, área de comunicación y tiempo disponible.">
   <meta name="theme-color" content="#fef9f3">
   <script>document.documentElement.classList.add("js");</script>
   <link rel="icon" href="assets/brand/favicon.ico" sizes="any">
@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
   <link rel="stylesheet" href="css/styles.css?v=espacio1">
-  <link rel="stylesheet" href="css/pages.css?v=ipad8">
+  <link rel="stylesheet" href="css/pages.css?v=orientacion1">
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -43,8 +43,8 @@
           <div class="act-hero__content">
             <h1 id="page-title">Actividades para crecer comunicándonos</h1>
             <p class="act-hero__lead">
-              Cada actividad está pensada para una edad. Filtra por edad, área de comunicación o materiales
-              y adapta la propuesta a los intereses de tu niño con lo que ya tienes en casa.
+              Cada actividad está pensada para una edad. Filtra por edad, momento del día, área de comunicación
+              o el tiempo que tengas, y adapta la propuesta a los intereses de tu niño con lo que ya tienes en casa.
             </p>
           </div>
         </div>
@@ -67,25 +67,14 @@
             </div>
           </div>
 
-          <fieldset class="filters__group">
-            <legend class="filters__label">Edad</legend>
-            <div class="chip-group" data-chips="edad"></div>
-          </fieldset>
-
-          <fieldset class="filters__group">
-            <legend class="filters__label">Área de comunicación</legend>
-            <div class="chip-group chip-group--icons" data-chips="area"></div>
-          </fieldset>
-
-          <fieldset class="filters__group">
-            <legend class="filters__label">Materiales</legend>
-            <div class="chip-group chip-group--icons" data-chips="materiales"></div>
-          </fieldset>
+          <div class="filters__groups" data-filter-groups></div>
 
           <div class="filters__actions">
             <button class="btn btn--outline" type="reset" data-reset-filters hidden>Limpiar filtros</button>
           </div>
         </form>
+
+        <p class="filters-notice" data-filters-notice hidden></p>
 
         <div class="filters-active" data-active-filters hidden></div>
 
@@ -94,8 +83,7 @@
 
         <div class="empty-state" data-empty hidden>
           <h2>No encontramos actividades con estos filtros</h2>
-          <p>Prueba con otra combinación.</p>
-          <button class="btn btn--coral" type="button" data-clear-filters>Ver todas las actividades</button>
+          <div class="empty-state__body" data-empty-body></div>
         </div>
 
         <noscript>
@@ -109,8 +97,8 @@
 
   <script src="js/data.js?v=edad1" defer></script>
   <script src="js/ui.js?v=wave1" defer></script>
-  <script src="js/chrome.js?v=espacio1" defer></script>
+  <script src="js/chrome.js?v=orientacion1" defer></script>
   <script src="js/main.js?v=wave1" defer></script>
-  <script src="js/catalog.js?v=wave1" defer></script>
+  <script src="js/catalog.js?v=filtros1" defer></script>
 </body>
 </html>
