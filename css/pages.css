@@ -2165,23 +2165,6 @@
     border-color: var(--c-ink);
 }
 
-/* Sin fichas detrás: el chip sigue a la vista para no mover el diseño, pero no se puede pulsar. */
-.filters .chip--unavailable>span,
-.filters .chip--unavailable input:hover+span {
-    background: var(--c-bg);
-    border-color: var(--c-line);
-    border-style: dashed;
-    color: var(--c-muted);
-}
-
-.filters .chip--unavailable .chip__glyph {
-    opacity: 0.6;
-}
-
-.filters .chip--unavailable input {
-    cursor: not-allowed;
-}
-
 .chip input:checked+span {
     background: var(--c-ink);
     border-color: var(--c-ink);
@@ -2286,20 +2269,6 @@ html:not(.js) .filters {
     display: none !important;
 }
 
-.filters-notice {
-    margin-top: var(--space-4);
-    margin-bottom: 0;
-    padding: var(--space-3) var(--space-4);
-    border-radius: var(--radius-md);
-    background: var(--c-yellow-soft);
-    color: var(--c-ink);
-    font-weight: 700;
-}
-
-.filters-notice[hidden] {
-    display: none !important;
-}
-
 .filters-active {
     display: flex;
     flex-wrap: wrap;
@@ -2361,6 +2330,18 @@ html:not(.js) .filters {
 
 .filters-active__pill:hover {
     background: var(--c-coral-soft);
+}
+
+/* Pedido pero sin efecto en estos resultados: se deja a la vista para poder quitarlo. */
+.filters-active__pill--ignored {
+    border: 1px dashed var(--c-muted);
+    background: transparent;
+    box-shadow: none;
+    color: var(--c-muted);
+}
+
+.filters-active__pill--ignored>span:first-child {
+    text-decoration: line-through;
 }
 
 .filters-active__pill:focus-visible {

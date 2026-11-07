@@ -8,7 +8,6 @@
   const count = document.querySelector("[data-results-count]");
   const empty = document.querySelector("[data-empty]");
   const emptyBody = empty && empty.querySelector("[data-empty-body]");
-  const notice = document.querySelector("[data-filters-notice]");
   const resetButton = form && form.querySelector("[data-reset-filters]");
   const clearSearchButton = form && form.querySelector("[data-clear-search]");
   const activeFilters = document.querySelector("[data-active-filters]");
@@ -19,8 +18,8 @@
 
   /*
     Cada filtro se declara una sola vez. De aquí salen los chips, la lectura de la URL,
-    las pastillas de filtros activos, el texto del contador y el cálculo de disponibilidad,
-    así que añadir un filtro nuevo no obliga a tocar cinco sitios distintos.
+    las pastillas de filtros activos y el texto del contador, así que añadir un filtro
+    nuevo no obliga a tocar cinco sitios distintos.
   */
   const FILTERS = [
     {
@@ -98,7 +97,7 @@
     },
   ];
 
-  /* Al soltar un filtro se empieza por el final de esta lista: lo más fino cae primero. */
+  /* Cuando hay que soltar algo, se empieza por lo más fino y se deja la edad para el final. */
   const RELAX_ORDER = ["materiales", "duracion", "area", "momento", "edad"];
 
   /*
@@ -147,7 +146,7 @@
     return `
       <label class="${classes.join(" ")}" data-chip="${filter.key}" data-value="${ui.escapeHTML(option.value)}">
         <input type="radio" name="${filter.key}" value="${ui.escapeHTML(option.value)}"${option.value ? "" : " checked"}>
-        <span>${glyph}${ui.escapeHTML(option.label)}<span class="chip__note visually-hidden"></span></span>
+        <span>${glyph}${ui.escapeHTML(option.label)}</span>
       </label>`;
   }
 
@@ -228,110 +227,82 @@
     window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
   }
 
-  /* `exceptKey` deja fuera un grupo para poder contar cuánto ofrecería cada una de sus opciones. */
-  function filterActivities(current, exceptKey) {
+  function filterActivities(current) {
     const words = normalize(current.q).split(/\s+/).filter(Boolean);
     return data.activities.filter((activity) => {
       const text = searchIndex.get(activity.id);
       if (!words.every((word) => text.includes(word))) return false;
-      return filters.every(
-        (filter) =>
-          filter.key === exceptKey || !current[filter.key] || filter.matches(activity, current[filter.key])
-      );
+      return filters.every((filter) => !current[filter.key] || filter.matches(activity, current[filter.key]));
     });
   }
 
   /*
-    Un chip solo queda activo si, junto al resto de filtros, deja algo que ver. El recuento
-    ignora su propio grupo, así que moverse dentro de un grupo nunca puede vaciar la lista:
-    cualquier opción pulsable garantiza al menos una actividad.
+    Orden en que se sueltan los filtros cuando una combinación no deja nada. Lo último que
+    hizo la familia es lo último que se sacrifica; por lo demás cae antes el texto buscado
+    (suele ser una palabra que no acierta) y después los chips, del más fino al más grueso.
   */
-  function syncAvailability(current) {
-    filters.forEach((filter) => {
-      const pool = filterActivities(current, filter.key);
-      filter.options.forEach((option) => {
-        const label = chipNodes.get(`${filter.key}:${option.value}`);
-        if (!label) return;
-        const input = label.querySelector("input");
-        const note = label.querySelector(".chip__note");
-        const available = pool.some((activity) => filter.matches(activity, option.value));
-        /* La opción marcada nunca se bloquea: hay que poder salir de ella. */
-        const blocked = !available && !input.checked;
-        input.disabled = blocked;
-        label.classList.toggle("chip--unavailable", blocked);
-        if (note) note.textContent = blocked ? " (sin actividades con los filtros actuales)" : "";
-      });
-    });
+  function dropOrder(touchedKey) {
+    const chipKeys = RELAX_ORDER.filter(
+      (key) => filters.some((filter) => filter.key === key) && key !== touchedKey
+    );
+    if (touchedKey === "q") return [...chipKeys, "q"];
+    const order = ["q", ...chipKeys];
+    if (touchedKey) order.push(touchedKey);
+    return order;
   }
 
   /*
-    Una URL compartida puede traer una combinación sin fichas. En vez de recibir a la familia
-    con una pantalla vacía, se sueltan filtros por orden hasta que haya algo que mostrar.
+    La lista nunca se queda vacía: si la combinación pedida no tiene fichas, se van
+    soltando filtros hasta que haya algo que mostrar. El ajuste es silencioso a propósito;
+    la familia ve siempre una propuesta cercana a lo que pidió, no un aviso de que falló.
   */
-  function relax(current) {
-    const dropped = [];
-    const keys = RELAX_ORDER.filter((key) => filters.some((filter) => filter.key === key));
-    while (filterActivities(current).length === 0) {
-      const key = keys.find((candidate) => current[candidate]);
+  function resolve(requested, touchedKey) {
+    const applied = { ...requested };
+    const order = dropOrder(touchedKey);
+    while (filterActivities(applied).length === 0) {
+      const key = order.find((candidate) => applied[candidate]);
       if (!key) break;
-      current[key] = "";
-      dropped.push(key);
+      applied[key] = "";
     }
-    return dropped;
+    return applied;
   }
 
-  function listText(items) {
-    if (items.length <= 1) return items[0] || "";
-    return `${items.slice(0, -1).join(", ")} y ${items[items.length - 1]}`;
-  }
-
-  function showNotice(dropped) {
-    if (!notice) return;
-    if (!dropped.length) {
-      notice.hidden = true;
-      notice.textContent = "";
-      return;
-    }
-    const names = dropped
-      .map((key) => (filters.find((filter) => filter.key === key) || {}).legend)
-      .filter(Boolean)
-      .map((name) => name.toLowerCase());
-    const plural = names.length > 1;
-    notice.hidden = false;
-    notice.textContent = `Esa combinación no tenía actividades, así que quitamos ${
-      plural ? "los filtros" : "el filtro"
-    } de ${listText(names)} para mostrarte propuestas.`;
-  }
-
-  function describe(current, total) {
+  function describe(applied, total) {
     const singular = total === 1;
     const parts = [];
     filters.forEach((filter) => {
-      if (!current[filter.key]) return;
-      const phrase = filter.phrase(current[filter.key]);
+      if (!applied[filter.key]) return;
+      const phrase = filter.phrase(applied[filter.key]);
       if (phrase) parts.push(phrase);
     });
-    if (current.q) parts.push(`que ${singular ? "coincide" : "coinciden"} con «${current.q}»`);
+    if (applied.q) parts.push(`que ${singular ? "coincide" : "coinciden"} con «${applied.q}»`);
     const noun = singular ? "actividad" : "actividades";
     return `${total} ${noun}${parts.length ? " " + parts.join(" ") : ""}`;
   }
 
-  function activePill(key, label) {
+  function activePill(key, label, ignored) {
+    const classes = ["filters-active__pill"];
+    if (ignored) classes.push("filters-active__pill--ignored");
     return `
-      <button class="filters-active__pill" type="button" data-clear-key="${ui.escapeHTML(key)}">
+      <button class="${classes.join(" ")}" type="button" data-clear-key="${ui.escapeHTML(key)}">
         <span>${ui.escapeHTML(label)}</span>
+        ${ignored ? '<span class="visually-hidden">(sin efecto en estos resultados)</span>' : ""}
         <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-close"></use></svg>
         <span class="visually-hidden">Quitar filtro</span>
       </button>`;
   }
 
-  function renderActiveFilters(current) {
+  /*
+    Las pastillas enseñan lo que la familia pidió, no solo lo que se pudo aplicar: una
+    búsqueda que quedó fuera sigue visible, marcada, para que se entienda y se pueda quitar.
+  */
+  function renderActiveFilters(requested, applied) {
     const pills = [];
-    if (current.q) pills.push(activePill("q", `«${current.q}»`));
+    if (requested.q) pills.push(activePill("q", `«${requested.q}»`, !applied.q));
     filters.forEach((filter) => {
-      if (!current[filter.key]) return;
-      const label = filter.label(current[filter.key]);
-      if (label) pills.push(activePill(filter.key, label));
+      if (!applied[filter.key]) return;
+      const label = filter.label(applied[filter.key]);
+      if (label) pills.push(activePill(filter.key, label, false));
     });
 
     activeFilters.hidden = pills.length === 0;
@@ -340,54 +311,37 @@
       : "";
   }
 
-  /*
-    Con los chips vigilados, el vacío solo llega por texto escrito. Se ofrece la salida más
-    corta: soltar los chips si la búsqueda sola sí encuentra algo, o limpiar la búsqueda.
-  */
-  function syncEmptyState(current, total) {
+  /* Red de seguridad: con el catálogo poblado, `resolve` garantiza que esto no se vea. */
+  function syncEmptyState(total) {
     empty.hidden = total > 0;
     if (total > 0 || !emptyBody) return;
-    const onlySearch = filterActivities({ q: current.q });
-    const chipsApplied = filters.some((filter) => Boolean(current[filter.key]));
-    if (chipsApplied && onlySearch.length > 0) {
-      const singular = onlySearch.length === 1;
-      emptyBody.innerHTML = `
-        <p>Hay ${onlySearch.length} ${singular ? "actividad que coincide" : "actividades que coinciden"} con «${ui.escapeHTML(
-        current.q
-      )}», pero no con el resto de filtros.</p>
-        <button class="btn btn--coral" type="button" data-empty-action="chips">Quitar los demás filtros</button>`;
-      return;
-    }
-    if (current.q) {
-      emptyBody.innerHTML = `
-        <p>No hay actividades que coincidan con «${ui.escapeHTML(current.q)}». Prueba con otra palabra.</p>
-        <button class="btn btn--coral" type="button" data-empty-action="search">Limpiar la búsqueda</button>`;
-      return;
-    }
-    emptyBody.innerHTML = `
-      <p>Prueba con otra combinación.</p>
-      <button class="btn btn--coral" type="button" data-empty-action="all">Ver todas las actividades</button>`;
+    emptyBody.innerHTML = "<p>Vuelve a intentarlo en un momento.</p>";
   }
 
-  function render(current) {
-    const list = filterActivities(current);
+  function render(requested, applied) {
+    const list = filterActivities(applied);
     results.innerHTML = list.map((activity) => `<li>${ui.activityCard(activity, { headingLevel: 2 })}</li>`).join("");
-    count.textContent = describe(current, list.length);
-    syncEmptyState(current, list.length);
-    renderActiveFilters(current);
-    syncResetButton(current);
-    syncSearchClear(current.q);
-    syncAvailability(current);
+    count.textContent = describe(applied, list.length);
+    syncEmptyState(list.length);
+    renderActiveFilters(requested, applied);
+    syncResetButton(requested);
+    syncSearchClear(requested.q);
   }
 
   let typingTimer;
 
-  function update() {
+  /*
+    `touchedKey` es el filtro que la familia acaba de tocar. Los chips que haya que soltar
+    se desmarcan de verdad, para que lo resaltado y lo filtrado digan siempre lo mismo;
+    el texto buscado se respeta tal cual lo escribieron, aunque se quede sin aplicar.
+  */
+  function update(touchedKey) {
     clearTimeout(typingTimer);
-    showNotice([]);
-    const current = readFiltersFromForm();
-    render(current);
-    updateUrl(current);
+    const requested = readFiltersFromForm();
+    const applied = resolve(requested, touchedKey);
+    filters.forEach((filter) => checkRadio(filter.key, applied[filter.key]));
+    render(requested, applied);
+    updateUrl({ ...applied, q: requested.q });
   }
 
   function focusSearch() {
@@ -397,10 +351,6 @@
   function clearSearch() {
     form.elements.q.value = "";
     syncSearchClear("");
-  }
-
-  function clearChips() {
-    filters.forEach((filter) => checkRadio(filter.key, ""));
   }
 
   function clearFilterKey(key) {
@@ -426,10 +376,10 @@
     if (event.target.name !== "q") return;
     syncSearchClear(event.target.value);
     clearTimeout(typingTimer);
-    typingTimer = setTimeout(update, TYPING_DELAY);
+    typingTimer = setTimeout(() => update("q"), TYPING_DELAY);
   });
   form.addEventListener("change", (event) => {
-    if (event.target.type === "radio") update();
+    if (event.target.type === "radio") update(event.target.name);
   });
   form.addEventListener("reset", () => {
     setTimeout(() => {
@@ -452,20 +402,6 @@
     clearFilterKey(pill.getAttribute("data-clear-key"));
   });
 
-  empty.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-empty-action]");
-    if (!button) return;
-    const action = button.getAttribute("data-empty-action");
-    if (action === "chips") clearChips();
-    else if (action === "search") clearSearch();
-    else {
-      clearChips();
-      clearSearch();
-    }
-    update();
-    focusSearch();
-  });
-
   document.querySelectorAll(SEARCH_LINK).forEach((link) => {
     link.addEventListener("click", (event) => {
       event.preventDefault();
@@ -475,11 +411,8 @@
 
   const cameFromSearchLink = window.location.hash === "#buscar";
   const initial = readFiltersFromUrl();
-  const dropped = relax(initial);
   applyFiltersToForm(initial);
-  render(initial);
-  updateUrl(initial);
-  showNotice(dropped);
+  update();
 
   if (cameFromSearchLink) {
     focusSearch();

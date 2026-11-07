@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap">
   <link rel="stylesheet" href="css/styles.css?v=espacio1">
-  <link rel="stylesheet" href="css/pages.css?v=biblioteca1">
+  <link rel="stylesheet" href="css/pages.css?v=biblioteca3">
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -74,15 +74,14 @@
           </div>
         </form>
 
-        <p class="filters-notice" data-filters-notice hidden></p>
-
         <div class="filters-active" data-active-filters hidden></div>
 
         <p class="results-count" aria-live="polite" data-results-count></p>
         <ul class="activity-grid" data-results></ul>
 
+        <!-- Red de seguridad: con fichas en el catálogo, los filtros nunca dejan la lista vacía. -->
         <div class="empty-state" data-empty hidden>
-          <h2>No encontramos actividades con estos filtros</h2>
+          <h2>Ahora mismo no hay actividades disponibles</h2>
           <div class="empty-state__body" data-empty-body></div>
         </div>
 
@@ -99,6 +98,6 @@
   <script src="js/ui.js?v=wave1" defer></script>
   <script src="js/chrome.js?v=orientacion1" defer></script>
   <script src="js/main.js?v=wave1" defer></script>
-  <script src="js/catalog.js?v=filtros1" defer></script>
+  <script src="js/catalog.js?v=filtros3" defer></script>
 </body>
 </html>
