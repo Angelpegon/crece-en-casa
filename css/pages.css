@@ -2332,18 +2332,6 @@ html:not(.js) .filters {
     background: var(--c-coral-soft);
 }
 
-/* Pedido pero sin efecto en estos resultados: se deja a la vista para poder quitarlo. */
-.filters-active__pill--ignored {
-    border: 1px dashed var(--c-muted);
-    background: transparent;
-    box-shadow: none;
-    color: var(--c-muted);
-}
-
-.filters-active__pill--ignored>span:first-child {
-    text-decoration: line-through;
-}
-
 .filters-active__pill:focus-visible {
     outline: 3px solid var(--c-sky-strong);
     outline-offset: 2px;

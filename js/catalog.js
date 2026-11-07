@@ -26,6 +26,7 @@
       key: "edad",
       legend: "Edad",
       allLabel: "Todas las edades",
+      weight: 10,
       options: data.ages.map((age) => ({ value: String(age.value), label: age.label, tone: age.tone })),
       matches: (activity, value) => activity.ages.includes(Number(value)),
       label: (value) => (data.getAge(value) || {}).label,
@@ -39,6 +40,7 @@
       legend: "Momento del día",
       allLabel: "Todos",
       icons: true,
+      weight: 4,
       options: data.moments.map((moment) => ({
         value: moment.id,
         label: moment.shortLabel || moment.label,
@@ -60,6 +62,7 @@
       legend: "Área de comunicación",
       allLabel: "Todas",
       icons: true,
+      weight: 3,
       /* Etiquetas largas: con media columna cada chip caería en su propia línea. */
       wide: true,
       options: data.areas.map((area) => ({ value: area.id, label: area.label, icon: area.icon, tone: area.tone })),
@@ -74,6 +77,7 @@
       key: "duracion",
       legend: "Tiempo disponible",
       allLabel: "Cualquiera",
+      weight: 2,
       options: data.durations.map((duration) => ({ value: duration.id, label: duration.label })),
       matches: (activity, value) => activity.durationId === value,
       label: (value) => (data.getDuration(value) || {}).label,
@@ -87,6 +91,7 @@
       legend: "Materiales",
       allLabel: "Todos",
       icons: true,
+      weight: 1,
       options: data.materials.map((material) => ({ value: material.id, label: material.label, icon: "i-home" })),
       matches: (activity, value) => activity.materialsId === value,
       label: (value) => (data.getMaterial(value) || {}).label,
@@ -97,8 +102,8 @@
     },
   ];
 
-  /* Cuando hay que soltar algo, se empieza por lo más fino y se deja la edad para el final. */
-  const RELAX_ORDER = ["materiales", "duracion", "area", "momento", "edad"];
+  /* La búsqueda pesa como el momento: orienta, pero no manda sobre la edad. */
+  const SEARCH_WEIGHT = 4;
 
   /*
     Solo se ofrece lo que el contenido puede sostener: una opción sin ninguna ficha no
@@ -227,82 +232,81 @@
     window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
   }
 
-  function filterActivities(current) {
-    const words = normalize(current.q).split(/\s+/).filter(Boolean);
-    return data.activities.filter((activity) => {
-      const text = searchIndex.get(activity.id);
-      if (!words.every((word) => text.includes(word))) return false;
-      return filters.every((filter) => !current[filter.key] || filter.matches(activity, current[filter.key]));
+  function searchWords(query) {
+    return normalize(query).split(/\s+/).filter(Boolean);
+  }
+
+  function matchesQuery(activity, words) {
+    const text = searchIndex.get(activity.id);
+    return words.every((word) => text.includes(word));
+  }
+
+  function matchesFilter(activity, filter, current) {
+    return Boolean(current[filter.key]) && filter.matches(activity, current[filter.key]);
+  }
+
+  /*
+    Los filtros son preferencias, no condiciones: cada ficha suma el peso de lo que cumple
+    y se muestran las que más suman. Mientras exista alguna combinación exacta, esa gana
+    (tiene la puntuación máxima posible) y el catálogo se comporta como un filtro de toda
+    la vida; cuando no la hay, en vez de vaciarse enseña lo más cercano. Así cualquier
+    combinación de chips es seleccionable y siempre deja algo que ver.
+  */
+  function rankActivities(current) {
+    const words = searchWords(current.q);
+    let best = -1;
+    const scored = data.activities.map((activity) => {
+      let score = 0;
+      filters.forEach((filter) => {
+        if (matchesFilter(activity, filter, current)) score += filter.weight;
+      });
+      if (words.length && matchesQuery(activity, words)) score += SEARCH_WEIGHT;
+      if (score > best) best = score;
+      return { activity, score };
     });
+    return scored.filter((item) => item.score === best).map((item) => item.activity);
   }
 
   /*
-    Orden en que se sueltan los filtros cuando una combinación no deja nada. Lo último que
-    hizo la familia es lo último que se sacrifica; por lo demás cae antes el texto buscado
-    (suele ser una palabra que no acierta) y después los chips, del más fino al más grueso.
+    Solo se nombra lo que cumple toda la lista. Si la combinación no existía y se está
+    enseñando lo más parecido, el contador calla ese filtro en vez de prometer algo falso:
+    con la edad, prometer de más sería lo peor que podría hacer esta página.
   */
-  function dropOrder(touchedKey) {
-    const chipKeys = RELAX_ORDER.filter(
-      (key) => filters.some((filter) => filter.key === key) && key !== touchedKey
-    );
-    if (touchedKey === "q") return [...chipKeys, "q"];
-    const order = ["q", ...chipKeys];
-    if (touchedKey) order.push(touchedKey);
-    return order;
-  }
-
-  /*
-    La lista nunca se queda vacía: si la combinación pedida no tiene fichas, se van
-    soltando filtros hasta que haya algo que mostrar. El ajuste es silencioso a propósito;
-    la familia ve siempre una propuesta cercana a lo que pidió, no un aviso de que falló.
-  */
-  function resolve(requested, touchedKey) {
-    const applied = { ...requested };
-    const order = dropOrder(touchedKey);
-    while (filterActivities(applied).length === 0) {
-      const key = order.find((candidate) => applied[candidate]);
-      if (!key) break;
-      applied[key] = "";
-    }
-    return applied;
-  }
-
-  function describe(applied, total) {
+  function describe(current, list) {
+    const total = list.length;
     const singular = total === 1;
     const parts = [];
     filters.forEach((filter) => {
-      if (!applied[filter.key]) return;
-      const phrase = filter.phrase(applied[filter.key]);
+      const value = current[filter.key];
+      if (!value) return;
+      if (!list.every((activity) => filter.matches(activity, value))) return;
+      const phrase = filter.phrase(value);
       if (phrase) parts.push(phrase);
     });
-    if (applied.q) parts.push(`que ${singular ? "coincide" : "coinciden"} con «${applied.q}»`);
+    const words = searchWords(current.q);
+    if (words.length && list.every((activity) => matchesQuery(activity, words))) {
+      parts.push(`que ${singular ? "coincide" : "coinciden"} con «${current.q}»`);
+    }
     const noun = singular ? "actividad" : "actividades";
     return `${total} ${noun}${parts.length ? " " + parts.join(" ") : ""}`;
   }
 
-  function activePill(key, label, ignored) {
-    const classes = ["filters-active__pill"];
-    if (ignored) classes.push("filters-active__pill--ignored");
+  function activePill(key, label) {
     return `
-      <button class="${classes.join(" ")}" type="button" data-clear-key="${ui.escapeHTML(key)}">
+      <button class="filters-active__pill" type="button" data-clear-key="${ui.escapeHTML(key)}">
         <span>${ui.escapeHTML(label)}</span>
-        ${ignored ? '<span class="visually-hidden">(sin efecto en estos resultados)</span>' : ""}
         <svg class="icon" aria-hidden="true" focusable="false"><use href="assets/icons/sprite.svg#i-close"></use></svg>
         <span class="visually-hidden">Quitar filtro</span>
       </button>`;
   }
 
-  /*
-    Las pastillas enseñan lo que la familia pidió, no solo lo que se pudo aplicar: una
-    búsqueda que quedó fuera sigue visible, marcada, para que se entienda y se pueda quitar.
-  */
-  function renderActiveFilters(requested, applied) {
+  function renderActiveFilters(current) {
     const pills = [];
-    if (requested.q) pills.push(activePill("q", `«${requested.q}»`, !applied.q));
+    if (current.q) pills.push(activePill("q", `«${current.q}»`));
     filters.forEach((filter) => {
-      if (!applied[filter.key]) return;
-      const label = filter.label(applied[filter.key]);
-      if (label) pills.push(activePill(filter.key, label, false));
+      if (!current[filter.key]) return;
+      const label = filter.label(current[filter.key]);
+      if (label) pills.push(activePill(filter.key, label));
     });
 
     activeFilters.hidden = pills.length === 0;
@@ -311,37 +315,31 @@
       : "";
   }
 
-  /* Red de seguridad: con el catálogo poblado, `resolve` garantiza que esto no se vea. */
+  /* Red de seguridad: con fichas en el catálogo, `rankActivities` siempre devuelve alguna. */
   function syncEmptyState(total) {
     empty.hidden = total > 0;
     if (total > 0 || !emptyBody) return;
     emptyBody.innerHTML = "<p>Vuelve a intentarlo en un momento.</p>";
   }
 
-  function render(requested, applied) {
-    const list = filterActivities(applied);
+  function render(current) {
+    const list = rankActivities(current);
     results.innerHTML = list.map((activity) => `<li>${ui.activityCard(activity, { headingLevel: 2 })}</li>`).join("");
-    count.textContent = describe(applied, list.length);
+    count.textContent = describe(current, list);
     syncEmptyState(list.length);
-    renderActiveFilters(requested, applied);
-    syncResetButton(requested);
-    syncSearchClear(requested.q);
+    renderActiveFilters(current);
+    syncResetButton(current);
+    syncSearchClear(current.q);
   }
 
   let typingTimer;
 
-  /*
-    `touchedKey` es el filtro que la familia acaba de tocar. Los chips que haya que soltar
-    se desmarcan de verdad, para que lo resaltado y lo filtrado digan siempre lo mismo;
-    el texto buscado se respeta tal cual lo escribieron, aunque se quede sin aplicar.
-  */
-  function update(touchedKey) {
+  /* Lo que la familia marca se queda marcado: nada se desmarca solo. */
+  function update() {
     clearTimeout(typingTimer);
-    const requested = readFiltersFromForm();
-    const applied = resolve(requested, touchedKey);
-    filters.forEach((filter) => checkRadio(filter.key, applied[filter.key]));
-    render(requested, applied);
-    updateUrl({ ...applied, q: requested.q });
+    const current = readFiltersFromForm();
+    render(current);
+    updateUrl(current);
   }
 
   function focusSearch() {
@@ -376,10 +374,10 @@
     if (event.target.name !== "q") return;
     syncSearchClear(event.target.value);
     clearTimeout(typingTimer);
-    typingTimer = setTimeout(() => update("q"), TYPING_DELAY);
+    typingTimer = setTimeout(update, TYPING_DELAY);
   });
   form.addEventListener("change", (event) => {
-    if (event.target.type === "radio") update(event.target.name);
+    if (event.target.type === "radio") update();
   });
   form.addEventListener("reset", () => {
     setTimeout(() => {
